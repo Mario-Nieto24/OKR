@@ -1,830 +1,175 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulador — Ser percibidos como la agencia #1</title>
-<style>
-  :root{
-    --bg:#F5F6F8; --surface:#FFFFFF; --ink:#16232E; --ink-soft:#54626E; --line:#DFE3E8;
-    --accent:#1F4E78; --accent-soft:#E6EEF5;
-    --done:#0F6E56; --done-soft:#E1F5EE;
-    --no:#A32D2D; --no-soft:#FCEBEB;
-    --pending:#8A5A0B; --pending-soft:#FAEEDA;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--ink);font-family:-apple-system, 'Segoe UI', Roboto, sans-serif;line-height:1.5;padding:36px 16px 80px;}
-  .page{max-width:820px;margin:0 auto;}
-  .eyebrow{font-family:ui-monospace, 'SF Mono', Consolas, monospace;font-size:12px;color:var(--ink-soft);}
-  h1{font-size:24px;font-weight:600;margin-top:6px;letter-spacing:-0.01em;}
-  .subtitle{font-size:13px;color:var(--ink-soft);margin-top:8px;max-width:620px;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador OKR - Interactivo</title>
+  <style>
+    /* Estilos Generales y Tema Azul Dark Mode */
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      --card-bg: rgba(30, 58, 138, 0.35);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --accent-blue: #38bdf8;
+      --accent-hover: #60a5fa;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
 
-  .sticky{position:sticky; top:0; z-index:5; background:var(--bg); padding:16px 0 12px; margin-top:20px;}
-  .viewing-badge{
-    display:inline-flex; align-items:center; gap:6px;
-    font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:12px; color:var(--accent);
-    background:var(--accent-soft); padding:5px 10px; border-radius:6px; margin-bottom:10px;
-  }
-  .viewing-badge button{
-    border:none; background:none; color:var(--accent); cursor:pointer; font-family:ui-monospace, 'SF Mono', Consolas, monospace;
-    font-size:12px; text-decoration:underline; padding:0;
-  }
-  .okr-summary{
-    background:var(--surface); border:1px solid var(--line); border-radius:10px;
-    padding:20px; display:flex; align-items:center; gap:20px;
-    transition: box-shadow .3s ease;
-  }
-  .okr-summary.celebrate{box-shadow:0 0 0 3px var(--done-soft), 0 4px 18px rgba(15,110,86,0.25);}
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 30px;
+      box-sizing: border-box;
+    }
 
-  .gauge-wrap{position:relative; width:112px; height:112px; flex-shrink:0;}
-  .gauge-wrap svg{position:absolute; top:0; left:0;}
-  #gaugeRing{transition: stroke-dashoffset 0.7s cubic-bezier(.4,0,.2,1), stroke 0.4s ease;}
-  .gauge-center{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-  }
-  .gauge-value{
-    font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:26px; font-weight:600; color:var(--ink);
-    transition: color .4s ease;
-  }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
 
-  .okr-summary-text{flex:1;}
-  .okr-summary-text .label{font-size:12px;color:var(--ink-soft);margin-bottom:8px;}
-  .status-pill{
-    display:inline-flex; align-items:center; gap:6px;
-    font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:12px; font-weight:500;
-    padding:5px 12px; border-radius:20px; transition: background .3s ease, color .3s ease;
-  }
-  .status-pill.good{background:var(--done-soft); color:var(--done);}
-  .status-pill.mid{background:var(--pending-soft); color:var(--pending);}
-  .status-pill.bad{background:var(--no-soft); color:var(--no);}
-  .status-pill .dot-pulse{
-    width:7px; height:7px; border-radius:50%; background:currentColor;
-    animation:pulse 1.6s ease-in-out infinite;
-  }
-  @keyframes pulse{
-    0%,100%{opacity:1; transform:scale(1);}
-    50%{opacity:.4; transform:scale(0.7);}
-  }
+    header {
+      margin-bottom: 30px;
+    }
 
-  .kr-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;}
-  .kr-chip{background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:10px 12px; transition: transform .2s ease, border-color .2s ease, background .2s ease;}
-  .kr-chip .v{transition: color .3s ease;}
-  .kr-chip.tab-active{border-color:var(--accent); border-width:2px; background:var(--accent-soft);}
-  .kr-chip .n{font-size:11px;color:var(--ink-soft);}
-  .kr-chip .v{font-family:ui-monospace, 'SF Mono', Consolas, monospace;font-size:18px;font-weight:500;color:var(--accent);margin-top:2px;}
+    h1 {
+      font-size: 1.8rem;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
 
-  .toolbar{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;}
-  .action-btn{
-    font-family:-apple-system, 'Segoe UI', Roboto, sans-serif; font-size:13px; padding:9px 16px;
-    border-radius:8px; border:1px solid var(--line); background:var(--surface);
-    color:var(--ink); cursor:pointer; font-weight:500;
-  }
-  .action-btn:hover{border-color:var(--accent);}
-  .action-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
 
-  .breadcrumb{
-    display:flex; align-items:center; gap:6px; flex-wrap:wrap;
-    margin-top:14px; padding:10px 14px; background:var(--surface); border:1px solid var(--line);
-    border-radius:8px; font-size:12px;
-  }
-  .breadcrumb .crumb-okr{color:var(--ink-soft);}
-  .breadcrumb .crumb-sep{color:var(--line);}
-  .breadcrumb .crumb-kr{font-weight:600; color:var(--ink);}
-  .breadcrumb .crumb-kpi{color:var(--accent); font-weight:500;}
-  .breadcrumb .crumb-badge{
-    font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:10px;
-    background:var(--accent-soft); color:var(--accent); padding:2px 7px; border-radius:5px; margin-left:2px;
-  }
+    /* Targetas principales */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
 
-  .tab-groups{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;}
-  .tab-group{
-    border:1px solid var(--line); border-radius:10px; padding:10px; flex:1; min-width:200px;
-    border-top:3px solid var(--line); transition: border-top-color .2s ease, background .2s ease;
-  }
-  .tab-group[data-kr="1"]{border-top-color:#5B8FB0;}
-  .tab-group[data-kr="2"]{border-top-color:#7A9E7E;}
-  .tab-group[data-kr="3"]{border-top-color:#B08A5B;}
-  .tab-group.has-active{background:var(--accent-soft);}
-  .tab-group-label{
-    font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:10px; color:var(--ink-soft);
-    margin-bottom:8px; letter-spacing:0.02em;
-  }
-  .tab-group-row{display:flex; gap:6px; flex-wrap:wrap;}
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
 
-  .tab{font-size:13px; padding:8px 14px; border-radius:8px; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer;}
-  .tab:hover{border-color:var(--accent);}
-  .tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+    .card:hover, .card.selected {
+      border-color: var(--accent-blue);
+      box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.25);
+      transform: translateY(-2px);
+    }
 
-  .panel{background:var(--surface); border:1px solid var(--line); border-radius:10px; margin-top:14px; overflow:hidden;}
-  .panel-head{display:grid; padding:10px 16px; font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:11px; color:var(--ink-soft); background:var(--bg); border-bottom:1px solid var(--line);}
-  .row{display:grid; align-items:center; gap:10px; padding:10px 16px; font-size:13px; border-bottom:1px solid var(--line);}
-  .row:last-child{border-bottom:none;}
-  .row.row-si{background:var(--done-soft);}
-  .row.row-no{background:var(--no-soft);}
-  .acc-name{font-weight:500;}
-  .acc-weight{font-size:11px;color:var(--ink-soft);font-family:ui-monospace, 'SF Mono', Consolas, monospace;}
+    .card-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
 
-  input[type=number]{width:100%; padding:6px 8px; border:1px solid var(--line); border-radius:6px; font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:13px; color:var(--ink);}
-  input[type=range]{width:100%;}
-  input[type=date]{width:100%; padding:5px 6px; border:1px solid var(--line); border-radius:6px; font-family:-apple-system, 'Segoe UI', Roboto, sans-serif; font-size:12px;}
-  .toggle-btn{font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:12px; padding:5px 10px; border-radius:6px; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer; width:100%;}
-  .toggle-btn.si{background:var(--done-soft);border-color:var(--done);color:var(--done);}
-  .toggle-btn.no{background:var(--no-soft);border-color:var(--no);color:var(--no);}
+    /* Animación de Escala en Números */
+    .metric-value {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: inline-block;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+    }
 
-  .result-chip{font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:11px; padding:3px 9px; border-radius:5px; text-align:center; width:fit-content;}
-  .result-chip.si{background:var(--done-soft);color:var(--done);}
-  .result-chip.no{background:var(--no-soft);color:var(--no);}
-  .nps-val{font-family:ui-monospace, 'SF Mono', Consolas, monospace;font-size:13px;min-width:22px;text-align:right;color:var(--accent);}
+    /* Efecto al presionar o seleccionar */
+    .card:hover .metric-value,
+    .card:active .metric-value,
+    .card.selected .metric-value {
+      transform: scale(1.18);
+      color: var(--accent-blue);
+    }
 
-  section{margin-top:28px;}
-  section > h2{font-size:14px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;}
+    /* Filtros y Opciones */
+    .filter-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
 
-  .account-pills{display:flex;gap:6px;flex-wrap:wrap;}
-  .apill{
-    font-size:12px; padding:6px 11px; border-radius:16px; border:1px solid var(--line);
-    background:var(--surface); color:var(--ink-soft); cursor:pointer;
-  }
-  .apill:hover{border-color:var(--accent);}
-  .apill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+    .chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
 
-  .control-block{margin-top:14px;}
-  .control-label{font-family:ui-monospace, 'SF Mono', Consolas, monospace;font-size:10px;color:var(--ink-soft);margin-bottom:6px;letter-spacing:0.02em;}
-
-  .panel-title{font-size:15px;font-weight:500;margin-top:22px;margin-bottom:2px;}
-  .panel-title .sub{display:block;font-size:12px;font-weight:400;color:var(--ink-soft);margin-top:2px;}
-
-  .row.dim{opacity:0.35;}
-  .row.focus{outline:2px solid var(--accent);outline-offset:-2px;}
-
-  .history-panel{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:20px 20px 8px;}
-  .history-chart-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:14px;}
-  .history-chart{display:grid; grid-template-columns:repeat(9,1fr); align-items:end; gap:10px; height:140px;}
-  .history-bar-wrap{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;cursor:pointer;}
-  .history-bar{width:100%; border-radius:5px 5px 0 0; transition:height .25s ease, opacity .15s; display:flex; align-items:flex-start; justify-content:center; opacity:0.85;}
-  .history-bar-wrap:hover .history-bar{opacity:1;}
-  .history-bar.selected{outline:2px solid var(--ink); outline-offset:2px;}
-  .history-bar span{font-family:ui-monospace, 'SF Mono', Consolas, monospace;font-size:10px;color:#fff;margin-top:4px;}
-  .history-bar.good{background:var(--done);}
-  .history-bar.mid{background:var(--pending);}
-  .history-bar.bad{background:var(--no);}
-  .history-month{font-size:11px;color:var(--ink-soft);text-align:center;margin-top:6px;font-family:ui-monospace, 'SF Mono', Consolas, monospace;}
-  .history-legend{display:flex;gap:16px;margin-top:14px;padding-bottom:14px;font-size:12px;color:var(--ink-soft);}
-  .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;}
-  .dot.good{background:var(--done);} .dot.mid{background:var(--pending);} .dot.bad{background:var(--no);}
-
-  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--ink-soft);}
-
-  .check-panel{background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden;}
-  .check-row{
-    display:flex; align-items:center; gap:12px; padding:13px 16px;
-    border-bottom:1px solid var(--line); font-size:13px;
-  }
-  .check-row:last-child{border-bottom:none;}
-  .check-icon{
-    width:20px; height:20px; border-radius:50%; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    font-size:12px; font-weight:700; color:#fff;
-  }
-  .check-icon.pass{background:var(--done);}
-  .check-icon.fail{background:var(--no);}
-  .check-text{flex:1;}
-  .check-detail{font-size:11px;color:var(--ink-soft);margin-top:2px;font-family:ui-monospace, 'SF Mono', Consolas, monospace;}
-  .check-summary{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:14px 16px; background:var(--bg); font-size:13px; font-weight:500;
-  }
-  .check-summary .ok-badge{
-    font-family:ui-monospace, 'SF Mono', Consolas, monospace; font-size:12px;
-    padding:4px 10px; border-radius:6px; background:var(--done-soft); color:var(--done);
-  }
-</style>
+    .chip:hover, .chip.active {
+      background: var(--accent-blue);
+      color: #0f172a;
+      font-weight: 600;
+      border-color: var(--accent-blue);
+    }
+  </style>
 </head>
 <body>
-<div class="page">
 
-  <div class="eyebrow">OKR-009 · Simulador interactivo</div>
-  <h1>Ser percibidos como la agencia #1 por nuestros clientes</h1>
-  <p class="subtitle">Captura datos por cuenta y mira cómo se recalcula el % en vivo. Toca un mes del histórico para cargar los datos de ese mes, o filtra por cuenta para ver su evolución individual.</p>
+  <div class="container">
+    <header>
+      <h1>OKR-009 - Simulador Interactivo</h1>
+      <div class="subtitle">Selecciona cualquier indicador para resaltar métricas y expandir datos.</div>
+    </header>
 
-  <div class="breadcrumb" id="breadcrumb"></div>
-
-  <div class="sticky">
-    <div id="viewingBadge"></div>
-    <div class="okr-summary">
-      <div class="gauge-wrap">
-        <svg width="112" height="112" viewBox="0 0 140 140">
-          <circle cx="70" cy="70" r="58" stroke="var(--line)" stroke-width="12" fill="none"/>
-          <circle id="gaugeRing" cx="70" cy="70" r="58" stroke="var(--no)" stroke-width="12" fill="none"
-                  stroke-linecap="round" stroke-dasharray="364.4" stroke-dashoffset="364.4"
-                  transform="rotate(-90 70 70)"/>
-        </svg>
-        <div class="gauge-center">
-          <div class="gauge-value" id="okrValue">0%</div>
-        </div>
+    <div class="dashboard-grid">
+      <div class="card selected" onclick="selectCard(this)">
+        <div class="card-title">NPS Total</div>
+        <div class="metric-value">85%</div>
       </div>
-      <div class="okr-summary-text">
-        <div class="label" id="summaryLabel">% del OKR con lo capturado</div>
-        <div class="status-pill" id="statusPill">Calculando...</div>
-      </div>
-    </div>
-    <div class="kr-strip">
-      <div class="kr-chip" id="krChip1"><div class="n">NPS</div><div class="v" id="kr1val">0%</div></div>
-      <div class="kr-chip" id="krChip2"><div class="n">Retención</div><div class="v" id="kr2val">0%</div></div>
-      <div class="kr-chip" id="krChip3"><div class="n">Reporte mensual</div><div class="v" id="kr3val">0%</div></div>
-    </div>
 
-    <div class="control-block">
-      <div class="control-label">INDICADOR A CAPTURAR</div>
-      <div class="tab-groups" id="tabs">
-        <div class="tab-group" data-kr="1">
-          <div class="tab-group-label">KR1 · NPS</div>
-          <div class="tab-group-row">
-            <button class="tab active" data-tab="nps">NPS (cliente)</button>
-            <button class="tab" data-tab="quejas">Quejas SLA (gerente)</button>
-          </div>
-        </div>
-        <div class="tab-group" data-kr="2">
-          <div class="tab-group-label">KR2 · Retención</div>
-          <div class="tab-group-row">
-            <button class="tab" data-tab="retencion">Retención (gerente)</button>
-            <button class="tab" data-tab="fortalecimiento">Fortalecimiento (gerente)</button>
-          </div>
-        </div>
-        <div class="tab-group" data-kr="3">
-          <div class="tab-group-label">KR3 · Reporte mensual</div>
-          <div class="tab-group-row">
-            <button class="tab" data-tab="reporte">Reporte mensual (gerente)</button>
-          </div>
-        </div>
+      <div class="card" onclick="selectCard(this)">
+        <div class="card-title">Retención</div>
+        <div class="metric-value">86%</div>
+      </div>
+
+      <div class="card" onclick="selectCard(this)">
+        <div class="card-title">Reporte Mensual</div>
+        <div class="metric-value">89%</div>
       </div>
     </div>
 
-    <div class="control-block">
-      <div class="control-label">FILTRAR / RESALTAR CUENTA</div>
-      <div class="account-pills" id="accountPills"></div>
-    </div>
-
-    <div class="control-block">
-      <div class="control-label">IR A UN MES DEL HISTÓRICO</div>
-      <div class="account-pills" id="monthPills"></div>
-    </div>
-
-    <div class="toolbar">
-      <button class="action-btn primary" id="loadSample">Cargar datos de ejemplo</button>
-      <button class="action-btn" id="clearData">Limpiar todo</button>
+    <div class="card">
+      <div class="card-title">Filtrar por Cuenta</div>
+      <div class="filter-group">
+        <button class="chip active">Todas</button>
+        <button class="chip">ADM</button>
+        <button class="chip">Bepensa</button>
+        <button class="chip">Gifan</button>
+        <button class="chip">Spinmaster</button>
+        <button class="chip">Multimarca</button>
+      </div>
     </div>
   </div>
 
-  <div class="panel-title" id="panelTitle"></div>
-  <div class="panel" id="panel"></div>
-
-  <section>
-    <h2>Histórico mensual (ejemplo)</h2>
-    <p class="subtitle">Esta gráfica siempre corresponde al indicador de la pestaña activa (arriba), no al OKR completo.</p>
-    <div class="history-panel">
-      <div class="history-chart-title" id="historyChartTitle"></div>
-      <div class="history-chart" id="historyChart"></div>
-      <div class="history-legend">
-        <span><i class="dot good"></i> ≥80%</span>
-        <span><i class="dot mid"></i> 60–79%</span>
-        <span><i class="dot bad"></i> &lt;60%</span>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Verificación del sistema</h2>
-    <p class="subtitle">Pruebas en vivo que confirman que el cálculo está funcionando correctamente en este momento.</p>
-    <div class="check-panel" id="checkPanel"></div>
-  </section>
-
-  <footer>
-    Simulador con datos que tú capturas — no está conectado a Emetrix. Sirve para sentir cómo funciona el cálculo real.
-  </footer>
-
-</div>
-
-<script>
-const ACCOUNTS = [
-  {name:"ADM", weight:12}, {name:"Bepensa", weight:11}, {name:"Gifan", weight:11},
-  {name:"Spinmaster", weight:11}, {name:"Multimarca", weight:11}, {name:"Ajemex", weight:11},
-  {name:"Ruz", weight:11}, {name:"Hanes", weight:11}, {name:"Zuru", weight:11},
-];
-const MONTHS = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep"];
-const TAB_LABELS = {nps:"NPS", quejas:"Quejas SLA", retencion:"Retención", fortalecimiento:"Fortalecimiento", reporte:"Reporte mensual"};
-
-function emptyAccountState(){
-  return {nps:8, quejasReg:0, quejasRes:0, facturo:null, accProg:0, accCump:0, reporteFecha:""};
-}
-
-const SAMPLE = {
-  ADM:          {nps:9, quejasReg:10, quejasRes:10, facturo:true,  accProg:4, accCump:4, reporteFecha:"2026-09-03"},
-  Bepensa:      {nps:8, quejasReg:6,  quejasRes:6,  facturo:true,  accProg:3, accCump:3, reporteFecha:"2026-09-04"},
-  Gifan:        {nps:9, quejasReg:3,  quejasRes:3,  facturo:true,  accProg:2, accCump:2, reporteFecha:"2026-09-02"},
-  Spinmaster:   {nps:7, quejasReg:8,  quejasRes:7,  facturo:true,  accProg:4, accCump:3, reporteFecha:"2026-09-05"},
-  Multimarca:   {nps:9, quejasReg:2,  quejasRes:2,  facturo:true,  accProg:3, accCump:3, reporteFecha:"2026-09-04"},
-  Ajemex:       {nps:8, quejasReg:5,  quejasRes:5,  facturo:true,  accProg:4, accCump:4, reporteFecha:"2026-09-01"},
-  Ruz:          {nps:8, quejasReg:4,  quejasRes:4,  facturo:true,  accProg:2, accCump:2, reporteFecha:"2026-09-03"},
-  Hanes:        {nps:10,quejasReg:12, quejasRes:12, facturo:true,  accProg:5, accCump:5, reporteFecha:"2026-09-02"},
-  Zuru:         {nps:6, quejasReg:7,  quejasRes:5,  facturo:false, accProg:3, accCump:2, reporteFecha:"2026-09-09"},
-};
-
-// arranca con los datos de ejemplo ya cargados, para que se vea algo desde el primer momento
-const state = {};
-ACCOUNTS.forEach(a => { state[a.name] = {...SAMPLE[a.name]}; });
-
-// ---- generar histórico determinístico (ejemplo) ----
-function pseudo(seed){ const x = Math.sin(seed*12.9898)*43758.5453; return x - Math.floor(x); }
-
-const HISTORY = {};
-MONTHS.forEach((m, mi) => {
-  HISTORY[m] = {};
-  ACCOUNTS.forEach((a, ai) => {
-    const base = mi*17 + ai*5;
-    // sesgo general: la mayoría de los meses/cuentas rinden bien, con caídas ocasionales realistas
-    const nps = Math.round(4 + pseudo(base+1)*6);                 // rango 4-10, centrado alto
-    const quejasReg = Math.round(pseudo(base+2)*9)+2;
-    const quejasRes = Math.max(0, Math.round(quejasReg * (0.72 + pseudo(base+3)*0.28))); // 72%-100%
-    const facturo = pseudo(base+4) > 0.10;                        // ~90% de meses factura
-    const accProg = Math.round(pseudo(base+5)*4)+1;
-    const accCump = Math.max(0, Math.round(accProg * (0.65 + pseudo(base+6)*0.35)));     // 65%-100%
-    const day = Math.round(pseudo(base+7)*8)+1;                   // sesgado a mandarse temprano (1-8)
-    HISTORY[m][a.name] = {
-      nps, quejasReg, quejasRes, facturo, accProg, accCump,
-      reporteFecha: `2026-${String(mi+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`
-    };
-  });
-});
-
-let currentTab = "nps";
-let selectedMonth = null;
-let accountFilter = "todas";
-const TAB_TITLES = {
-  nps: {name:"NPS — encuesta al cliente", sub:"Escala 0 a 10. SI si respuesta ≥8. Trimestral."},
-  quejas: {name:"Quejas atendidas dentro de SLA", sub:"Resueltas ÷ Registradas. SI si ≥90%. Mensual."},
-  retencion: {name:"Cuentas retenidas al cierre del mes", sub:"SI si la cuenta facturó ese mes. Mensual."},
-  fortalecimiento: {name:"Acciones de fortalecimiento cumplidas", sub:"Cumplidas ÷ Programadas. SI si ≥90%. Mensual."},
-  reporte: {name:"Reporte mensual enviado a tiempo", sub:"SI si se envió en o antes del día 5. Mensual."},
-};
-const TAB_TO_KR_NUM = {nps:1, quejas:1, retencion:2, fortalecimiento:2, reporte:3};
-const KR_NAMES = {1:"Satisfacción y lealtad del cliente (NPS)", 2:"Retención de clientes", 3:"Reporte mensual a cliente"};
-
-function renderBreadcrumb(){
-  const krNum = TAB_TO_KR_NUM[currentTab];
-  const scope = accountFilter === "todas" ? "" : ` <span class="crumb-badge">${accountFilter}</span>`;
-  document.getElementById("breadcrumb").innerHTML = `
-    <span class="crumb-okr">OKR: Ser percibidos como la agencia #1</span>
-    <span class="crumb-sep">›</span>
-    <span class="crumb-kr">KR${krNum}: ${KR_NAMES[krNum]}</span>
-    <span class="crumb-sep">›</span>
-    <span class="crumb-kpi">${TAB_TITLES[currentTab].name}</span>${scope}
-  `;
-  document.querySelectorAll(".tab-group").forEach(g=>{
-    g.classList.toggle("has-active", Number(g.dataset.kr) === krNum);
-  });
-}
-
-function weightedPct(flags){
-  const evaluated = flags.filter(f => f.si !== null);
-  if(evaluated.length === 0) return 0;
-  const totalW = evaluated.reduce((s,f)=>s+f.weight,0);
-  const siW = evaluated.filter(f=>f.si).reduce((s,f)=>s+f.weight,0);
-  return totalW === 0 ? 0 : Math.round((siW/totalW)*100);
-}
-
-function computeMetrics(dataObj, onlyAccount){
-  const accs = (onlyAccount && onlyAccount !== "todas")
-    ? ACCOUNTS.filter(a => a.name === onlyAccount)
-    : ACCOUNTS;
-
-  const npsGe8 = accs.map(a => ({weight:a.weight, si: dataObj[a.name].nps >= 8}));
-  const npsLevantado = accs.map(a => ({weight:a.weight, si: true}));
-  const quejas = accs.map(a => {
-    const s = dataObj[a.name];
-    if(s.quejasReg === 0) return {weight:a.weight, si:null};
-    return {weight:a.weight, si:(s.quejasRes/s.quejasReg) >= 0.9};
-  });
-  const retencion = accs.map(a => ({weight:a.weight, si: dataObj[a.name].facturo}));
-  const fortalecimiento = accs.map(a => {
-    const s = dataObj[a.name];
-    if(s.accProg === 0) return {weight:a.weight, si:null};
-    return {weight:a.weight, si:(s.accCump/s.accProg) >= 0.9};
-  });
-  const reporte = accs.map(a => {
-    const s = dataObj[a.name];
-    if(!s.reporteFecha) return {weight:a.weight, si:null};
-    const day = new Date(s.reporteFecha + "T00:00:00").getDate();
-    return {weight:a.weight, si: day <= 5};
-  });
-
-  const kpi1 = weightedPct(npsGe8), kpi2 = weightedPct(npsLevantado), kpi3 = weightedPct(quejas);
-  const kpi4 = weightedPct(retencion), kpi5 = weightedPct(fortalecimiento), kpi6 = weightedPct(reporte);
-  const kr1 = Math.round(kpi1*0.5 + kpi2*0.15 + kpi3*0.35);
-  const kr2 = Math.round(kpi4*0.7 + kpi5*0.3);
-  const kr3 = kpi6;
-  const okr = Math.round(kr1*0.35 + kr2*0.35 + kr3*0.30);
-  return {kpi1,kpi2,kpi3,kpi4,kpi5,kpi6,kr1,kr2,kr3,okr};
-}
-
-const TAB_TO_KR_CHIP = {nps:"krChip1", quejas:"krChip1", retencion:"krChip2", fortalecimiento:"krChip2", reporte:"krChip3"};
-
-const GAUGE_CIRCUMFERENCE = 364.4;
-let lastOkrShown = 0;
-
-function pctColor(val){
-  if(val >= 80) return "var(--done)";
-  if(val >= 60) return "var(--pending)";
-  return "var(--no)";
-}
-
-function animateCount(el, from, to, duration=600){
-  const start = performance.now();
-  function tick(now){
-    const t = Math.min(1, (now - start) / duration);
-    const eased = 1 - Math.pow(1 - t, 3);
-    const current = Math.round(from + (to - from) * eased);
-    el.textContent = current + "%";
-    if(t < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-
-function computeAll(){
-  const m = computeMetrics(state, accountFilter);
-
-  // gauge circular
-  const ring = document.getElementById("gaugeRing");
-  const offset = GAUGE_CIRCUMFERENCE * (1 - m.okr/100);
-  ring.style.strokeDashoffset = offset;
-  ring.style.stroke = pctColor(m.okr);
-
-  // número animado del centro
-  const okrEl = document.getElementById("okrValue");
-  animateCount(okrEl, lastOkrShown, m.okr);
-  okrEl.style.color = pctColor(m.okr);
-  okrEl.dataset.target = m.okr;
-  lastOkrShown = m.okr;
-
-  // KR chips animados
-  animateCount(document.getElementById("kr1val"), parseInt(document.getElementById("kr1val").textContent)||0, m.kr1);
-  animateCount(document.getElementById("kr2val"), parseInt(document.getElementById("kr2val").textContent)||0, m.kr2);
-  animateCount(document.getElementById("kr3val"), parseInt(document.getElementById("kr3val").textContent)||0, m.kr3);
-  document.getElementById("kr1val").style.color = pctColor(m.kr1);
-  document.getElementById("kr2val").style.color = pctColor(m.kr2);
-  document.getElementById("kr3val").style.color = pctColor(m.kr3);
-
-  const label = document.getElementById("summaryLabel");
-  const scope = accountFilter === "todas" ? "9 cuentas" : accountFilter;
-  if(label) label.textContent = `% TOTAL del OKR (combina las 3 tarjetas de abajo) — ${scope}`;
-
-  // status pill
-  const pill = document.getElementById("statusPill");
-  const cls = m.okr >= 80 ? "good" : m.okr >= 60 ? "mid" : "bad";
-  const msg = m.okr >= 80 ? "En meta" : m.okr >= 60 ? "Avanzando" : "Necesita atención";
-  pill.className = "status-pill " + cls;
-  pill.innerHTML = `<span class="dot-pulse"></span>${msg}`;
-
-  // efecto de celebración si está en meta
-  const summaryBox = document.querySelector(".okr-summary");
-  summaryBox.classList.toggle("celebrate", m.okr >= 80);
-
-  // resaltar la tarjeta que corresponde a la pestaña activa, para no confundirla con el número grande de arriba
-  ["krChip1","krChip2","krChip3"].forEach(id => document.getElementById(id).classList.remove("tab-active"));
-  const activeChip = document.getElementById(TAB_TO_KR_CHIP[currentTab]);
-  if(activeChip) activeChip.classList.add("tab-active");
-}
-
-function renderViewingBadge(){
-  const el = document.getElementById("viewingBadge");
-  if(selectedMonth){
-    el.innerHTML = `<div class="viewing-badge">Viendo datos de: ${selectedMonth} 2026 <button id="backToLive">volver a captura libre</button></div>`;
-    document.getElementById("backToLive").addEventListener("click", ()=>{
-      selectedMonth = null;
-      ACCOUNTS.forEach(a => { state[a.name] = emptyAccountState(); });
-      refreshAll();
-    });
-  } else {
-    el.innerHTML = "";
-  }
-}
-
-// Única función de refresco: SIEMPRE actualiza las 6 piezas juntas y en el mismo orden,
-// sin importar si cambiaste de KR, de cuenta o de mes. Así nunca vuelven a quedar
-// desincronizadas entre sí.
-function refreshAll(){
-  renderViewingBadge();
-  renderAccountPills();
-  renderMonthPills();
-  renderBreadcrumb();
-  renderPanel();
-  computeAll();
-  renderHistory();
-  runChecks();
-}
-
-// Pruebas reales, no decorativas: comparan el número que se ve en pantalla contra
-// un cálculo independiente hecho aparte, para demostrar que todo sigue cuadrando.
-function runChecks(){
-  const checks = [];
-  const m = computeMetrics(state, accountFilter);
-
-  // 1) Los pesos de las 9 cuentas suman 100
-  const totalWeight = ACCOUNTS.reduce((s,a)=>s+a.weight, 0);
-  checks.push({
-    label: "Los pesos de las 9 cuentas suman 100%",
-    pass: totalWeight === 100,
-    detail: `Suma actual: ${totalWeight}%`
-  });
-
-  // 2) El número grande de arriba coincide con lo que dice el DOM
-  const domOkr = parseInt(document.getElementById("okrValue").dataset.target) || 0;
-  checks.push({
-    label: "El número mostrado coincide con el cálculo interno",
-    pass: domOkr === m.okr,
-    detail: `Objetivo mostrado: ${domOkr}% · Cálculo: ${m.okr}%`
-  });
-
-  // 3) El OKR es el blend correcto de los 3 KR con sus pesos oficiales (35/35/30)
-  const okrRecalc = Math.round(m.kr1*0.35 + m.kr2*0.35 + m.kr3*0.30);
-  checks.push({
-    label: "El OKR total = NPS×35% + Retención×35% + Reporte×30%",
-    pass: okrRecalc === m.okr,
-    detail: `${m.kr1}%×0.35 + ${m.kr2}%×0.35 + ${m.kr3}%×0.30 = ${okrRecalc}%`
-  });
-
-  // 4) La gráfica del histórico usa el mismo KPI que la pestaña activa
-  const chartTitle = document.getElementById("historyChartTitle").textContent;
-  checks.push({
-    label: "El histórico muestra el mismo indicador que la pestaña activa",
-    pass: chartTitle.includes(TAB_TITLES[currentTab].name),
-    detail: `Pestaña: ${TAB_TITLES[currentTab].name}`
-  });
-
-  // 5) Si hay una cuenta filtrada, su resultado individual es binario (0 o 100)
-  let filterCheckPass = true, filterDetail = "Filtro en \"Todas\"";
-  if(accountFilter !== "todas"){
-    const isBinary = [m.kpi4].every(v => v === 0 || v === 100) || true; // retención siempre binaria por cuenta
-    filterDetail = `${accountFilter}: NPS ${m.kr1}% (mezcla 3 KPI) · Retención ${m.kpi4===100||m.kpi4===0?'binaria':'revisar'} (${m.kpi4}%)`;
-    filterCheckPass = (m.kpi4 === 0 || m.kpi4 === 100);
-  }
-  checks.push({
-    label: "El resultado individual de retención es 0% o 100% por cuenta",
-    pass: filterCheckPass,
-    detail: filterDetail
-  });
-
-  // 6) Todas las cuentas están representadas en el panel visible
-  const rowsShown = document.querySelectorAll("#panel .row").length;
-  checks.push({
-    label: "Las 9 cuentas están cargadas en la pestaña activa",
-    pass: rowsShown === 9,
-    detail: `Filas visibles: ${rowsShown}/9`
-  });
-
-  const allPass = checks.every(c => c.pass);
-  const panel = document.getElementById("checkPanel");
-  panel.innerHTML = `
-    <div class="check-summary">
-      <span>${allPass ? "Todo funcionando correctamente" : "Se encontraron inconsistencias"}</span>
-      <span class="ok-badge">${checks.filter(c=>c.pass).length}/${checks.length} pruebas OK</span>
-    </div>
-    ${checks.map(c => `
-      <div class="check-row">
-        <div class="check-icon ${c.pass?'pass':'fail'}">${c.pass?'✓':'✕'}</div>
-        <div class="check-text">
-          ${c.label}
-          <div class="check-detail">${c.detail}</div>
-        </div>
-      </div>
-    `).join("")}
-  `;
-}
-
-function extraCls(name){
-  if(accountFilter === "todas") return "";
-  return accountFilter === name ? " focus" : " dim";
-}
-
-function renderPanel(){
-  const panel = document.getElementById("panel");
-  let html = "";
-  document.getElementById("panelTitle").innerHTML = `${TAB_TITLES[currentTab].name}<span class="sub">${TAB_TITLES[currentTab].sub}</span>`;
-
-  if(currentTab === "nps"){
-    html += `<div class="panel-head" style="grid-template-columns:1fr 60px 1fr 70px;"><div>CUENTA</div><div>PESO</div><div>ESCALA 0-10</div><div>RESULTADO</div></div>`;
-    ACCOUNTS.forEach(a=>{
-      const s = state[a.name]; const si = s.nps >= 8;
-      html += `<div class="row ${si?'row-si':'row-no'}${extraCls(a.name)}" style="grid-template-columns:1fr 60px 1fr 70px;">
-        <div class="acc-name">${a.name}</div><div class="acc-weight">${a.weight}%</div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <input type="range" min="0" max="10" value="${s.nps}" data-acc="${a.name}" data-field="nps">
-          <span class="nps-val">${s.nps}</span>
-        </div>
-        <div><span class="result-chip ${si?'si':'no'}">${si?'SI ≥8':'NO'}</span></div>
-      </div>`;
-    });
-  }
-
-  if(currentTab === "quejas"){
-    html += `<div class="panel-head" style="grid-template-columns:1fr 50px 80px 80px 70px;"><div>CUENTA</div><div>PESO</div><div>REGISTR.</div><div>RESUELT.</div><div>RESULTADO</div></div>`;
-    ACCOUNTS.forEach(a=>{
-      const s = state[a.name];
-      const pct = s.quejasReg > 0 ? (s.quejasRes/s.quejasReg) : null;
-      const si = pct === null ? null : pct >= 0.9;
-      const rowCls = si===null ? '' : (si?'row-si':'row-no');
-      html += `<div class="row ${rowCls}${extraCls(a.name)}" style="grid-template-columns:1fr 50px 80px 80px 70px;">
-        <div class="acc-name">${a.name}</div><div class="acc-weight">${a.weight}%</div>
-        <input type="number" min="0" value="${s.quejasReg}" data-acc="${a.name}" data-field="quejasReg">
-        <input type="number" min="0" value="${s.quejasRes}" data-acc="${a.name}" data-field="quejasRes">
-        <div>${si===null?'<span class="acc-weight">sin dato</span>':`<span class="result-chip ${si?'si':'no'}">${si?'SI':'NO'}</span>`}</div>
-      </div>`;
-    });
-  }
-
-  if(currentTab === "retencion"){
-    html += `<div class="panel-head" style="grid-template-columns:1fr 60px 1fr;"><div>CUENTA</div><div>PESO</div><div>¿FACTURÓ ESTE MES?</div></div>`;
-    ACCOUNTS.forEach(a=>{
-      const s = state[a.name]; const val = s.facturo;
-      const cls = val === true ? "si" : val === false ? "no" : "";
-      const label = val === true ? "SI" : val === false ? "NO" : "Sin contestar";
-      const rowCls = val === true ? 'row-si' : val === false ? 'row-no' : '';
-      html += `<div class="row ${rowCls}${extraCls(a.name)}" style="grid-template-columns:1fr 60px 1fr;">
-        <div class="acc-name">${a.name}</div><div class="acc-weight">${a.weight}%</div>
-        <button class="toggle-btn ${cls}" data-acc="${a.name}" data-field="facturo">${label}</button>
-      </div>`;
-    });
-  }
-
-  if(currentTab === "fortalecimiento"){
-    html += `<div class="panel-head" style="grid-template-columns:1fr 50px 80px 80px 70px;"><div>CUENTA</div><div>PESO</div><div>PROGRAM.</div><div>CUMPLID.</div><div>RESULTADO</div></div>`;
-    ACCOUNTS.forEach(a=>{
-      const s = state[a.name];
-      const pct = s.accProg > 0 ? (s.accCump/s.accProg) : null;
-      const si = pct === null ? null : pct >= 0.9;
-      const rowCls = si===null ? '' : (si?'row-si':'row-no');
-      html += `<div class="row ${rowCls}${extraCls(a.name)}" style="grid-template-columns:1fr 50px 80px 80px 70px;">
-        <div class="acc-name">${a.name}</div><div class="acc-weight">${a.weight}%</div>
-        <input type="number" min="0" value="${s.accProg}" data-acc="${a.name}" data-field="accProg">
-        <input type="number" min="0" value="${s.accCump}" data-acc="${a.name}" data-field="accCump">
-        <div>${si===null?'<span class="acc-weight">sin dato</span>':`<span class="result-chip ${si?'si':'no'}">${si?'SI':'NO'}</span>`}</div>
-      </div>`;
-    });
-  }
-
-  if(currentTab === "reporte"){
-    html += `<div class="panel-head" style="grid-template-columns:1fr 60px 1fr 90px;"><div>CUENTA</div><div>PESO</div><div>FECHA DE ENVÍO</div><div>RESULTADO</div></div>`;
-    ACCOUNTS.forEach(a=>{
-      const s = state[a.name];
-      let si = null;
-      if(s.reporteFecha){ const day = new Date(s.reporteFecha + "T00:00:00").getDate(); si = day <= 5; }
-      const rowCls = si===null ? '' : (si?'row-si':'row-no');
-      html += `<div class="row ${rowCls}${extraCls(a.name)}" style="grid-template-columns:1fr 60px 1fr 90px;">
-        <div class="acc-name">${a.name}</div><div class="acc-weight">${a.weight}%</div>
-        <input type="date" value="${s.reporteFecha}" data-acc="${a.name}" data-field="reporteFecha">
-        <div>${si===null?'<span class="acc-weight">sin dato</span>':`<span class="result-chip ${si?'si':'no'}">${si?'SI ≤5':'NO'}</span>`}</div>
-      </div>`;
-    });
-  }
-
-  panel.innerHTML = html;
-  attachHandlers();
-}
-
-function attachHandlers(){
-  document.querySelectorAll('[data-field]').forEach(el=>{
-    if(el.tagName === "BUTTON"){
-      el.addEventListener("click", ()=>{
-        const acc = el.dataset.acc;
-        const cur = state[acc].facturo;
-        state[acc].facturo = cur === true ? false : cur === false ? null : true;
-        selectedMonth = null;
-        refreshAll();
+  <script>
+    function selectCard(element) {
+      document.querySelectorAll('.dashboard-grid .card').forEach(card => {
+        card.classList.remove('selected');
       });
-    } else {
-      const evt = el.type === "range" || el.type === "number" ? "input" : "change";
-      el.addEventListener(evt, ()=>{
-        const acc = el.dataset.acc; const field = el.dataset.field;
-        state[acc][field] = field === "reporteFecha" ? el.value : Number(el.value);
-        selectedMonth = null;
-        if(field === "nps"){
-          // actualización ligera para no interrumpir el arrastre del slider,
-          // pero igual se refresca todo lo demás (resumen, histórico, badges)
-          el.nextElementSibling.textContent = el.value;
-          const row = el.closest(".row");
-          const chip = row.querySelector(".result-chip");
-          const si = Number(el.value) >= 8;
-          chip.className = "result-chip " + (si?"si":"no");
-          chip.textContent = si ? "SI ≥8" : "NO";
-          row.className = "row " + (si?"row-si":"row-no") + extraCls(acc);
-          renderViewingBadge();
-          renderMonthPills();
-          computeAll();
-          renderHistory();
-        } else {
-          refreshAll();
-        }
-      });
+      element.classList.add('selected');
     }
-  });
-}
+  </script>
 
-// ---- histórico ----
-function accountValueForTab(monthData, accName, tab){
-  const s = monthData[accName];
-  if(tab === "nps") return s.nps >= 8 ? 100 : 0;
-  if(tab === "quejas") return s.quejasReg > 0 ? Math.round((s.quejasRes/s.quejasReg)*100) : 0;
-  if(tab === "retencion") return s.facturo ? 100 : 0;
-  if(tab === "fortalecimiento") return s.accProg > 0 ? Math.round((s.accCump/s.accProg)*100) : 0;
-  if(tab === "reporte") return new Date(s.reporteFecha+"T00:00:00").getDate() <= 5 ? 100 : 0;
-  return 0;
-}
-
-function renderAccountPills(){
-  const wrap = document.getElementById("accountPills");
-  let html = `<button class="apill ${accountFilter==='todas'?'active':''}" data-acc="todas">Todas</button>`;
-  ACCOUNTS.forEach(a=>{
-    html += `<button class="apill ${accountFilter===a.name?'active':''}" data-acc="${a.name}">${a.name}</button>`;
-  });
-  wrap.innerHTML = html;
-  wrap.querySelectorAll(".apill").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      accountFilter = btn.dataset.acc;
-      refreshAll();
-    });
-  });
-}
-
-function renderMonthPills(){
-  const wrap = document.getElementById("monthPills");
-  let html = "";
-  MONTHS.forEach(m=>{
-    html += `<button class="apill ${selectedMonth===m?'active':''}" data-month="${m}">${m}</button>`;
-  });
-  wrap.innerHTML = html;
-  wrap.querySelectorAll(".apill").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const m = btn.dataset.month;
-      selectedMonth = m;
-      ACCOUNTS.forEach(a => { state[a.name] = {...HISTORY[m][a.name]}; });
-      refreshAll();
-    });
-  });
-}
-
-const TAB_KPI_KEY = {nps:"kpi1", quejas:"kpi3", retencion:"kpi4", fortalecimiento:"kpi5", reporte:"kpi6"};
-
-function renderHistory(){
-  const scope = accountFilter === "todas" ? "las 9 cuentas" : accountFilter;
-  document.getElementById("historyChartTitle").textContent = `Mostrando: ${TAB_TITLES[currentTab].name} — ${scope}`;
-  const chart = document.getElementById("historyChart");
-  chart.innerHTML = "";
-  MONTHS.forEach(m=>{
-    let val;
-    if(accountFilter === "todas"){
-      const metrics = computeMetrics(HISTORY[m]);
-      val = metrics[TAB_KPI_KEY[currentTab]];
-    } else {
-      val = accountValueForTab(HISTORY[m], accountFilter, currentTab);
-    }
-    const cls = val>=80 ? "good" : val>=60 ? "mid" : "bad";
-    const sel = selectedMonth === m ? " selected" : "";
-    const wrap = document.createElement("div");
-    wrap.className = "history-bar-wrap";
-    wrap.innerHTML = `
-      <div class="history-bar ${cls}${sel}" style="height:${Math.max(val,4)}%;"><span>${val}%</span></div>
-      <div class="history-month">${m}</div>
-    `;
-    wrap.addEventListener("click", ()=>{
-      selectedMonth = m;
-      ACCOUNTS.forEach(a => { state[a.name] = {...HISTORY[m][a.name]}; });
-      refreshAll();
-    });
-    chart.appendChild(wrap);
-  });
-}
-
-document.getElementById("tabs").addEventListener("click", (e)=>{
-  const btn = e.target.closest(".tab");
-  if(!btn) return;
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  btn.classList.add("active");
-  currentTab = btn.dataset.tab;
-  refreshAll();
-});
-
-document.getElementById("loadSample").addEventListener("click", ()=>{
-  ACCOUNTS.forEach(a=>{ state[a.name] = {...SAMPLE[a.name]}; });
-  selectedMonth = null;
-  refreshAll();
-});
-
-document.getElementById("clearData").addEventListener("click", ()=>{
-  ACCOUNTS.forEach(a=>{ state[a.name] = emptyAccountState(); });
-  selectedMonth = null;
-  refreshAll();
-});
-
-refreshAll();
-</script>
 </body>
 </html>

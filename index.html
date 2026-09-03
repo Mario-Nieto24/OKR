@@ -3,50 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador OKR - Interactivo</title>
+  <title>Simulador OKR - Executive Dashboard</title>
   <style>
-    /* Estilos Generales y Tema Azul Dark Mode */
     :root {
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      --card-bg: rgba(30, 58, 138, 0.35);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --accent-blue: #38bdf8;
-      --accent-hover: #60a5fa;
+      --bg-main: #0b1329;
+      --card-bg: rgba(23, 37, 84, 0.4);
+      --card-border: rgba(56, 189, 248, 0.15);
+      --card-hover: rgba(30, 58, 138, 0.6);
+      --accent-cyan: #38bdf8;
+      --accent-blue: #3b82f6;
+      --accent-emerald: #34d399;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
     }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background: var(--bg-gradient);
+      background: radial-gradient(circle at top right, #1e3a8a 0%, #0b1329 60%);
       color: var(--text-main);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
-      margin: 0;
-      padding: 30px;
-      box-sizing: border-box;
+      padding: 40px 20px;
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1150px;
       margin: 0 auto;
     }
 
+    /* Header */
     header {
-      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 35px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--card-border);
     }
 
-    h1 {
-      font-size: 1.8rem;
-      color: var(--text-main);
+    .brand-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
       margin-bottom: 8px;
     }
 
-    .subtitle {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+    h1 { font-size: 1.8rem; font-weight: 700; }
+    p.subtitle { color: var(--text-muted); font-size: 0.95rem; }
+
+    /* Main OKR Overview Card */
+    .hero-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 30px;
+      align-items: center;
     }
 
-    /* Targetas principales */
+    /* Progress Ring Graphic */
+    .circle-chart {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto;
+    }
+
+    .circle-chart svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .circle-chart circle {
+      fill: none;
+      stroke-width: 12;
+      stroke-linecap: round;
+    }
+
+    .circle-bg { stroke: rgba(255, 255, 255, 0.05); }
+    .circle-progress {
+      stroke: var(--accent-cyan);
+      stroke-dasharray: 440;
+      stroke-dashoffset: 66; /* 85% */
+      transition: stroke-dashoffset 0.8s ease;
+    }
+
+    .circle-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    .circle-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    /* Grid de Métricas */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -54,73 +123,100 @@
       margin-bottom: 30px;
     }
 
-    .card {
+    .metric-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       border-radius: 16px;
       padding: 24px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
+    }
+
+    .metric-card:hover, .metric-card.active {
+      background: var(--card-hover);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 12px 30px -10px rgba(56, 189, 248, 0.3);
+      transform: translateY(-4px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+    }
+
+    .metric-value {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    /* Interactividad: Animación al seleccionar */
+    .metric-card:hover .metric-value,
+    .metric-card.active .metric-value {
+      transform: scale(1.15);
+      color: var(--accent-cyan);
+    }
+
+    .progress-bar-bg {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-top: 15px;
       overflow: hidden;
     }
 
-    .card:hover, .card.selected {
-      border-color: var(--accent-blue);
-      box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.25);
-      transform: translateY(-2px);
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+      border-radius: 10px;
+      transition: width 0.5s ease;
     }
 
-    .card-title {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    /* Filtros Interactivos */
+    .filter-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px 24px;
+    }
+
+    .filter-title {
+      font-size: 0.85rem;
       color: var(--text-muted);
       margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    /* Animación de Escala en Números */
-    .metric-value {
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: var(--text-main);
-      display: inline-block;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
-    }
-
-    /* Efecto al presionar o seleccionar */
-    .card:hover .metric-value,
-    .card:active .metric-value,
-    .card.selected .metric-value {
-      transform: scale(1.18);
-      color: var(--accent-blue);
-    }
-
-    /* Filtros y Opciones */
-    .filter-group {
+    .chips-group {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-top: 20px;
     }
 
     .chip {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
-      padding: 8px 16px;
-      border-radius: 20px;
+      padding: 8px 18px;
+      border-radius: 30px;
       cursor: pointer;
       font-size: 0.85rem;
+      font-weight: 500;
       transition: all 0.2s ease;
     }
 
     .chip:hover, .chip.active {
-      background: var(--accent-blue);
-      color: #0f172a;
-      font-weight: 600;
-      border-color: var(--accent-blue);
+      background: var(--accent-cyan);
+      color: #0b1329;
+      border-color: var(--accent-cyan);
+      font-weight: 700;
     }
   </style>
 </head>
@@ -128,48 +224,102 @@
 
   <div class="container">
     <header>
-      <h1>OKR-009 - Simulador Interactivo</h1>
-      <div class="subtitle">Selecciona cualquier indicador para resaltar métricas y expandir datos.</div>
+      <div>
+        <span class="brand-tag">Simulador Interactivo</span>
+        <h1>Agencia #1 en Satisfacción de Clientes</h1>
+        <p class="subtitle">OKR Objetivos y Resultados Clave del Trimestre</p>
+      </div>
     </header>
 
-    <div class="dashboard-grid">
-      <div class="card selected" onclick="selectCard(this)">
-        <div class="card-title">NPS Total</div>
-        <div class="metric-value">85%</div>
+    <!-- Visualización Global del OKR -->
+    <div class="hero-card">
+      <div class="circle-chart">
+        <svg viewBox="0 0 160 160">
+          <circle class="circle-bg" cx="80" cy="80" r="70"></circle>
+          <circle class="circle-progress" id="heroProgress" cx="80" cy="80" r="70"></circle>
+        </svg>
+        <div class="circle-text">
+          <div class="circle-number" id="heroPercent">85%</div>
+        </div>
       </div>
-
-      <div class="card" onclick="selectCard(this)">
-        <div class="card-title">Retención</div>
-        <div class="metric-value">86%</div>
-      </div>
-
-      <div class="card" onclick="selectCard(this)">
-        <div class="card-title">Reporte Mensual</div>
-        <div class="metric-value">89%</div>
+      <div>
+        <h2>Resultado Global OKR</h2>
+        <p class="subtitle" style="margin-top: 8px;">Promedio en vivo basado en los 3 Resultados Clave principales.</p>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Filtrar por Cuenta</div>
-      <div class="filter-group">
-        <button class="chip active">Todas</button>
-        <button class="chip">ADM</button>
-        <button class="chip">Bepensa</button>
-        <button class="chip">Gifan</button>
-        <button class="chip">Spinmaster</button>
-        <button class="chip">Multimarca</button>
+    <!-- Resultados Clave (KR Cards) -->
+    <div class="dashboard-grid">
+      <div class="metric-card active" onclick="updateDashboard(81, 'NPS Cliente', this)">
+        <div class="card-header">
+          <span>KR1: NPS</span>
+          <span style="color: var(--accent-emerald);">● En meta</span>
+        </div>
+        <div class="metric-value">81%</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: 81%;"></div>
+        </div>
+      </div>
+
+      <div class="metric-card" onclick="updateDashboard(86, 'Retención de Cuentas', this)">
+        <div class="card-header">
+          <span>KR2: Retención</span>
+          <span style="color: var(--accent-emerald);">● En meta</span>
+        </div>
+        <div class="metric-value">86%</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: 86%;"></div>
+        </div>
+      </div>
+
+      <div class="metric-card" onclick="updateDashboard(89, 'Reporte Mensual', this)">
+        <div class="card-header">
+          <span>KR3: Reporte SLA</span>
+          <span style="color: var(--accent-emerald);">● En meta</span>
+        </div>
+        <div class="metric-value">89%</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" style="width: 89%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtro interactivo de cuentas -->
+    <div class="filter-section">
+      <div class="filter-title">Filtrar por Cuenta / Cliente</div>
+      <div class="chips-group">
+        <button class="chip active" onclick="filterClick(this)">Todas</button>
+        <button class="chip" onclick="filterClick(this)">ADM</button>
+        <button class="chip" onclick="filterClick(this)">Bepensa</button>
+        <button class="chip" onclick="filterClick(this)">Gifan</button>
+        <button class="chip" onclick="filterClick(this)">Spinmaster</button>
+        <button class="chip" onclick="filterClick(this)">Multimarca</button>
       </div>
     </div>
   </div>
 
   <script>
-    function selectCard(element) {
-      document.querySelectorAll('.dashboard-grid .card').forEach(card => {
-        card.classList.remove('selected');
-      });
-      element.classList.add('selected');
+    function updateDashboard(value, title, cardElement) {
+      // Remover estado activo de otras tarjetas
+      document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('active'));
+      cardElement.classList.add('active');
+
+      // Actualizar el porcentaje global del gráfico principal
+      const percentText = document.getElementById('heroPercent');
+      const progressCircle = document.getElementById('heroProgress');
+      
+      percentText.innerText = value + '%';
+      
+      // Cálculo del perímetro de la gráfica circular para ajustar el avance
+      const circumference = 2 * Math.PI * 70;
+      const offset = circumference - (value / 100) * circumference;
+      progressCircle.style.strokeDashoffset = offset;
+    }
+
+    function filterClick(chipElement) {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chipElement.classList.add('active');
     }
   </script>
-
 </body>
 </html>

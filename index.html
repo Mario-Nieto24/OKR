@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador OKR - Executive Dashboard</title>
-  <!-- Chart.js para gráficos profesionales -->
+  <!-- Chart.js para gráficas ejecutivas -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -14,8 +14,8 @@
       --card-hover: rgba(30, 58, 138, 0.6);
       --accent-cyan: #38bdf8;
       --accent-blue: #3b82f6;
-      --accent-purple: #818cf8;
       --accent-emerald: #34d399;
+      --accent-amber: #fbbf24;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
     }
@@ -57,7 +57,7 @@
     h1 { font-size: 1.8rem; font-weight: 700; }
     p.subtitle { color: var(--text-muted); font-size: 0.95rem; }
 
-    /* Layout principal */
+    /* Targeta Principal de Resumen */
     .hero-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -210,7 +210,7 @@
       width: 100%;
     }
 
-    /* Paneles de Filtro */
+    /* Paneles de Filtros */
     .panel-section {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -258,12 +258,12 @@
 
   <div class="container">
     <header>
-      <span class="brand-tag">OKR-009 • Performance Analytics Dashboard</span>
+      <span class="brand-tag">OKR-009 • Executive Dashboard</span>
       <h1>Ser percibidos como la agencia #1 por nuestros clientes</h1>
-      <p class="subtitle" id="selectedContext">Filtrando por: Todas las cuentas | Mes: Septiembre</p>
+      <p class="subtitle" id="selectedContext">Filtrando por: Todas las cuentas | Mes: Sep</p>
     </header>
 
-    <!-- Resumen Total -->
+    <!-- Resumen Total Global -->
     <div class="hero-card">
       <div class="circle-chart">
         <svg viewBox="0 0 160 160">
@@ -275,18 +275,18 @@
         </div>
       </div>
       <div>
-        <h2>% TOTAL DEL OKR GLOBAL</h2>
-        <p class="subtitle" style="margin-top: 8px;">Consolidado en tiempo real basado en el histórico y las métricas activas.</p>
-        <span class="brand-tag" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); margin-top: 12px;" id="statusBadge">● Desempeño Excelente</span>
+        <h2>% TOTAL DEL OKR</h2>
+        <p class="subtitle" style="margin-top: 8px;">Cálculo dinámico directo para la cuenta y período seleccionado.</p>
+        <span class="brand-tag" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); margin-top: 12px;" id="statusBadge">● En Meta</span>
       </div>
     </div>
 
-    <!-- KRs en Tarjetas con números interactivos -->
+    <!-- Las 3 tarjetas de KRs principales -->
     <div class="dashboard-grid">
       <div class="metric-card active" id="card-kr1" onclick="focusKR('kr1')">
         <div class="card-header">
           <span>KR1: NPS (Cliente)</span>
-          <span style="color: var(--accent-emerald);">● En meta</span>
+          <span id="badge-kr1" style="color: var(--accent-emerald);">● En meta</span>
         </div>
         <div class="metric-value" id="val-kr1">81%</div>
         <div class="progress-bar-bg">
@@ -297,7 +297,7 @@
       <div class="metric-card" id="card-kr2" onclick="focusKR('kr2')">
         <div class="card-header">
           <span>KR2: Retención (Gerente)</span>
-          <span style="color: var(--accent-emerald);">● En meta</span>
+          <span id="badge-kr2" style="color: var(--accent-emerald);">● En meta</span>
         </div>
         <div class="metric-value" id="val-kr2">86%</div>
         <div class="progress-bar-bg">
@@ -307,8 +307,8 @@
 
       <div class="metric-card" id="card-kr3" onclick="focusKR('kr3')">
         <div class="card-header">
-          <span>KR3: Reporte Mensual (SLA)</span>
-          <span style="color: var(--accent-emerald);">● En meta</span>
+          <span>KR3: Reporte SLA (Gerente)</span>
+          <span id="badge-kr3" style="color: var(--accent-emerald);">● En meta</span>
         </div>
         <div class="metric-value" id="val-kr3">89%</div>
         <div class="progress-bar-bg">
@@ -317,17 +317,15 @@
       </div>
     </div>
 
-    <!-- NUEVA SECCIÓN: GRÁFICAS DE PERFORMANCE -->
+    <!-- SECCIÓN DE GRÁFICAS -->
     <div class="charts-grid">
-      <!-- Gráfica de Tendencia Histórica (Línea) -->
       <div class="chart-card">
-        <div class="chart-header">📈 Tendencia Histórica del OKR (Ene - Sep)</div>
+        <div class="chart-header">📈 Tendencia Histórica (Ene - Sep)</div>
         <div class="chart-container">
           <canvas id="lineChart"></canvas>
         </div>
       </div>
 
-      <!-- Gráfica de Radar (Desglose por KR) -->
       <div class="chart-card">
         <div class="chart-header">🎯 Balance de Resultados</div>
         <div class="chart-container">
@@ -336,7 +334,7 @@
       </div>
     </div>
 
-    <!-- Filtro por Cuentas -->
+    <!-- Filtro de Cuentas -->
     <div class="panel-section">
       <div class="panel-title">Filtrar por Cuenta / Cliente</div>
       <div class="chips-group" id="accountChips">
@@ -353,9 +351,9 @@
       </div>
     </div>
 
-    <!-- Histórico de Meses -->
+    <!-- Filtro de Meses -->
     <div class="panel-section">
-      <div class="panel-title">Evolución por Mes</div>
+      <div class="panel-title">Ir a un Mes del Histórico</div>
       <div class="chips-group" id="monthChips">
         <button class="chip" onclick="selectMonth('Ene', this)">Ene</button>
         <button class="chip" onclick="selectMonth('Feb', this)">Feb</button>
@@ -371,38 +369,99 @@
   </div>
 
   <script>
-    // Datos de cuentas
-    const accountData = {
-      'Todas': { kr1: 81, kr2: 86, kr3: 89 },
-      'ADM': { kr1: 85, kr2: 90, kr3: 92 },
-      'Bepensa': { kr1: 78, kr2: 82, kr3: 88 },
-      'Gifan': { kr1: 88, kr2: 89, kr3: 94 },
-      'Spinmaster': { kr1: 90, kr2: 91, kr3: 85 },
-      'Multimarca': { kr1: 75, kr2: 80, kr3: 82 },
-      'Ajemex': { kr1: 83, kr2: 87, kr3: 90 },
-      'Ruz': { kr1: 80, kr2: 84, kr3: 87 },
-      'Hanes': { kr1: 86, kr2: 88, kr3: 91 },
-      'Zuru': { kr1: 82, kr2: 85, kr3: 89 }
+    // Matriz de Datos Históricos por Cuenta y Mes
+    // Para cuentas individuales, Retención es 100% o 0% sin promedios falsos
+    const database = {
+      'Todas': {
+        'Ene': { kr1: 70, kr2: 78, kr3: 75 }, 'Feb': { kr1: 72, kr2: 78, kr3: 77 },
+        'Mar': { kr1: 75, kr2: 80, kr3: 82 }, 'Abr': { kr1: 74, kr2: 82, kr3: 80 },
+        'May': { kr1: 78, kr2: 84, kr3: 85 }, 'Jun': { kr1: 80, kr2: 85, kr3: 86 },
+        'Jul': { kr1: 82, kr2: 86, kr3: 88 }, 'Ago': { kr1: 80, kr2: 86, kr3: 87 },
+        'Sep': { kr1: 81, kr2: 86, kr3: 89 }
+      },
+      'Gifan': {
+        'Ene': { kr1: 50, kr2: 100, kr3: 80 }, 'Feb': { kr1: 50, kr2: 100, kr3: 100 },
+        'Mar': { kr1: 60, kr2: 100, kr3: 100 }, 'Abr': { kr1: 60, kr2: 100, kr3: 90 },
+        'May': { kr1: 70, kr2: 100, kr3: 100 }, 'Jun': { kr1: 80, kr2: 100, kr3: 100 },
+        'Jul': { kr1: 85, kr2: 100, kr3: 100 }, 'Ago': { kr1: 85, kr2: 100, kr3: 95 },
+        'Sep': { kr1: 88, kr2: 100, kr3: 94 }
+      },
+      'ADM': {
+        'Ene': { kr1: 75, kr2: 100, kr3: 85 }, 'Feb': { kr1: 78, kr2: 100, kr3: 88 },
+        'Mar': { kr1: 80, kr2: 100, kr3: 90 }, 'Abr': { kr1: 82, kr2: 100, kr3: 90 },
+        'May': { kr1: 83, kr2: 100, kr3: 92 }, 'Jun': { kr1: 85, kr2: 100, kr3: 92 },
+        'Jul': { kr1: 85, kr2: 100, kr3: 95 }, 'Ago': { kr1: 84, kr2: 100, kr3: 90 },
+        'Sep': { kr1: 85, kr2: 100, kr3: 92 }
+      },
+      'Bepensa': {
+        'Ene': { kr1: 65, kr2: 100, kr3: 80 }, 'Feb': { kr1: 68, kr2: 100, kr3: 82 },
+        'Mar': { kr1: 70, kr2: 100, kr3: 85 }, 'Abr': { kr1: 72, kr2: 100, kr3: 84 },
+        'May': { kr1: 75, kr2: 100, kr3: 86 }, 'Jun': { kr1: 76, kr2: 100, kr3: 88 },
+        'Jul': { kr1: 78, kr2: 100, kr3: 88 }, 'Ago': { kr1: 77, kr2: 100, kr3: 87 },
+        'Sep': { kr1: 78, kr2: 100, kr3: 88 }
+      },
+      'Spinmaster': {
+        'Ene': { kr1: 80, kr2: 100, kr3: 75 }, 'Feb': { kr1: 82, kr2: 100, kr3: 78 },
+        'Mar': { kr1: 85, kr2: 100, kr3: 80 }, 'Abr': { kr1: 84, kr2: 100, kr3: 82 },
+        'May': { kr1: 88, kr2: 100, kr3: 85 }, 'Jun': { kr1: 89, kr2: 100, kr3: 85 },
+        'Jul': { kr1: 90, kr2: 100, kr3: 88 }, 'Ago': { kr1: 89, kr2: 100, kr3: 86 },
+        'Sep': { kr1: 90, kr2: 100, kr3: 85 }
+      },
+      'Multimarca': {
+        'Ene': { kr1: 60, kr2: 100, kr3: 70 }, 'Feb': { kr1: 65, kr2: 100, kr3: 72 },
+        'Mar': { kr1: 68, kr2: 100, kr3: 75 }, 'Abr': { kr1: 70, kr2: 100, kr3: 78 },
+        'May': { kr1: 72, kr2: 100, kr3: 80 }, 'Jun': { kr1: 74, kr2: 100, kr3: 80 },
+        'Jul': { kr1: 75, kr2: 100, kr3: 82 }, 'Ago': { kr1: 74, kr2: 100, kr3: 81 },
+        'Sep': { kr1: 75, kr2: 100, kr3: 82 }
+      },
+      'Ajemex': {
+        'Ene': { kr1: 70, kr2: 100, kr3: 80 }, 'Feb': { kr1: 72, kr2: 100, kr3: 82 },
+        'Mar': { kr1: 75, kr2: 100, kr3: 85 }, 'Abr': { kr1: 78, kr2: 100, kr3: 86 },
+        'May': { kr1: 80, kr2: 100, kr3: 88 }, 'Jun': { kr1: 81, kr2: 100, kr3: 88 },
+        'Jul': { kr1: 83, kr2: 100, kr3: 90 }, 'Ago': { kr1: 82, kr2: 100, kr3: 89 },
+        'Sep': { kr1: 83, kr2: 100, kr3: 90 }
+      },
+      'Ruz': {
+        'Ene': { kr1: 68, kr2: 100, kr3: 75 }, 'Feb': { kr1: 70, kr2: 100, kr3: 78 },
+        'Mar': { kr1: 72, kr2: 100, kr3: 80 }, 'Abr': { kr1: 75, kr2: 100, kr3: 82 },
+        'May': { kr1: 78, kr2: 100, kr3: 85 }, 'Jun': { kr1: 79, kr2: 100, kr3: 86 },
+        'Jul': { kr1: 80, kr2: 100, kr3: 87 }, 'Ago': { kr1: 79, kr2: 100, kr3: 86 },
+        'Sep': { kr1: 80, kr2: 100, kr3: 87 }
+      },
+      'Hanes': {
+        'Ene': { kr1: 75, kr2: 100, kr3: 82 }, 'Feb': { kr1: 78, kr2: 100, kr3: 85 },
+        'Mar': { kr1: 80, kr2: 100, kr3: 88 }, 'Abr': { kr1: 82, kr2: 100, kr3: 88 },
+        'May': { kr1: 84, kr2: 100, kr3: 90 }, 'Jun': { kr1: 85, kr2: 100, kr3: 90 },
+        'Jul': { kr1: 86, kr2: 100, kr3: 92 }, 'Ago': { kr1: 85, kr2: 100, kr3: 91 },
+        'Sep': { kr1: 86, kr2: 100, kr3: 91 }
+      },
+      'Zuru': {
+        'Ene': { kr1: 70, kr2: 100, kr3: 78 }, 'Feb': { kr1: 72, kr2: 100, kr3: 80 },
+        'Mar': { kr1: 75, kr2: 100, kr3: 82 }, 'Abr': { kr1: 78, kr2: 100, kr3: 85 },
+        'May': { kr1: 80, kr2: 100, kr3: 87 }, 'Jun': { kr1: 81, kr2: 100, kr3: 88 },
+        'Jul': { kr1: 82, kr2: 100, kr3: 89 }, 'Ago': { kr1: 81, kr2: 100, kr3: 88 },
+        'Sep': { kr1: 82, kr2: 100, kr3: 89 }
+      }
     };
 
     let currentAccount = 'Todas';
     let currentMonth = 'Sep';
     let lineChart, radarChart;
+    const monthsList = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'];
 
-    // Inicializar Gráficas
     function initCharts() {
       const lineCtx = document.getElementById('lineChart').getContext('2d');
       lineChart = new Chart(lineCtx, {
         type: 'line',
         data: {
-          labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'],
+          labels: monthsList,
           datasets: [{
             label: 'Cumplimiento OKR Global (%)',
-            data: [72, 74, 78, 77, 80, 82, 84, 83, 85],
+            data: monthsList.map(m => Math.round((database['Todas'][m].kr1 + database['Todas'][m].kr2 + database['Todas'][m].kr3) / 3)),
             borderColor: '#38bdf8',
             backgroundColor: 'rgba(56, 189, 248, 0.1)',
             fill: true,
-            tension: 0.4,
+            tension: 0.3,
             borderWidth: 3,
             pointBackgroundColor: '#38bdf8'
           }]
@@ -413,7 +472,7 @@
           plugins: { legend: { display: false } },
           scales: {
             x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-            y: { min: 50, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
+            y: { min: 40, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
           }
         }
       });
@@ -424,7 +483,7 @@
         data: {
           labels: ['NPS (KR1)', 'Retención (KR2)', 'SLA (KR3)'],
           datasets: [{
-            label: 'Desempeño',
+            label: 'Resultado',
             data: [81, 86, 89],
             backgroundColor: 'rgba(59, 130, 246, 0.25)',
             borderColor: '#3b82f6',
@@ -438,7 +497,7 @@
           plugins: { legend: { display: false } },
           scales: {
             r: {
-              min: 50,
+              min: 0,
               max: 100,
               grid: { color: 'rgba(255,255,255,0.1)' },
               angleLines: { color: 'rgba(255,255,255,0.1)' },
@@ -451,45 +510,45 @@
     }
 
     function updateDashboard() {
-      const base = accountData[currentAccount];
-      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep'];
-      const monthOffset = (months.indexOf(currentMonth) - 8) * 1.5;
+      const data = database[currentAccount][currentMonth];
+      const kr1 = data.kr1;
+      const kr2 = data.kr2;
+      const kr3 = data.kr3;
 
-      const kr1 = Math.min(100, Math.max(0, Math.round(base.kr1 + monthOffset)));
-      const kr2 = Math.min(100, Math.max(0, Math.round(base.kr2 + monthOffset)));
-      const kr3 = Math.min(100, Math.max(0, Math.round(base.kr3 + monthOffset)));
-
-      // Actualizar valores en UI
+      // Actualizar valores numéricos
       document.getElementById('val-kr1').innerText = kr1 + '%';
       document.getElementById('val-kr2').innerText = kr2 + '%';
       document.getElementById('val-kr3').innerText = kr3 + '%';
 
+      // Actualizar barras
       document.getElementById('bar-kr1').style.width = kr1 + '%';
       document.getElementById('bar-kr2').style.width = kr2 + '%';
       document.getElementById('bar-kr3').style.width = kr3 + '%';
 
+      // Calcular promedio global exacto
       const total = Math.round((kr1 + kr2 + kr3) / 3);
       document.getElementById('heroPercent').innerText = total + '%';
 
+      // Actualizar dona central
       const circumference = 2 * Math.PI * 70;
       const offset = circumference - (total / 100) * circumference;
       document.getElementById('heroProgress').style.strokeDashoffset = offset;
 
       document.getElementById('selectedContext').innerText = `Filtrando por: ${currentAccount} | Mes: ${currentMonth}`;
 
-      // Actualizar Gráficos
+      // Actualizar Radar Chart
       if (radarChart) {
         radarChart.data.datasets[0].data = [kr1, kr2, kr3];
         radarChart.update();
       }
 
+      // Actualizar Line Chart
       if (lineChart) {
-        // Generar una línea histórica ajustada a la cuenta actual
-        const historicalTrend = months.map((m, idx) => {
-          const off = (idx - 8) * 1.5;
-          return Math.round((base.kr1 + base.kr2 + base.kr3) / 3 + off);
+        const trendData = monthsList.map(m => {
+          const item = database[currentAccount][m];
+          return Math.round((item.kr1 + item.kr2 + item.kr3) / 3);
         });
-        lineChart.data.datasets[0].data = historicalTrend;
+        lineChart.data.datasets[0].data = trendData;
         lineChart.update();
       }
     }
@@ -513,7 +572,6 @@
       document.getElementById('card-' + krId).classList.add('active');
     }
 
-    // Inicializar al cargar la página
     window.onload = () => {
       initCharts();
       updateDashboard();

@@ -1,581 +1,164 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador OKR - Executive Dashboard</title>
-  <!-- Chart.js para gráficas ejecutivas -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    :root {
-      --bg-main: #0b1329;
-      --card-bg: rgba(23, 37, 84, 0.4);
-      --card-border: rgba(56, 189, 248, 0.15);
-      --card-hover: rgba(30, 58, 138, 0.6);
-      --accent-cyan: #38bdf8;
-      --accent-blue: #3b82f6;
-      --accent-emerald: #34d399;
-      --accent-amber: #fbbf24;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolve - Sistema de OKRs & Operaciones</title>
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: radial-gradient(circle at top right, #1e3a8a 0%, #0b1329 60%);
-      color: var(--text-main);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    header {
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    .brand-tag {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent-cyan);
-      background: rgba(56, 189, 248, 0.1);
-      padding: 4px 12px;
-      border-radius: 20px;
-      display: inline-block;
-      margin-bottom: 8px;
-    }
-
-    h1 { font-size: 1.8rem; font-weight: 700; }
-    p.subtitle { color: var(--text-muted); font-size: 0.95rem; }
-
-    /* Tarjeta Principal de Resumen */
-    .hero-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 30px;
-      margin-bottom: 30px;
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 30px;
-      align-items: center;
-    }
-
-    .circle-chart {
-      position: relative;
-      width: 160px;
-      height: 160px;
-      margin: 0 auto;
-    }
-
-    .circle-chart svg {
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
-    }
-
-    .circle-chart circle {
-      fill: none;
-      stroke-width: 12;
-      stroke-linecap: round;
-    }
-
-    .circle-bg { stroke: rgba(255, 255, 255, 0.05); }
-    .circle-progress {
-      stroke: var(--accent-cyan);
-      stroke-dasharray: 440;
-      stroke-dashoffset: 66;
-      transition: stroke-dashoffset 0.6s ease;
-    }
-
-    .circle-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-    }
-
-    .circle-number {
-      font-size: 2.2rem;
-      font-weight: 800;
-      color: var(--text-main);
-      transition: transform 0.2s ease, color 0.2s ease;
-    }
-
-    /* Grid KRs */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .metric-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
-      padding: 24px;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .metric-card:hover, .metric-card.active {
-      background: var(--card-hover);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 12px 30px -10px rgba(56, 189, 248, 0.3);
-      transform: translateY(-4px);
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 15px;
-    }
-
-    .metric-value {
-      font-size: 2.8rem;
-      font-weight: 800;
-      color: var(--text-main);
-      display: inline-block;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
-    }
-
-    .metric-card:hover .metric-value,
-    .metric-card.active .metric-value {
-      transform: scale(1.18);
-      color: var(--accent-cyan);
-    }
-
-    .progress-bar-bg {
-      height: 6px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      margin-top: 15px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
-      border-radius: 10px;
-      transition: width 0.5s ease;
-    }
-
-    /* Sección de Gráficos Analíticos */
-    .charts-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    @media (max-width: 900px) {
-      .charts-grid { grid-template-columns: 1fr; }
-    }
-
-    .chart-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
-      padding: 24px;
-    }
-
-    .chart-header {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 18px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .chart-container {
-      position: relative;
-      height: 250px;
-      width: 100%;
-    }
-
-    /* Paneles de Filtros */
-    .panel-section {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 20px 24px;
-      margin-bottom: 20px;
-    }
-
-    .panel-title {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .chips-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 8px 18px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-
-    .chip:hover, .chip.active {
-      background: var(--accent-cyan);
-      color: #0b1329;
-      border-color: var(--accent-cyan);
-      font-weight: 700;
-      transform: scale(1.05);
-    }
-  </style>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; }
+        @media (min-width: 768px) { body { flex-direction: row; } }
+        
+        aside { width: 100%; background-color: #020617; border-right: 1px solid #1e293b; padding: 1.5rem; flex-shrink: 0; }
+        @media (min-width: 768px) { aside { width: 16rem; display: flex; flex-direction: column; justify-content: space-between; } }
+        
+        .logo-container { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
+        .logo-box { width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background-color: #4f46e5; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.25rem; color: #ffffff; }
+        .logo-title { font-weight: 700; font-size: 1.125rem; color: #ffffff; }
+        .logo-subtitle { font-size: 0.75rem; color: #94a3b8; }
+        
+        nav { display: flex; flex-direction: column; gap: 0.5rem; }
+        .nav-btn { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; transition: all 0.2s; background: none; border: none; cursor: pointer; text-align: left; font-size: 0.875rem; font-weight: 500; }
+        .btn-inactive { color: #94a3b8; }
+        .btn-inactive:hover { background-color: #0f172a; color: #ffffff; }
+        .btn-active { background-color: #4f46e5; color: #ffffff; }
+        
+        main { flex: 1 1 0%; padding: 1.5rem; overflow-y: auto; }
+        @media (min-width: 768px) { main { padding: 2.5rem; } }
+        
+        header { display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #1e293b; }
+        @media (min-width: 640px) { header { flex-direction: row; align-items: center; } }
+        
+        .header-title { font-size: 1.5rem; font-weight: 700; color: #ffffff; }
+        .header-subtitle { font-size: 0.875rem; color: #94a3b8; margin-top: 0.25rem; }
+        
+        /* ESTILOS DE TARJETAS Y TABLAS */
+        .card { background-color: #020617; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .badge-green { background-color: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 9999px; font-weight: 600; }
+        .badge-yellow { background-color: rgba(245, 158, 11, 0.15); color: #fbbf24; font-size: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 9999px; font-weight: 600; }
+        
+        table { width: 100%; text-align: left; border-collapse: collapse; font-size: 0.875rem; margin-top: 1rem; }
+        th { background: #0f172a; padding: 0.75rem; color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; }
+        td { padding: 0.75rem; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+        .text-right { text-align: right; }
+        .font-mono { font-family: monospace; }
+        
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <span class="brand-tag">OKR-009 • Executive Dashboard</span>
-      <h1>Ser percibidos como la agencia #1 por nuestros clientes</h1>
-      <p class="subtitle" id="selectedContext">Filtrando por: Todas las cuentas | Mes: Sep</p>
-    </header>
+    <aside>
+        <div>
+            <div class="logo-container">
+                <div class="logo-box">E</div>
+                <div>
+                    <h1 class="logo-title">EVOLVE</h1>
+                    <span class="logo-subtitle">Repositorio OKR</span>
+                </div>
+            </div>
 
-    <!-- Resumen Total Global -->
-    <div class="hero-card">
-      <div class="circle-chart">
-        <svg viewBox="0 0 160 160">
-          <circle class="circle-bg" cx="80" cy="80" r="70"></circle>
-          <circle class="circle-progress" id="heroProgress" cx="80" cy="80" r="70"></circle>
-        </svg>
-        <div class="circle-text">
-          <div class="circle-number" id="heroPercent">85%</div>
+            <nav>
+                <button onclick="switchTab('okr01')" id="tab-okr01" class="nav-btn btn-active">
+                    <i class="fa-solid fa-person-walking-luggage" style="width: 1.25rem;"></i>
+                    <span>OKR 01 · Cobertura Campo</span>
+                </button>
+                <button onclick="switchTab('okr09')" id="tab-okr09" class="nav-btn btn-inactive">
+                    <i class="fa-solid fa-trophy" style="width: 1.25rem;"></i>
+                    <span>OKR 09 · Agencia #1 (NPS)</span>
+                </button>
+            </nav>
         </div>
-      </div>
-      <div>
-        <h2>% TOTAL DEL OKR</h2>
-        <p class="subtitle" style="margin-top: 8px;">Cálculo dinámico directo para la cuenta y período seleccionado.</p>
-        <span class="brand-tag" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); margin-top: 12px;" id="statusBadge">● En Meta</span>
-      </div>
-    </div>
+    </aside>
 
-    <!-- Las 3 tarjetas de KRs principales -->
-    <div class="dashboard-grid">
-      <div class="metric-card active" id="card-kr1" onclick="focusKR('kr1')">
-        <div class="card-header">
-          <span>KR1: NPS (Cliente)</span>
-          <span id="badge-kr1" style="color: var(--accent-emerald);">● En meta</span>
-        </div>
-        <div class="metric-value" id="val-kr1">81%</div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="bar-kr1" style="width: 81%;"></div>
-        </div>
-      </div>
+    <main>
+        <!-- SECCIÓN 1: OKR 01 DISCIPLINA OPERATIVA DE CAMPO -->
+        <section id="sec-okr01">
+            <header>
+                <div>
+                    <h2 class="header-title">OKR 01 · Disciplina Operativa de Campo</h2>
+                    <p class="header-subtitle">Presencia y Cobertura de Plan de Trabajo por Cuenta (Emetrix)</p>
+                </div>
+                <span class="badge-green"><i class="fa-solid fa-check"></i> 30-Sep-2026 (Medición Activa)</span>
+            </header>
 
-      <div class="metric-card" id="card-kr2" onclick="focusKR('kr2')">
-        <div class="card-header">
-          <span>KR2: Retención (Gerente)</span>
-          <span id="badge-kr2" style="color: var(--accent-emerald);">● En meta</span>
-        </div>
-        <div class="metric-value" id="val-kr2">86%</div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="bar-kr2" style="width: 86%;"></div>
-        </div>
-      </div>
+            <div class="card">
+                <h3 style="color:#818cf8; margin-bottom:0.5rem;">Fórmula MD (Definición Operativa)</h3>
+                <p style="font-size:0.875rem; color:#cbd5e1;"><code>Visitas ejecutadas ÷ Visitas planeadas en el plan de trabajo del periodo, por cuenta.</code></p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cuenta</th>
+                            <th>Gerente / Responsable</th>
+                            <th>Fuente</th>
+                            <th class="text-right">Meta</th>
+                            <th class="text-right">Avance Real</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Hanes Promotoría</td><td>Fabián Martínez Campos</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#34d399;">77.1%</td></tr>
+                        <tr><td>Ajemex Promotoría</td><td>Mario Alberto Nieto Suárez</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#34d399;">73.7%</td></tr>
+                        <tr><td>ADM Promotoría</td><td>María Deisa Rodríguez</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#fbbf24;">69.4%</td></tr>
+                        <tr><td>Zuru Promotoría</td><td>Ejecutivo Cuenta</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#fbbf24;">61.1%</td></tr>
+                        <tr><td>Bepensa Promotoría</td><td>Omar Said Zapién</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#fbbf24;">60.0%</td></tr>
+                        <tr><td>Disney Promotoría</td><td>Édgar Alan Obregón</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#f87171;">54.2%</td></tr>
+                        <tr><td>Gifan Promotoría</td><td>Omar Said Zapién</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#f87171;">34.2%</td></tr>
+                        <tr><td>Ruz Promotoría</td><td>Fernando Delgadillo</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#f87171;">28.3%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-      <div class="metric-card" id="card-kr3" onclick="focusKR('kr3')">
-        <div class="card-header">
-          <span>KR3: Reporte SLA (Gerente)</span>
-          <span id="badge-kr3" style="color: var(--accent-emerald);">● En meta</span>
-        </div>
-        <div class="metric-value" id="val-kr3">89%</div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="bar-kr3" style="width: 89%;"></div>
-        </div>
-      </div>
-    </div>
+        <!-- SECCIÓN 2: OKR 09 SER PERCIBIDOS COMO LA AGENCIA #1 -->
+        <section id="sec-okr09" class="hidden">
+            <header>
+                <div>
+                    <h2 class="header-title">OKR 09 · Ser Percibidos como la Agencia #1</h2>
+                    <p class="header-subtitle">NPS Trimestral de Clientes por Gerente de Cuenta (Meta: ≥ 90.0%)</p>
+                </div>
+                <span class="badge-yellow"><i class="fa-solid fa-clock"></i> Evaluación Trimestral</span>
+            </header>
 
-    <!-- SECCIÓN DE GRÁFICAS -->
-    <div class="charts-grid">
-      <div class="chart-card">
-        <div class="chart-header">📈 Tendencia Histórica (Ene - Sep)</div>
-        <div class="chart-container">
-          <canvas id="lineChart"></canvas>
-        </div>
-      </div>
+            <div class="card">
+                <h3 style="color:#818cf8; margin-bottom:0.5rem;">Cuentas con NPS ≥ 8 Puntos</h3>
+                <p style="font-size:0.875rem; color:#cbd5e1; margin-bottom:1rem;"><code>Evaluación SI/NO por contacto principal de la cuenta en la encuesta de Vercel.</code></p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cuenta</th>
+                            <th>Gerente de Cuenta</th>
+                            <th>Puntaje NPS</th>
+                            <th>Status (≥8 Ptos)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Ajemex</td><td>Mario Alberto Nieto Suárez</td><td>9 / 10</td><td><span class="badge-green">SÍ</span></td></tr>
+                        <tr><td>ADM</td><td>María Deisa Rodríguez</td><td>9 / 10</td><td><span class="badge-green">SÍ</span></td></tr>
+                        <tr><td>Spinmaster</td><td>Verónica Ochoa Manzo</td><td>8 / 10</td><td><span class="badge-green">SÍ</span></td></tr>
+                        <tr><td>Bepensa</td><td>Omar Said Zapién</td><td>7 / 10</td><td><span style="color:#f87171; font-weight:700;">NO</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
-      <div class="chart-card">
-        <div class="chart-header">🎯 Balance de Resultados</div>
-        <div class="chart-container">
-          <canvas id="radarChart"></canvas>
-        </div>
-      </div>
-    </div>
+    <script>
+        function switchTab(tab) {
+            document.getElementById('sec-okr01').classList.add('hidden');
+            document.getElementById('sec-okr09').classList.add('hidden');
+            document.getElementById('tab-okr01').className = 'nav-btn btn-inactive';
+            document.getElementById('tab-okr09').className = 'nav-btn btn-inactive';
 
-    <!-- Filtro de Cuentas -->
-    <div class="panel-section">
-      <div class="panel-title">Filtrar por Cuenta / Cliente</div>
-      <div class="chips-group" id="accountChips">
-        <button class="chip active" onclick="selectAccount('Todas', this)">Todas</button>
-        <button class="chip" onclick="selectAccount('ADM', this)">ADM</button>
-        <button class="chip" onclick="selectAccount('Bepensa', this)">Bepensa</button>
-        <button class="chip" onclick="selectAccount('Gifan', this)">Gifan</button>
-        <button class="chip" onclick="selectAccount('Spinmaster', this)">Spinmaster</button>
-        <button class="chip" onclick="selectAccount('Multimarca', this)">Multimarca</button>
-        <button class="chip" onclick="selectAccount('Ajemex', this)">Ajemex</button>
-        <button class="chip" onclick="selectAccount('Ruz', this)">Ruz</button>
-        <button class="chip" onclick="selectAccount('Hanes', this)">Hanes</button>
-        <button class="chip" onclick="selectAccount('Zuru', this)">Zuru</button>
-      </div>
-    </div>
-
-    <!-- Filtro de Meses -->
-    <div class="panel-section">
-      <div class="panel-title">Ir a un Mes del Histórico</div>
-      <div class="chips-group" id="monthChips">
-        <button class="chip" onclick="selectMonth('Ene', this)">Ene</button>
-        <button class="chip" onclick="selectMonth('Feb', this)">Feb</button>
-        <button class="chip" onclick="selectMonth('Mar', this)">Mar</button>
-        <button class="chip" onclick="selectMonth('Abr', this)">Abr</button>
-        <button class="chip" onclick="selectMonth('May', this)">May</button>
-        <button class="chip" onclick="selectMonth('Jun', this)">Jun</button>
-        <button class="chip" onclick="selectMonth('Jul', this)">Jul</button>
-        <button class="chip" onclick="selectMonth('Ago', this)">Ago</button>
-        <button class="chip active" onclick="selectMonth('Sep', this)">Sep</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Matriz de Datos Históricos por Cuenta y Mes
-    // Para cuentas individuales, Retención es 100% o 0% sin promedios mezclados
-    const database = {
-      'Todas': {
-        'Ene': { kr1: 70, kr2: 78, kr3: 75 }, 'Feb': { kr1: 72, kr2: 78, kr3: 77 },
-        'Mar': { kr1: 75, kr2: 80, kr3: 82 }, 'Abr': { kr1: 74, kr2: 82, kr3: 80 },
-        'May': { kr1: 78, kr2: 84, kr3: 85 }, 'Jun': { kr1: 80, kr2: 85, kr3: 86 },
-        'Jul': { kr1: 82, kr2: 86, kr3: 88 }, 'Ago': { kr1: 80, kr2: 86, kr3: 87 },
-        'Sep': { kr1: 81, kr2: 86, kr3: 89 }
-      },
-      'Gifan': {
-        'Ene': { kr1: 50, kr2: 100, kr3: 80 }, 'Feb': { kr1: 50, kr2: 100, kr3: 100 },
-        'Mar': { kr1: 60, kr2: 100, kr3: 100 }, 'Abr': { kr1: 60, kr2: 100, kr3: 90 },
-        'May': { kr1: 70, kr2: 100, kr3: 100 }, 'Jun': { kr1: 80, kr2: 100, kr3: 100 },
-        'Jul': { kr1: 85, kr2: 100, kr3: 100 }, 'Ago': { kr1: 85, kr2: 100, kr3: 95 },
-        'Sep': { kr1: 88, kr2: 100, kr3: 94 }
-      },
-      'ADM': {
-        'Ene': { kr1: 75, kr2: 100, kr3: 85 }, 'Feb': { kr1: 78, kr2: 100, kr3: 88 },
-        'Mar': { kr1: 80, kr2: 100, kr3: 90 }, 'Abr': { kr1: 82, kr2: 100, kr3: 90 },
-        'May': { kr1: 83, kr2: 100, kr3: 92 }, 'Jun': { kr1: 85, kr2: 100, kr3: 92 },
-        'Jul': { kr1: 85, kr2: 100, kr3: 95 }, 'Ago': { kr1: 84, kr2: 100, kr3: 90 },
-        'Sep': { kr1: 85, kr2: 100, kr3: 92 }
-      },
-      'Bepensa': {
-        'Ene': { kr1: 65, kr2: 100, kr3: 80 }, 'Feb': { kr1: 68, kr2: 100, kr3: 82 },
-        'Mar': { kr1: 70, kr2: 100, kr3: 85 }, 'Abr': { kr1: 72, kr2: 100, kr3: 84 },
-        'May': { kr1: 75, kr2: 100, kr3: 86 }, 'Jun': { kr1: 76, kr2: 100, kr3: 88 },
-        'Jul': { kr1: 78, kr2: 100, kr3: 88 }, 'Ago': { kr1: 77, kr2: 100, kr3: 87 },
-        'Sep': { kr1: 78, kr2: 100, kr3: 88 }
-      },
-      'Spinmaster': {
-        'Ene': { kr1: 80, kr2: 100, kr3: 75 }, 'Feb': { kr1: 82, kr2: 100, kr3: 78 },
-        'Mar': { kr1: 85, kr2: 100, kr3: 80 }, 'Abr': { kr1: 84, kr2: 100, kr3: 82 },
-        'May': { kr1: 88, kr2: 100, kr3: 85 }, 'Jun': { kr1: 89, kr2: 100, kr3: 85 },
-        'Jul': { kr1: 90, kr2: 100, kr3: 88 }, 'Ago': { kr1: 89, kr2: 100, kr3: 86 },
-        'Sep': { kr1: 90, kr2: 100, kr3: 85 }
-      },
-      'Multimarca': {
-        'Ene': { kr1: 60, kr2: 100, kr3: 70 }, 'Feb': { kr1: 65, kr2: 100, kr3: 72 },
-        'Mar': { kr1: 68, kr2: 100, kr3: 75 }, 'Abr': { kr1: 70, kr2: 100, kr3: 78 },
-        'May': { kr1: 72, kr2: 100, kr3: 80 }, 'Jun': { kr1: 74, kr2: 100, kr3: 80 },
-        'Jul': { kr1: 75, kr2: 100, kr3: 82 }, 'Ago': { kr1: 74, kr2: 100, kr3: 81 },
-        'Sep': { kr1: 75, kr2: 100, kr3: 82 }
-      },
-      'Ajemex': {
-        'Ene': { kr1: 70, kr2: 100, kr3: 80 }, 'Feb': { kr1: 72, kr2: 100, kr3: 82 },
-        'Mar': { kr1: 75, kr2: 100, kr3: 85 }, 'Abr': { kr1: 78, kr2: 100, kr3: 86 },
-        'May': { kr1: 80, kr2: 100, kr3: 88 }, 'Jun': { kr1: 81, kr2: 100, kr3: 88 },
-        'Jul': { kr1: 83, kr2: 100, kr3: 90 }, 'Ago': { kr1: 82, kr2: 100, kr3: 89 },
-        'Sep': { kr1: 83, kr2: 100, kr3: 90 }
-      },
-      'Ruz': {
-        'Ene': { kr1: 68, kr2: 100, kr3: 75 }, 'Feb': { kr1: 70, kr2: 100, kr3: 78 },
-        'Mar': { kr1: 72, kr2: 100, kr3: 80 }, 'Abr': { kr1: 75, kr2: 100, kr3: 82 },
-        'May': { kr1: 78, kr2: 100, kr3: 85 }, 'Jun': { kr1: 79, kr2: 100, kr3: 86 },
-        'Jul': { kr1: 80, kr2: 100, kr3: 87 }, 'Ago': { kr1: 79, kr2: 100, kr3: 86 },
-        'Sep': { kr1: 80, kr2: 100, kr3: 87 }
-      },
-      'Hanes': {
-        'Ene': { kr1: 75, kr2: 100, kr3: 82 }, 'Feb': { kr1: 78, kr2: 100, kr3: 85 },
-        'Mar': { kr1: 80, kr2: 100, kr3: 88 }, 'Abr': { kr1: 82, kr2: 100, kr3: 88 },
-        'May': { kr1: 84, kr2: 100, kr3: 90 }, 'Jun': { kr1: 85, kr2: 100, kr3: 90 },
-        'Jul': { kr1: 86, kr2: 100, kr3: 92 }, 'Ago': { kr1: 85, kr2: 100, kr3: 91 },
-        'Sep': { kr1: 86, kr2: 100, kr3: 91 }
-      },
-      'Zuru': {
-        'Ene': { kr1: 70, kr2: 100, kr3: 78 }, 'Feb': { kr1: 72, kr2: 100, kr3: 80 },
-        'Mar': { kr1: 75, kr2: 100, kr3: 82 }, 'Abr': { kr1: 78, kr2: 100, kr3: 85 },
-        'May': { kr1: 80, kr2: 100, kr3: 87 }, 'Jun': { kr1: 81, kr2: 100, kr3: 88 },
-        'Jul': { kr1: 82, kr2: 100, kr3: 89 }, 'Ago': { kr1: 81, kr2: 100, kr3: 88 },
-        'Sep': { kr1: 82, kr2: 100, kr3: 89 }
-      }
-    };
-
-    let currentAccount = 'Todas';
-    let currentMonth = 'Sep';
-    let lineChart, radarChart;
-    const monthsList = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'];
-
-    function initCharts() {
-      const lineCtx = document.getElementById('lineChart').getContext('2d');
-      lineChart = new Chart(lineCtx, {
-        type: 'line',
-        data: {
-          labels: monthsList,
-          datasets: [{
-            label: 'Cumplimiento OKR Global (%)',
-            data: monthsList.map(m => Math.round((database['Todas'][m].kr1 + database['Todas'][m].kr2 + database['Todas'][m].kr3) / 3)),
-            borderColor: '#38bdf8',
-            backgroundColor: 'rgba(56, 189, 248, 0.1)',
-            fill: true,
-            tension: 0.3,
-            borderWidth: 3,
-            pointBackgroundColor: '#38bdf8'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } },
-            y: { min: 40, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }
-          }
+            document.getElementById(`sec-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).className = 'nav-btn btn-active';
         }
-      });
-
-      const radarCtx = document.getElementById('radarChart').getContext('2d');
-      radarChart = new Chart(radarCtx, {
-        type: 'radar',
-        data: {
-          labels: ['NPS (KR1)', 'Retención (KR2)', 'SLA (KR3)'],
-          datasets: [{
-            label: 'Resultado',
-            data: [81, 86, 89],
-            backgroundColor: 'rgba(59, 130, 246, 0.25)',
-            borderColor: '#3b82f6',
-            borderWidth: 2,
-            pointBackgroundColor: '#38bdf8'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            r: {
-              min: 0,
-              max: 100,
-              grid: { color: 'rgba(255,255,255,0.1)' },
-              angleLines: { color: 'rgba(255,255,255,0.1)' },
-              pointLabels: { color: '#f8fafc', font: { size: 11, weight: 'bold' } },
-              ticks: { display: false }
-            }
-          }
-        }
-      });
-    }
-
-    function updateDashboard() {
-      const data = database[currentAccount][currentMonth];
-      const kr1 = data.kr1;
-      const kr2 = data.kr2;
-      const kr3 = data.kr3;
-
-      // Actualizar valores numéricos
-      document.getElementById('val-kr1').innerText = kr1 + '%';
-      document.getElementById('val-kr2').innerText = kr2 + '%';
-      document.getElementById('val-kr3').innerText = kr3 + '%';
-
-      // Actualizar barras
-      document.getElementById('bar-kr1').style.width = kr1 + '%';
-      document.getElementById('bar-kr2').style.width = kr2 + '%';
-      document.getElementById('bar-kr3').style.width = kr3 + '%';
-
-      // Calcular promedio global exacto
-      const total = Math.round((kr1 + kr2 + kr3) / 3);
-      document.getElementById('heroPercent').innerText = total + '%';
-
-      // Actualizar dona central
-      const circumference = 2 * Math.PI * 70;
-      const offset = circumference - (total / 100) * circumference;
-      document.getElementById('heroProgress').style.strokeDashoffset = offset;
-
-      document.getElementById('selectedContext').innerText = `Filtrando por: ${currentAccount} | Mes: ${currentMonth}`;
-
-      // Actualizar Radar Chart
-      if (radarChart) {
-        radarChart.data.datasets[0].data = [kr1, kr2, kr3];
-        radarChart.update();
-      }
-
-      // Actualizar Line Chart
-      if (lineChart) {
-        const trendData = monthsList.map(m => {
-          const item = database[currentAccount][m];
-          return Math.round((item.kr1 + item.kr2 + item.kr3) / 3);
-        });
-        lineChart.data.datasets[0].data = trendData;
-        lineChart.update();
-      }
-    }
-
-    function selectAccount(account, element) {
-      currentAccount = account;
-      document.querySelectorAll('#accountChips .chip').forEach(c => c.classList.remove('active'));
-      element.classList.add('active');
-      updateDashboard();
-    }
-
-    function selectMonth(month, element) {
-      currentMonth = month;
-      document.querySelectorAll('#monthChips .chip').forEach(c => c.classList.remove('active'));
-      element.classList.add('active');
-      updateDashboard();
-    }
-
-    function focusKR(krId) {
-      document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('active'));
-      document.getElementById('card-' + krId).classList.add('active');
-    }
-
-    window.onload = () => {
-      initCharts();
-      updateDashboard();
-    };
-  </script>
+    </script>
 </body>
 </html>

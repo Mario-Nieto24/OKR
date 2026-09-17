@@ -16,6 +16,10 @@
         aside { width: 100%; background-color: #02040a; border-right: 1px solid rgba(255,255,255,0.08); padding: 1.75rem; flex-shrink: 0; }
         @media (min-width: 768px) { aside { width: 17rem; display: flex; flex-direction: column; justify-content: space-between; } }
         
+        /* REGLA DE PRIVACIDAD: OCULTAR MENÚ SI ES VISTA DE CLIENTE */
+        body.client-mode aside { display: none !important; }
+        body.client-mode main { width: 100vw !important; min-height: 100vh !important; }
+
         .logo-container { display: flex; align-items: center; gap: 0.85rem; margin-bottom: 2.5rem; }
         .logo-box { width: 2.85rem; height: 2.85rem; border-radius: 0.85rem; background: linear-gradient(135deg, #0099ff 0%, #0044ff 100%); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.4rem; color: #ffffff; box-shadow: 0 0 20px rgba(0, 153, 255, 0.4); }
         .logo-title { font-weight: 800; font-size: 1.2rem; color: #ffffff; letter-spacing: -0.03em; }
@@ -27,7 +31,7 @@
         .btn-inactive:hover { background: rgba(255,255,255,0.03); color: #cbd5e1; }
         .btn-active { background: linear-gradient(90deg, rgba(0, 153, 255, 0.15) 0%, rgba(0, 102, 255, 0.05) 100%); border: 1px solid rgba(0, 153, 255, 0.4); color: #38bdf8; box-shadow: 0 4px 20px rgba(0, 153, 255, 0.15); }
         
-        main { flex: 1 1 0%; padding: 2rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at top right, rgba(0, 153, 255, 0.05), transparent 40%); }
+        main { flex: 1 1 0%; padding: 2rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at top right, rgba(0, 153, 255, 0.05), transparent 40%); width: 100%; }
         
         /* TARJETA EXECUTIVE GLASSMORPHISM */
         .survey-card { background: rgba(11, 17, 32, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); color: #f8fafc; width: 100%; max-width: 720px; border-radius: 1.5rem; padding: 3rem; box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8); }
@@ -55,8 +59,12 @@
         .likert-option:hover, .likert-option.selected { border-color: #0099ff; background: rgba(0, 153, 255, 0.08); color: #ffffff; transform: translateX(6px); }
         .likert-num { width: 2.2rem; height: 2.2rem; border-radius: 0.6rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #38bdf8; }
         
-        .btn-primary { width: 100%; background: linear-gradient(90deg, #0099ff 0%, #0055ff 100%); color: #fff; border: none; padding: 1.05rem; border-radius: 0.85rem; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 6px 20px rgba(0, 153, 255, 0.3); transition: all 0.25s ease; }
+        /* BOTONES DE NAVEGACIÓN */
+        .btn-group { display: flex; gap: 1rem; margin-top: 1.25rem; }
+        .btn-primary { flex: 1; background: linear-gradient(90deg, #0099ff 0%, #0055ff 100%); color: #fff; border: none; padding: 1.05rem; border-radius: 0.85rem; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 6px 20px rgba(0, 153, 255, 0.3); transition: all 0.25s ease; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 153, 255, 0.5); }
+        .btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 1.05rem 1.5rem; border-radius: 0.85rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.25s ease; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
         textarea { width: 100%; height: 130px; border: 1px solid rgba(255,255,255,0.12); background: #060913; border-radius: 0.85rem; padding: 1.1rem; font-family: inherit; font-size: 0.95rem; outline: none; margin-top: 1rem; color: #f8fafc; transition: border-color 0.2s; }
         textarea:focus { border-color: #0099ff; }
@@ -76,7 +84,7 @@
 </head>
 <body>
 
-    <aside>
+    <aside id="sidebar-nav">
         <div>
             <div class="logo-container">
                 <div class="logo-box">e</div>
@@ -107,7 +115,7 @@
         </div>
     </aside>
 
-    <main>
+    <main id="main-content">
         <!-- GENERADOR DE ENLACES INTERNO -->
         <div id="sec-generator" class="survey-card">
             <span class="survey-badge"><i class="fa-solid fa-sliders"></i> Console Manager</span>
@@ -158,10 +166,10 @@
                 <button class="btn-primary" onclick="nextStep(1)">Iniciar Evaluación de Servicio <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- PASO 1: NPS PRINCIPAL -->
+            <!-- PASO 1: NPS PRINCIPAL CORREGIDO -->
             <div id="step-1" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">MÉTRICA 1 DE 5 · RECOMENDACIÓN STRATEGIC</p>
-                <h3 class="survey-title">Tomando en cuenta la visión global del servicio, ¿qué tan probable es que recomiendes la alianza estratégica de Evolve a un par directivo?</h3>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 1 DE 5 · VALORACIÓN GENERAL</p>
+                <h3 class="survey-title">¿Qué tan probable es que recomiendes el servicio de Evolve a un colega o contacto directivo de otra empresa?</h3>
                 <div class="nps-grid">
                     <button class="nps-btn" onclick="selectNPS(this, 0)">0</button>
                     <button class="nps-btn" onclick="selectNPS(this, 1)">1</button>
@@ -175,58 +183,73 @@
                     <button class="nps-btn" onclick="selectNPS(this, 9)">9</button>
                     <button class="nps-btn" onclick="selectNPS(this, 10)">10</button>
                 </div>
-                <button class="btn-primary" onclick="nextStep(2)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="nextStep(0)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                    <button class="btn-primary" onclick="nextStep(2)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
 
-            <!-- PASO 2: CUALITATIVO -->
+            <!-- PASO 2: CUALITATIVO CORREGIDO -->
             <div id="step-2" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">MÉTRICA 2 DE 5 · DIAGNÓSTICO CUALITATIVO</p>
-                <h3 class="survey-title">¿Cuál es el factor determinante de tu valoración y qué prioridades estratégicas deberíamos abordar?</h3>
-                <textarea id="txt-comentario" placeholder="Escribe tus observaciones directivas o áreas de enfoque..."></textarea>
-                <button class="btn-primary" onclick="nextStep(3)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 2 DE 5 · DIAGNÓSTICO CUALITATIVO</p>
+                <h3 class="survey-title">¿Cuál es el motivo principal de tu calificación y qué aspectos podemos mejorar en el servicio?</h3>
+                <textarea id="txt-comentario" placeholder="Escribe aquí tus comentarios u observaciones..."></textarea>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="nextStep(1)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                    <button class="btn-primary" onclick="nextStep(3)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
 
-            <!-- PASO 3: LIDERAZGO Y ATENCIÓN -->
+            <!-- PASO 3: LIDERAZGO Y ATENCIÓN (ORDEN INVERTIDO 5 A 1) -->
             <div id="step-3" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">MÉTRICA 3 DE 5 · ATENCIÓN Y GESTIÓN DIRECTIVA</p>
-                <h3 class="survey-title">El liderazgo de la Gerencia de Cuenta brinda respuestas ágiles, resolución oportuna de incidencias y un canal de comunicación efectivo</h3>
-                <div class="likert-option" onclick="selectLikert(this, 'atencion', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'atencion', '2')"><div class="likert-num">2</div> En desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'atencion', '3')"><div class="likert-num">3</div> Neutral</div>
-                <div class="likert-option" onclick="selectLikert(this, 'atencion', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 5 · ATENCIÓN Y SOLUCIÓN DE QUEJAS</p>
+                <h3 class="survey-title">El Gerente de Cuenta brinda atención ágil, seguimiento cercano y resuelve tus solicitudes u observaciones de forma oportuna</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
-                <button class="btn-primary" onclick="nextStep(4)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="nextStep(2)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                    <button class="btn-primary" onclick="nextStep(4)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
 
-            <!-- PASO 4: TECNOLOGÍA E INTEGRACIÓN -->
+            <!-- PASO 4: TECNOLOGÍA E INTEGRACIÓN (ORDEN INVERTIDO 5 A 1) -->
             <div id="step-4" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">MÉTRICA 4 DE 5 · BUSINESS INTELLIGENCE & TECH</p>
-                <h3 class="survey-title">Las herramientas de análisis y reporteo en tiempo real (Emetrix) aportan valor claro para la toma de decisiones directivas</h3>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '2')"><div class="likert-num">2</div> En desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '3')"><div class="likert-num">3</div> Neutral</div>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 5 · TECNOLOGÍA Y REPORTES</p>
+                <h3 class="survey-title">Las herramientas de análisis y reportes (Emetrix) facilitan la toma de decisiones e información de tu cuenta</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
-                <button class="btn-primary" onclick="nextStep(5)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="nextStep(3)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                    <button class="btn-primary" onclick="nextStep(5)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
 
-            <!-- PASO 5: EJECUCIÓN OPERATIVA -->
+            <!-- PASO 5: EJECUCIÓN OPERATIVA (ORDEN INVERTIDO 5 A 1) -->
             <div id="step-5" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">MÉTRICA 5 DE 5 · EXCELENCIA DE CAMPO</p>
-                <h3 class="survey-title">La cobertura en punto de venta y la disciplina operativa de la fuerza de campo cumplen con el plan de trabajo establecido</h3>
-                <div class="likert-option" onclick="selectLikert(this, 'campo', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'campo', '2')"><div class="likert-num">2</div> En desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'campo', '3')"><div class="likert-num">3</div> Neutral</div>
-                <div class="likert-option" onclick="selectLikert(this, 'campo', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 5 · DISCIPLINA EN CAMPO</p>
+                <h3 class="survey-title">La cobertura en tienda y la disciplina operativa de los promotores en punto de venta cumplen con el plan de trabajo</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
-                <button class="btn-primary" onclick="submitSurvey()"><i class="fa-solid fa-paper-plane"></i> Finalizar y Confirmar Evaluación</button>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="nextStep(4)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                    <button class="btn-primary" onclick="submitSurvey()"><i class="fa-solid fa-paper-plane"></i> Finalizar y Enviar</button>
+                </div>
             </div>
 
             <!-- AGRADECIMIENTO PRO -->
             <div id="step-6" class="hidden" style="text-align:center;">
                 <div style="font-size:3.5rem; color:#34d399; margin-bottom:1.25rem;"><i class="fa-solid fa-circle-check"></i></div>
-                <h2 class="survey-title">Evaluación Registrada con Éxito</h2>
-                <p class="survey-subtitle">Gracias por contribuir al fortalecimiento de nuestra excelencia operativa y relación estratégica. La Dirección General de Evolve dará seguimiento puntual a tus comentarios.</p>
+                <h2 class="survey-title">¡Evaluación Registrada con Éxito!</h2>
+                <p class="survey-subtitle">Gracias por contribuir a la mejora continua de nuestros servicios. Tus comentarios han sido registrados correctamente para seguimiento gerencial.</p>
             </div>
         </div>
 
@@ -296,12 +319,16 @@
             campo: "" 
         };
 
+        if (contactoParam || clienteParam) {
+            document.body.classList.add('client-mode');
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             generateLink();
 
-            if (contactoParam && clienteParam) {
-                document.getElementById('lbl-saludo').innerText = `Estimado/a ${contactoParam}`;
-                document.getElementById('lbl-cliente').innerText = clienteParam;
+            if (contactoParam || clienteParam) {
+                document.getElementById('lbl-saludo').innerText = `Estimado/a ${contactoParam || 'Ejecutivo/a'}`;
+                document.getElementById('lbl-cliente').innerText = clienteParam || 'tu empresa';
                 switchTab('survey');
             }
         });

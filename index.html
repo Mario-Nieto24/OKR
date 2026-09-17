@@ -186,7 +186,7 @@
                 <button class="btn-primary" onclick="nextStep(3)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- PASO 3: ATENCIÓN Y QUEJAS (GERENCIA DE CUENTA) -->
+            <!-- PASO 3: ATENCIÓN Y QUEJAS -->
             <div id="step-3" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 5</p>
                 <h3 class="survey-title">El Gerente de Cuenta te brinda una atención ágil y resuelve tus solicitudes o quejas oportunamente</h3>
@@ -198,7 +198,7 @@
                 <button class="btn-primary" onclick="nextStep(4)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- PASO 4: TECNOLOGÍA E INFRAESTRUCTURA -->
+            <!-- PASO 4: TECNOLOGÍA -->
             <div id="step-4" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 5</p>
                 <h3 class="survey-title">Las herramientas tecnológicas y reportes (Emetrix) facilitan la toma de decisiones en tu cuenta</h3>
@@ -210,7 +210,7 @@
                 <button class="btn-primary" onclick="nextStep(5)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- PASO 5: EJECUCIÓN Y CAMPO -->
+            <!-- PASO 5: EJECUCIÓN -->
             <div id="step-5" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 5</p>
                 <h3 class="survey-title">La presencia y disciplina operativa de los promotores en punto de venta cumple con lo planificado</h3>
@@ -282,14 +282,30 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytkZkfshddy_Cwby0uRQDloGwitfaHkWEYaM3RhDZctOQe0rp4ebJBRsHxre35dn8q/exec";
 
         const urlParams = new URLSearchParams(window.location.search);
-        const clienteParam = urlParams.get('cliente') || 'Ajemex';
-        const contactoParam = urlParams.get('contacto') || 'Carlos';
+        const clienteParam = urlParams.get('cliente');
+        const contactoParam = urlParams.get('contacto');
         const gerenteParam = urlParams.get('gerente') || 'Mario Nieto';
 
-        document.getElementById('lbl-saludo').innerText = `Hola, ${contactoParam}`;
-        document.getElementById('lbl-cliente').innerText = clienteParam;
+        let surveyData = { 
+            cliente: clienteParam || 'Ajemex', 
+            gerente: gerenteParam, 
+            nps: null, 
+            comentario: "", 
+            atencion: "", 
+            tecnologia: "", 
+            campo: "" 
+        };
 
-        let surveyData = { cliente: clienteParam, gerente: gerenteParam, nps: null, comentario: "", atencion: "", tecnologia: "", campo: "" };
+        // SI LA URL VIENE CON PARÁMETROS (LINK DEL CLIENTE), ABRE LA ENCUESTA DIRECTAMENTE
+        window.addEventListener('DOMContentLoaded', () => {
+            generateLink();
+
+            if (contactoParam && clienteParam) {
+                document.getElementById('lbl-saludo').innerText = `Hola, ${contactoParam}`;
+                document.getElementById('lbl-cliente').innerText = clienteParam;
+                switchTab('survey'); // Redirige automáticamente al cliente a la Encuesta
+            }
+        });
 
         function generateLink() {
             const contacto = document.getElementById('gen-contacto').value.trim() || 'Cliente';
@@ -315,7 +331,6 @@
 
         document.getElementById('gen-contacto').addEventListener('input', generateLink);
         document.getElementById('gen-cliente').addEventListener('change', generateLink);
-        window.addEventListener('DOMContentLoaded', generateLink);
 
         function nextStep(step) {
             for(let i=0; i<=6; i++) { 

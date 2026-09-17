@@ -3,64 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evolve - Sistema de OKRs & Encuestas NPS</title>
+    <title>Evolve - Platform OKR & Client Experience</title>
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: 'Inter', sans-serif; background-color: #090d16; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; }
         @media (min-width: 768px) { body { flex-direction: row; } }
         
-        aside { width: 100%; background-color: #020617; border-right: 1px solid #1e293b; padding: 1.5rem; flex-shrink: 0; }
-        @media (min-width: 768px) { aside { width: 16rem; display: flex; flex-direction: column; justify-content: space-between; } }
+        aside { width: 100%; background-color: #030712; border-right: 1px solid #1e293b; padding: 1.5rem; flex-shrink: 0; }
+        @media (min-width: 768px) { aside { width: 16.5rem; display: flex; flex-direction: column; justify-content: space-between; } }
         
         .logo-container { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
-        .logo-box { width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background-color: #0099ff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.25rem; color: #ffffff; }
-        .logo-title { font-weight: 700; font-size: 1.125rem; color: #ffffff; }
+        .logo-box { width: 2.75rem; height: 2.75rem; border-radius: 0.75rem; background: linear-gradient(135deg, #0099ff 0%, #0055ff 100%); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.35rem; color: #ffffff; box-shadow: 0 4px 14px rgba(0, 153, 255, 0.4); }
+        .logo-title { font-weight: 700; font-size: 1.15rem; color: #ffffff; letter-spacing: -0.02em; }
+        .logo-sub { font-size: 0.7rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
         
         nav { display: flex; flex-direction: column; gap: 0.5rem; }
-        .nav-btn { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; transition: all 0.2s; background: none; border: none; cursor: pointer; text-align: left; font-size: 0.875rem; font-weight: 500; }
+        .nav-btn { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1rem; border-radius: 0.75rem; transition: all 0.2s ease; background: none; border: none; cursor: pointer; text-align: left; font-size: 0.875rem; font-weight: 500; }
         .btn-inactive { color: #94a3b8; }
         .btn-inactive:hover { background-color: #0f172a; color: #ffffff; }
-        .btn-active { background-color: #0099ff; color: #ffffff; }
+        .btn-active { background: linear-gradient(90deg, #0099ff 0%, #0077ff 100%); color: #ffffff; box-shadow: 0 4px 12px rgba(0, 153, 255, 0.25); }
         
         main { flex: 1 1 0%; padding: 1.5rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; }
         
-        /* TARJETA DE ENCUESTA Y GENERADOR */
-        .survey-card { background-color: #ffffff; color: #0f172a; width: 100%; max-width: 680px; border-radius: 1rem; padding: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
-        .survey-badge { background-color: #f1f5f9; color: #64748b; font-size: 0.75rem; text-align: center; padding: 0.4rem 0.8rem; border-radius: 9999px; font-weight: 500; margin-bottom: 1.5rem; }
-        .survey-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; color: #0f172a; line-height: 1.3; }
-        .survey-subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.5; }
+        /* CARD PRO ESTILO GLASSMORPHISM */
+        .survey-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; width: 100%; max-width: 680px; border-radius: 1.25rem; padding: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
+        .survey-badge { background: rgba(0, 153, 255, 0.12); border: 1px solid rgba(0, 153, 255, 0.3); color: #38bdf8; font-size: 0.75rem; text-align: center; padding: 0.4rem 0.9rem; border-radius: 9999px; font-weight: 600; margin-bottom: 1.5rem; display: inline-block; }
+        .survey-title { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.75rem; color: #ffffff; line-height: 1.35; }
+        .survey-subtitle { font-size: 0.9rem; color: #94a3b8; margin-bottom: 1.5rem; line-height: 1.6; }
         
-        /* FORMULARIO DEL GENERADOR */
+        /* BARRA DE PROGRESO */
+        .progress-bar-bg { width: 100%; height: 6px; background: #1e293b; border-radius: 9999px; margin-bottom: 1.5rem; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 20%; background: linear-gradient(90deg, #0099ff, #38bdf8); transition: width 0.3s ease; }
+
+        /* FORMULARIO GENERADOR */
         .input-group { margin-bottom: 1.25rem; text-align: left; }
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem; }
-        .input-group input, .input-group select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.75rem; font-size: 0.95rem; font-family: inherit; outline: none; background: #fff; color: #0f172a; }
-        .input-group input:focus, .input-group select:focus { border-color: #0099ff; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem; }
+        .input-group input, .input-group select { width: 100%; padding: 0.85rem 1rem; border: 1px solid #334155; border-radius: 0.75rem; font-size: 0.95rem; font-family: inherit; outline: none; background: #0f172a; color: #f8fafc; }
+        .input-group input:focus, .input-group select:focus { border-color: #0099ff; box-shadow: 0 0 0 2px rgba(0,153,255,0.2); }
 
         /* ESCALA NPS (0 A 10) */
-        .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0.35rem; margin: 1.5rem 0; }
-        .nps-btn { border: 1px solid #cbd5e1; background: #fff; padding: 0.75rem 0; border-radius: 0.5rem; font-weight: 600; cursor: pointer; font-size: 0.9rem; color: #0f172a; transition: 0.2s; }
-        .nps-btn:hover, .nps-btn.selected { background-color: #0099ff; color: #fff; border-color: #0099ff; }
+        .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0.4rem; margin: 1.5rem 0; }
+        .nps-btn { border: 1px solid #334155; background: #0f172a; padding: 0.85rem 0; border-radius: 0.6rem; font-weight: 700; cursor: pointer; font-size: 0.95rem; color: #cbd5e1; transition: all 0.2s ease; }
+        .nps-btn:hover, .nps-btn.selected { background: #0099ff; color: #fff; border-color: #0099ff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 153, 255, 0.4); }
         
-        /* OPCIONES LIKERT */
-        .likert-option { border: 1px solid #cbd5e1; padding: 1rem; border-radius: 0.75rem; margin-bottom: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 1rem; font-weight: 500; transition: 0.2s; }
-        .likert-option:hover, .likert-option.selected { border-color: #0099ff; background-color: #f0f9ff; }
-        .likert-num { width: 2rem; height: 2rem; border-radius: 9999px; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+        /* OPCIONES LIKERT PRO */
+        .likert-option { border: 1px solid #334155; background: #0f172a; padding: 1rem 1.25rem; border-radius: 0.75rem; margin-bottom: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 1rem; font-weight: 500; font-size: 0.9rem; transition: all 0.2s ease; color: #cbd5e1; }
+        .likert-option:hover, .likert-option.selected { border-color: #0099ff; background: rgba(0, 153, 255, 0.1); color: #ffffff; transform: translateX(4px); }
+        .likert-num { width: 2rem; height: 2rem; border-radius: 9999px; border: 1px solid #475569; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #38bdf8; }
         
-        .btn-primary { width: 100%; background-color: #0099ff; color: #fff; border: none; padding: 0.9rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-        .btn-primary:hover { background-color: #007acc; }
+        .btn-primary { width: 100%; background: linear-gradient(90deg, #0099ff 0%, #0066ff 100%); color: #fff; border: none; padding: 0.95rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(0, 153, 255, 0.3); transition: all 0.2s ease; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0, 153, 255, 0.5); }
 
-        textarea { width: 100%; height: 120px; border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1rem; font-family: inherit; font-size: 0.95rem; outline: none; margin-top: 1rem; }
+        textarea { width: 100%; height: 120px; border: 1px solid #334155; background: #0f172a; border-radius: 0.75rem; padding: 1rem; font-family: inherit; font-size: 0.95rem; outline: none; margin-top: 1rem; color: #f8fafc; }
         textarea:focus { border-color: #0099ff; }
         
         .hidden { display: none !important; }
         
-        /* VISTA TABLERO GENERAL */
+        /* DASHBOARDS */
         .dashboard-container { width: 100%; max-width: 1000px; }
-        .card { background-color: #020617; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .card { background-color: #030712; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; }
         table { width: 100%; text-align: left; border-collapse: collapse; font-size: 0.875rem; margin-top: 1rem; }
         th { background: #0f172a; padding: 0.75rem; color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; }
         td { padding: 0.75rem; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
@@ -76,7 +81,8 @@
             <div class="logo-container">
                 <div class="logo-box">e</div>
                 <div>
-                    <h1 class="logo-title">evolve</h1>
+                    <h1 class="logo-title">EVOLVE</h1>
+                    <span class="logo-sub">Platform OKR</span>
                 </div>
             </div>
 
@@ -102,11 +108,11 @@
     </aside>
 
     <main>
-        <!-- NUEVA VISTA: GENERADOR DE ENLACES PARA EL GERENTE -->
+        <!-- GENERADOR DE ENLACES -->
         <div id="sec-generator" class="survey-card">
-            <div class="survey-badge">Herramienta Interna Evolve</div>
-            <h2 class="survey-title">Generador de Enlaces de Encuesta NPS</h2>
-            <p class="survey-subtitle">Crea un enlace personalizado para enviarlo directamente a la persona de contacto de cada cuenta por WhatsApp o correo.</p>
+            <span class="survey-badge"><i class="fa-solid fa-shield-halved"></i> Herramienta Interna Evolve</span>
+            <h2 class="survey-title">Generador de Enlaces Personalizados</h2>
+            <p class="survey-subtitle">Crea y copia enlaces únicos de encuesta NPS asignados por cuenta y cliente para WhatsApp o correo.</p>
 
             <div class="input-group">
                 <label for="gen-contacto">Nombre del Cliente / Contacto:</label>
@@ -115,7 +121,7 @@
 
             <div class="input-group">
                 <label for="gen-cliente">Cuenta / Marca:</label>
-                <select id="gen-cliente" onchange="updateGerente()">
+                <select id="gen-cliente">
                     <option value="Ajemex" data-gerente="Mario Nieto">Ajemex</option>
                     <option value="ADM" data-gerente="Deisa Rodríguez">ADM</option>
                     <option value="Bepensa" data-gerente="Omar Zapién">Bepensa</option>
@@ -128,31 +134,34 @@
             </div>
 
             <div class="input-group">
-                <label>Enlace Generado:</label>
-                <input type="text" id="gen-url-result" readonly style="background:#f8fafc; font-size:0.85rem; color:#475569;">
+                <label>Enlace Generado Listo para Usar:</label>
+                <input type="text" id="gen-url-result" readonly style="background:#090d16; font-size:0.85rem; color:#38bdf8;">
             </div>
 
             <button class="btn-primary" onclick="copyGeneratedLink()">
-                <i class="fa-solid fa-copy"></i> Copiar Enlace para WhatsApp
+                <i class="fa-solid fa-copy"></i> Copiar Enlace Personalizado
             </button>
-            <p id="gen-alert" style="color:#10b981; font-weight:600; font-size:0.85rem; margin-top:0.75rem; text-align:center;" class="hidden">
+            <p id="gen-alert" style="color:#34d399; font-weight:600; font-size:0.85rem; margin-top:0.75rem; text-align:center;" class="hidden">
                 ¡Enlace copiado al portapapeles con éxito!
             </p>
         </div>
 
-        <!-- VISTA CLIENTE: ENCUESTA NPS -->
+        <!-- ENCUESTA CLIENTE PRO (5 PREGUNTAS) -->
         <div id="sec-survey" class="survey-card hidden">
-            <div class="survey-badge">Encuesta de Satisfacción · Evolve Interactive</div>
+            <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
+            <span class="survey-badge">Client Experience Assessment</span>
             
+            <!-- PASO 0: INTRODUCCIÓN -->
             <div id="step-0">
                 <h2 class="survey-title" id="lbl-saludo">Hola, Cliente</h2>
-                <p class="survey-subtitle">En Evolve nos importa mucho la percepción de nuestros clientes y trabajamos constantemente para ofrecerte un mejor servicio en <strong id="lbl-cliente">tu cuenta</strong>.</p>
-                <button class="btn-primary" onclick="nextStep(1)">Comenzar encuesta</button>
+                <p class="survey-subtitle">En Evolve valoramos tu retroalimentación para mantener la excelencia operativa en la cuenta de <strong id="lbl-cliente" style="color:#38bdf8;">tu empresa</strong>.</p>
+                <button class="btn-primary" onclick="nextStep(1)">Iniciar Evaluación</button>
             </div>
 
+            <!-- PASO 1: NPS PRINCIPAL (0-10) -->
             <div id="step-1" class="hidden">
-                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 1 de 3</p>
-                <h3 class="survey-title">En una escala de 0 a 10, ¿qué tan probable es que recomiendes a Evolve a un colega de otra marca?</h3>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 1 DE 5</p>
+                <h3 class="survey-title">¿Qué tan probable es que recomiendes los servicios de Evolve a un colega o directivo de otra marca?</h3>
                 <div class="nps-grid">
                     <button class="nps-btn" onclick="selectNPS(this, 0)">0</button>
                     <button class="nps-btn" onclick="selectNPS(this, 1)">1</button>
@@ -166,35 +175,62 @@
                     <button class="nps-btn" onclick="selectNPS(this, 9)">9</button>
                     <button class="nps-btn" onclick="selectNPS(this, 10)">10</button>
                 </div>
-                <button class="btn-primary" onclick="nextStep(2)">Siguiente</button>
+                <button class="btn-primary" onclick="nextStep(2)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
+            <!-- PASO 2: CUALITATIVO -->
             <div id="step-2" class="hidden">
-                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 2 de 3</p>
-                <h3 class="survey-title">¿Por qué esa calificación?</h3>
-                <textarea id="txt-comentario" placeholder="Escribe tus comentarios o áreas de mejora..."></textarea>
-                <button class="btn-primary" onclick="nextStep(3)">Siguiente</button>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 2 DE 5</p>
+                <h3 class="survey-title">¿Cuál es el motivo principal de tu calificación y qué áreas de oportunidad detectas?</h3>
+                <textarea id="txt-comentario" placeholder="Escribe aquí tus comentarios u observaciones sobre el servicio..."></textarea>
+                <button class="btn-primary" onclick="nextStep(3)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
+            <!-- PASO 3: ATENCIÓN Y QUEJAS (GERENCIA DE CUENTA) -->
             <div id="step-3" class="hidden">
-                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 3 de 3</p>
-                <h3 class="survey-title">La presencia y ejecución de nuestros promotores en tienda es consistente</h3>
-                <div class="likert-option" onclick="selectLikert(this, 'Totalmente en desacuerdo')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'En desacuerdo')"><div class="likert-num">2</div> En desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'Ni de acuerdo ni en desacuerdo')"><div class="likert-num">3</div> Ni de acuerdo ni en desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'De acuerdo')"><div class="likert-num">4</div> De acuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'Totalmente de acuerdo')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
-                <button class="btn-primary" onclick="submitSurvey()">Enviar respuestas</button>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 5</p>
+                <h3 class="survey-title">El Gerente de Cuenta te brinda una atención ágil y resuelve tus solicitudes o quejas oportunamente</h3>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'atencion', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
+                <button class="btn-primary" onclick="nextStep(4)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <div id="step-4" class="hidden" style="text-align:center;">
-                <div style="font-size:3rem; color:#10b981; margin-bottom:1rem;"><i class="fa-solid fa-circle-check"></i></div>
-                <h2 class="survey-title">¡Muchas gracias!</h2>
-                <p class="survey-subtitle">Tus respuestas han sido enviadas y guardadas correctamente. La Dirección General las revisará con atención.</p>
+            <!-- PASO 4: TECNOLOGÍA E INFRAESTRUCTURA -->
+            <div id="step-4" class="hidden">
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 5</p>
+                <h3 class="survey-title">Las herramientas tecnológicas y reportes (Emetrix) facilitan la toma de decisiones en tu cuenta</h3>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
+                <button class="btn-primary" onclick="nextStep(5)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <!-- PASO 5: EJECUCIÓN Y CAMPO -->
+            <div id="step-5" class="hidden">
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 5</p>
+                <h3 class="survey-title">La presencia y disciplina operativa de los promotores en punto de venta cumple con lo planificado</h3>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'campo', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
+                <button class="btn-primary" onclick="submitSurvey()"><i class="fa-solid fa-paper-plane"></i> Finalizar y Enviar</button>
+            </div>
+
+            <!-- AGRADECIMIENTO -->
+            <div id="step-6" class="hidden" style="text-align:center;">
+                <div style="font-size:3.5rem; color:#34d399; margin-bottom:1rem;"><i class="fa-solid fa-circle-check"></i></div>
+                <h2 class="survey-title">¡Evaluación Completada!</h2>
+                <p class="survey-subtitle">Agradecemos tu tiempo. Sus respuestas han sido registradas en la plataforma gerencial de Evolve.</p>
             </div>
         </div>
 
-        <!-- VISTA OKR 01 -->
+        <!-- TABLERO OKR 01 -->
         <div id="sec-okr01" class="dashboard-container hidden">
             <div class="card">
                 <h2 style="color:#fff; margin-bottom:0.5rem;">OKR 01 · Disciplina Operativa de Campo</h2>
@@ -218,11 +254,11 @@
             </div>
         </div>
 
-        <!-- VISTA OKR 09 -->
+        <!-- TABLERO OKR 09 -->
         <div id="sec-okr09" class="dashboard-container hidden">
             <div class="card">
-                <h2 style="color:#fff; margin-bottom:0.5rem;">OKR 09 · Tablero de Satisfacción (NPS)</h2>
-                <p style="font-size:0.875rem; color:#94a3b8; margin-bottom:1rem;">Métrica: Cuentas con evaluación NPS ≥ 8 puntos</p>
+                <h2 style="color:#fff; margin-bottom:0.5rem;">OKR 09 · Tablero de Satisfacción & Retención (NPS)</h2>
+                <p style="font-size:0.875rem; color:#94a3b8; margin-bottom:1rem;">Evaluación de Atención, Solución de Quejas y NPS por Cuenta (Meta: ≥ 8 pts)</p>
                 <table>
                     <thead>
                         <tr>
@@ -253,9 +289,8 @@
         document.getElementById('lbl-saludo').innerText = `Hola, ${contactoParam}`;
         document.getElementById('lbl-cliente').innerText = clienteParam;
 
-        let surveyData = { cliente: clienteParam, gerente: gerenteParam, nps: null, comentario: "", presencia: "" };
+        let surveyData = { cliente: clienteParam, gerente: gerenteParam, nps: null, comentario: "", atencion: "", tecnologia: "", campo: "" };
 
-        // GENERADOR DE LINKS AUTOMÁTICO
         function generateLink() {
             const contacto = document.getElementById('gen-contacto').value.trim() || 'Cliente';
             const selectCliente = document.getElementById('gen-cliente');
@@ -279,11 +314,16 @@
         }
 
         document.getElementById('gen-contacto').addEventListener('input', generateLink);
+        document.getElementById('gen-cliente').addEventListener('change', generateLink);
         window.addEventListener('DOMContentLoaded', generateLink);
 
         function nextStep(step) {
-            for(let i=0; i<=4; i++) { document.getElementById(`step-${i}`).classList.add('hidden'); }
+            for(let i=0; i<=6; i++) { 
+                const el = document.getElementById(`step-${i}`);
+                if(el) el.classList.add('hidden'); 
+            }
             document.getElementById(`step-${step}`).classList.remove('hidden');
+            document.getElementById('progress-fill').style.width = `${(step / 5) * 100}%`;
         }
 
         function selectNPS(btn, val) {
@@ -292,10 +332,11 @@
             surveyData.nps = val;
         }
 
-        function selectLikert(opt, val) {
-            document.querySelectorAll('.likert-option').forEach(o => o.classList.remove('selected'));
+        function selectLikert(opt, field, val) {
+            const parent = opt.parentElement;
+            parent.querySelectorAll('.likert-option').forEach(o => o.classList.remove('selected'));
             opt.classList.add('selected');
-            surveyData.presencia = val;
+            surveyData[field] = val;
         }
 
         function submitSurvey() {
@@ -305,7 +346,7 @@
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(surveyData)
-            }).then(() => nextStep(4)).catch(() => nextStep(4));
+            }).then(() => nextStep(6)).catch(() => nextStep(6));
         }
 
         function switchTab(tab) {

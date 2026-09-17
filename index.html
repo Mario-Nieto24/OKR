@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -199,7 +199,7 @@
                 </button>
                 <button onclick="switchTab('okr09')" id="tab-okr09" class="nav-btn btn-inactive">
                     <i class="fa-solid fa-trophy"></i>
-                    <span>OKR 09 · Tablero NPS & RH</span>
+                    <span>OKR 09 · Tablero NPS & Agencia</span>
                 </button>
             </nav>
         </div>
@@ -375,17 +375,17 @@
                 </div>
             </div>
 
-            <!-- PASO 6: RECLUTAMIENTO Y VACANTES / RH -->
+            <!-- PASO 6: EVALUACIÓN A LA AGENCIA (VACANTES Y COBERTURA) -->
             <div id="step-6" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 6 DE 7 · RECURSOS HUMANOS Y VACANTES *</p>
-                <h3 class="survey-title">El equipo de Recursos Humanos / Reclutamiento cubre la plantilla de personal y vacantes operativas de tu cuenta en tiempo y forma</h3>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 6 DE 7 · EVALUACIÓN DE LA AGENCIA *</p>
+                <h3 class="survey-title">La agencia (Evolve Interactive) garantiza la cobertura oportuna de personal y la atención efectiva de vacantes operativas en tu cuenta</h3>
                 
                 <div class="likert-grid">
-                    <div class="likert-card" onclick="selectLikert(this, 'rh', '5')"><div class="likert-badge">5</div> Totalmente de acuerdo</div>
-                    <div class="likert-card" onclick="selectLikert(this, 'rh', '4')"><div class="likert-badge">4</div> De acuerdo</div>
-                    <div class="likert-card" onclick="selectLikert(this, 'rh', '3')"><div class="likert-badge">3</div> Neutral</div>
-                    <div class="likert-card" onclick="selectLikert(this, 'rh', '2')"><div class="likert-badge">2</div> En desacuerdo</div>
-                    <div class="likert-card" onclick="selectLikert(this, 'rh', '1')"><div class="likert-badge">1</div> Totalmente en desacuerdo</div>
+                    <div class="likert-card" onclick="selectLikert(this, 'agencia', '5')"><div class="likert-badge">5</div> Totalmente de acuerdo</div>
+                    <div class="likert-card" onclick="selectLikert(this, 'agencia', '4')"><div class="likert-badge">4</div> De acuerdo</div>
+                    <div class="likert-card" onclick="selectLikert(this, 'agencia', '3')"><div class="likert-badge">3</div> Neutral</div>
+                    <div class="likert-card" onclick="selectLikert(this, 'agencia', '2')"><div class="likert-badge">2</div> En desacuerdo</div>
+                    <div class="likert-card" onclick="selectLikert(this, 'agencia', '1')"><div class="likert-badge">1</div> Totalmente en desacuerdo</div>
                 </div>
 
                 <p id="err-step-6" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
@@ -466,8 +466,8 @@
                     <div class="kpi-num" style="color:#34d399;">90.0%</div>
                 </div>
                 <div class="kpi-card">
-                    <div class="kpi-label">Satisfacción RH / Vacantes</div>
-                    <div class="kpi-num" style="color:#38bdf8;">4.6 / 5.0</div>
+                    <div class="kpi-label">Calificación Agencia</div>
+                    <div class="kpi-num" style="color:#38bdf8;">4.7 / 5.0</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Cuentas Monitoreadas</div>
@@ -490,7 +490,7 @@
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
                         <h2 style="color:#fff; margin-bottom:0.25rem;">OKR 09 · Consolidado General de Cuentas</h2>
-                        <p style="font-size:0.875rem; color:#94a3b8;">Monitoreo de Satisfacción, RH, Salas e Infraestructura por Gerente</p>
+                        <p style="font-size:0.875rem; color:#94a3b8;">Monitoreo de Satisfacción, Cobertura Agencia, Salas e Infraestructura</p>
                     </div>
                 </div>
 
@@ -500,7 +500,7 @@
                             <th>Cuenta Estratégica</th>
                             <th>Gerente de Cuenta</th>
                             <th class="text-right">Score NPS</th>
-                            <th class="text-right">RH / Vacantes</th>
+                            <th class="text-right">Agencia / Vacantes</th>
                             <th class="text-right">Salas / Tech</th>
                             <th>Status Meta</th>
                         </tr>
@@ -538,7 +538,7 @@
             atencion: "",
             oficinas: "",
             tecnologia: "", 
-            rh: "",
+            agencia: "",
             campo: "" 
         };
 
@@ -614,7 +614,7 @@
             opt.classList.add(`selected-${val}`);
             surveyData[field] = val;
             
-            const stepMap = { 'atencion': 3, 'oficinas': 4, 'tecnologia': 5, 'rh': 6, 'campo': 7 };
+            const stepMap = { 'atencion': 3, 'oficinas': 4, 'tecnologia': 5, 'agencia': 6, 'campo': 7 };
             const err = document.getElementById(`err-step-${stepMap[field]}`);
             if(err) err.classList.add('hidden');
         }
@@ -638,7 +638,7 @@
                 if (!surveyData.tecnologia) { document.getElementById('err-step-5').classList.remove('hidden'); return; }
                 nextStep(6);
             } else if (currentStep === 6) {
-                if (!surveyData.rh) { document.getElementById('err-step-6').classList.remove('hidden'); return; }
+                if (!surveyData.agencia) { document.getElementById('err-step-6').classList.remove('hidden'); return; }
                 nextStep(7);
             } else if (currentStep === 7) {
                 if (!surveyData.campo) { document.getElementById('err-step-7').classList.remove('hidden'); return; }
@@ -649,7 +649,6 @@
         function submitSurvey() {
             surveyData.comentario = document.getElementById('txt-comentario').value;
             
-            // Generar Folio y Fecha para el Recibo Directivo
             const randomFolio = 'EVO-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000) + 'X';
             const now = new Date();
             const dateStr = now.toLocaleDateString('es-MX') + ' ' + now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
@@ -705,10 +704,10 @@
                 new Chart(ctx2, {
                     type: 'bar',
                     data: {
-                        labels: ['Atención', 'Oficinas', 'Salas/Tech', 'Vacantes/RH', 'Campo'],
+                        labels: ['Atención', 'Oficinas', 'Salas/Tech', 'Agencia', 'Campo'],
                         datasets: [{
                             label: 'Promedio / 5.0',
-                            data: [4.8, 4.7, 4.6, 4.5, 4.6],
+                            data: [4.8, 4.7, 4.6, 4.7, 4.6],
                             backgroundColor: ['#0099ff', '#38bdf8', '#34d399', '#fbbf24', '#0055ff'],
                             borderRadius: 6
                         }]

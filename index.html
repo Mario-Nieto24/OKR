@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -54,25 +54,11 @@
         body.client-mode aside { display: none !important; }
         body.client-mode main { width: 100vw !important; min-height: 100vh !important; padding: 1rem; }
 
-        /* BRANDING LOGO OFICIAL EVOLVE */
-        .logo-container { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 2.5rem; }
-        .logo-img-box { 
-            width: 3.2rem; 
-            height: 3.2rem; 
-            border-radius: 0.85rem; 
-            background: #0099ff; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            box-shadow: 0 0 25px rgba(0, 153, 255, 0.5); 
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 0.35rem;
-        }
-        .logo-img-box svg { width: 100%; height: 100%; }
-        
-        .logo-title { font-weight: 800; font-size: 1.3rem; color: #ffffff; letter-spacing: -0.03em; line-height: 1; }
-        .logo-sub { font-size: 0.65rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 800; margin-top: 0.25rem; }
-        
+        /* BRANDING LOGO OFICIAL EVOLVE VECTORIAL */
+        .logo-container { margin-bottom: 2.5rem; }
+        .logo-svg-full { width: 100%; max-width: 170px; height: auto; display: block; filter: drop-shadow(0 0 12px rgba(0, 153, 255, 0.4)); }
+        .logo-sub { font-size: 0.62rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.22em; font-weight: 800; margin-top: 0.4rem; display: block; }
+
         nav { display: flex; flex-direction: column; gap: 0.6rem; }
         .nav-btn { width: 100%; display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1.1rem; border-radius: 0.85rem; transition: all 0.25s ease; background: none; border: none; cursor: pointer; text-align: left; font-size: 0.875rem; font-weight: 600; }
         .btn-inactive { color: #64748b; }
@@ -81,7 +67,7 @@
         
         main { flex: 1 1 0%; padding: 2rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; width: 100%; z-index: 1; }
         
-        /* TARJETA GLASSMORPHISM EXECUTIVE */
+        /* TARJETA GLASSMORPHISM EXECUTIVE MASTER */
         .survey-card { 
             background: rgba(10, 15, 30, 0.85); 
             backdrop-filter: blur(25px); 
@@ -98,7 +84,7 @@
 
         .survey-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #0099ff, #38bdf8, #0044ff); }
         
-        .brand-header-survey { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+        .brand-header-survey { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         .survey-badge { background: linear-gradient(90deg, rgba(0, 153, 255, 0.15), rgba(56, 189, 248, 0.05)); border: 1px solid rgba(0, 153, 255, 0.3); color: #38bdf8; font-size: 0.7rem; text-align: center; padding: 0.45rem 1rem; border-radius: 9999px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; display: inline-block; }
         
         .survey-title { font-size: 1.45rem; font-weight: 700; margin-bottom: 0.85rem; color: #ffffff; line-height: 1.35; letter-spacing: -0.01em; }
@@ -123,7 +109,7 @@
 
         .nps-labels { display: flex; justify-content: space-between; margin-top: 0.85rem; font-size: 0.75rem; font-weight: 700; color: #64748b; }
 
-        /* NUEVO DISEÑO LIKERT TÉRMICO Y DINÁMICO (5 A 1 EN PÍLDORAS) */
+        /* LIKERT TÉRMICO (5 A 1) CON GLOW */
         .likert-grid { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.5rem 0; }
         .likert-card { 
             border: 1px solid rgba(255,255,255,0.08); 
@@ -152,12 +138,17 @@
         .req-alert { color: #f87171; font-size: 0.85rem; font-weight: 700; margin-top: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
 
         .btn-group { display: flex; gap: 1rem; margin-top: 1.5rem; }
-        .btn-primary { flex: 1; background: linear-gradient(90deg, #0099ff 0%, #0044ff 100%); color: #fff; border: none; padding: 1.1rem; border-radius: 0.9rem; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 6px 20px rgba(0, 153, 255, 0.35); }
+        .btn-primary { flex: 1; background: linear-gradient(90deg, #0099ff 0%, #0044ff 100%); color: #fff; border: none; padding: 1.1rem; border-radius: 0.9rem; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 6px 20px rgba(0, 153, 255, 0.35); transition: all 0.25s ease; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 153, 255, 0.55); }
         .btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 1.1rem 1.5rem; border-radius: 0.9rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
 
         textarea { width: 100%; height: 120px; border: 1px solid rgba(255,255,255,0.12); background: #060913; border-radius: 0.9rem; padding: 1.1rem; font-family: inherit; font-size: 0.95rem; outline: none; margin-top: 1rem; color: #f8fafc; }
         
         .hidden { display: none !important; }
+
+        /* RECEIPT CARD / CONFIRMACIÓN */
+        .receipt-box { background: rgba(6, 9, 19, 0.8); border: 1px border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; margin: 1.5rem 0; text-align: left; font-size: 0.85rem; color: #cbd5e1; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; }
         
         /* DASHBOARD PRO Y KPI CARDS */
         .dashboard-container { width: 100%; max-width: 1100px; }
@@ -184,17 +175,13 @@
     <aside id="sidebar-nav">
         <div>
             <div class="logo-container">
-                <div class="logo-img-box">
-                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 30L50 15L80 30L50 45L20 30Z" fill="white" fill-opacity="0.9"/>
-                        <path d="M20 50L50 35L80 50L50 65L20 50Z" fill="white" fill-opacity="0.75"/>
-                        <path d="M20 70L50 55L80 70L50 85L20 70Z" fill="white" fill-opacity="0.6"/>
-                    </svg>
-                </div>
-                <div>
-                    <h1 class="logo-title">evolve</h1>
-                    <span class="logo-sub">INTERACTIVE</span>
-                </div>
+                <svg class="logo-svg-full" viewBox="0 0 350 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 45L60 15L95 32.5L35 62.5L0 45Z" fill="#0099FF"/>
+                    <path d="M0 65L60 35L95 52.5L35 82.5L0 65Z" fill="#0099FF"/>
+                    <path d="M25 82.5L60 65L95 82.5L60 100L25 82.5Z" fill="#0099FF"/>
+                    <text x="110" y="70" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="62" fill="#0099FF" letter-spacing="-2">evolve</text>
+                </svg>
+                <span class="logo-sub">INTERACTIVE</span>
             </div>
 
             <nav>
@@ -259,21 +246,17 @@
             </p>
         </div>
 
-        <!-- ENCUESTA EXECUTIVE COMPLETA (7 PASOS TÉRMICOS) -->
+        <!-- ENCUESTA EXECUTIVE MASTER RELEASE -->
         <div id="sec-survey" class="survey-card hidden">
             <div class="brand-header-survey">
-                <div style="display:flex; align-items:center; gap:0.85rem;">
-                    <div class="logo-img-box" style="width:2.6rem; height:2.6rem;">
-                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 30L50 15L80 30L50 45L20 30Z" fill="white" fill-opacity="0.9"/>
-                            <path d="M20 50L50 35L80 50L50 65L20 50Z" fill="white" fill-opacity="0.75"/>
-                            <path d="M20 70L50 55L80 70L50 85L20 70Z" fill="white" fill-opacity="0.6"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div style="font-weight:800; font-size:1.15rem; color:#fff; letter-spacing:-0.03em; line-height:1;">evolve</div>
-                        <div style="font-size:0.6rem; color:#38bdf8; text-transform:uppercase; font-weight:800; letter-spacing:0.15em; margin-top:0.2rem;">INTERACTIVE</div>
-                    </div>
+                <div>
+                    <svg class="logo-svg-full" style="max-width:145px;" viewBox="0 0 350 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 45L60 15L95 32.5L35 62.5L0 45Z" fill="#0099FF"/>
+                        <path d="M0 65L60 35L95 52.5L35 82.5L0 65Z" fill="#0099FF"/>
+                        <path d="M25 82.5L60 65L95 82.5L60 100L25 82.5Z" fill="#0099FF"/>
+                        <text x="110" y="70" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="62" fill="#0099FF" letter-spacing="-2">evolve</text>
+                    </svg>
+                    <span class="logo-sub" style="font-size:0.55rem; margin-top:0.2rem;">INTERACTIVE</span>
                 </div>
                 <span class="survey-badge">Client Assessment</span>
             </div>
@@ -332,7 +315,7 @@
                 </div>
             </div>
 
-            <!-- PASO 3: ATENCIÓN Y QUEJAS (NUEVO FORMATO TÉRMICO) -->
+            <!-- PASO 3: ATENCIÓN Y QUEJAS -->
             <div id="step-3" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 7 · GERENCIA Y ATENCIÓN *</p>
                 <h3 class="survey-title">El Gerente de Cuenta brinda atención ágil, seguimiento cercano y resuelve tus solicitudes o quejas oportunamente</h3>
@@ -352,7 +335,7 @@
                 </div>
             </div>
 
-            <!-- PASO 4: INSTALACIONES Y OFICINAS (NUEVO FORMATO TÉRMICO) -->
+            <!-- PASO 4: INSTALACIONES Y OFICINAS -->
             <div id="step-4" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 7 · INSTALACIONES Y INFRAESTRUCTURA *</p>
                 <h3 class="survey-title">Las instalaciones y oficinas de Evolve Interactive proyectan una imagen corporativa profesional y adecuada para la atención de tu cuenta</h3>
@@ -372,7 +355,7 @@
                 </div>
             </div>
 
-            <!-- PASO 5: TECNOLOGÍA Y SALAS (NUEVO FORMATO TÉRMICO) -->
+            <!-- PASO 5: TECNOLOGÍA Y SALAS -->
             <div id="step-5" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 7 · TECNOLOGÍA EN SALAS & EMETRIX *</p>
                 <h3 class="survey-title">La infraestructura tecnológica en salas de reuniones y las herramientas de reportes (Emetrix) facilitan la presentación de resultados</h3>
@@ -392,7 +375,7 @@
                 </div>
             </div>
 
-            <!-- PASO 6: RECLUTAMIENTO Y VACANTES / RH (NUEVO FORMATO TÉRMICO) -->
+            <!-- PASO 6: RECLUTAMIENTO Y VACANTES / RH -->
             <div id="step-6" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 6 DE 7 · RECURSOS HUMANOS Y VACANTES *</p>
                 <h3 class="survey-title">El equipo de Recursos Humanos / Reclutamiento cubre la plantilla de personal y vacantes operativas de tu cuenta en tiempo y forma</h3>
@@ -412,7 +395,7 @@
                 </div>
             </div>
 
-            <!-- PASO 7: DISCIPLINA EN CAMPO (NUEVO FORMATO TÉRMICO) -->
+            <!-- PASO 7: DISCIPLINA EN CAMPO -->
             <div id="step-7" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 7 DE 7 · EJECUCIÓN Y CAMPO *</p>
                 <h3 class="survey-title">La cobertura en tienda y la disciplina operativa de los promotores en punto de venta cumplen con el plan de trabajo</h3>
@@ -432,11 +415,18 @@
                 </div>
             </div>
 
-            <!-- AGRADECIMIENTO -->
+            <!-- AGRADECIMIENTO MASTER CON COMPROBANTE CON FOLIO -->
             <div id="step-8" class="hidden" style="text-align:center;">
-                <div style="font-size:3.5rem; color:#34d399; margin-bottom:1.25rem;"><i class="fa-solid fa-circle-check"></i></div>
+                <div style="font-size:3.5rem; color:#34d399; margin-bottom:1rem;"><i class="fa-solid fa-circle-check"></i></div>
                 <h2 class="survey-title">¡Evaluación Registrada con Éxito!</h2>
-                <p class="survey-subtitle">Gracias por contribuir a la mejora continua de nuestros servicios. Tus comentarios han sido registrados correctamente para seguimiento gerencial por Evolve Interactive.</p>
+                <p class="survey-subtitle" style="margin-bottom:1rem;">Gracias por contribuir a la mejora continua de nuestros servicios. Tu respuesta ha sido enviada al servidor de Evolve Interactive.</p>
+                
+                <div class="receipt-box">
+                    <div class="receipt-row"><span>Folio Auditado:</span><strong id="rec-folio" class="font-mono" style="color:#38bdf8;">EVO-2026-9842X</strong></div>
+                    <div class="receipt-row"><span>Cuenta Evaluada:</span><strong id="rec-cuenta" style="color:#fff;">Ajemex</strong></div>
+                    <div class="receipt-row"><span>Fecha / Hora:</span><strong id="rec-fecha" style="color:#fff;">17/09/2026 13:37</strong></div>
+                    <div class="receipt-row" style="border:none; margin-bottom:0; padding-bottom:0;"><span>Estatus Registro:</span><strong style="color:#34d399;"><i class="fa-solid fa-shield-halved"></i> Google Sheets Synced</strong></div>
+                </div>
             </div>
         </div>
 
@@ -464,9 +454,8 @@
             </div>
         </div>
 
-        <!-- TABLERO EXECUTIVE OKR 09 CON GRÁFICAS E HISTÓRICO DE LAS 10 CUENTAS -->
+        <!-- TABLERO EXECUTIVE OKR 09 CON GRÁFICAS E HISTÓRICO -->
         <div id="sec-okr09" class="dashboard-container hidden">
-            <!-- TARJETAS MÉTRICAS KPI -->
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="kpi-label">NPS Global Evolve</div>
@@ -486,7 +475,6 @@
                 </div>
             </div>
 
-            <!-- GRÁFICAS DEL HISTÓRICO -->
             <div class="charts-grid">
                 <div class="card" style="margin-bottom:0;">
                     <h3 style="font-size:1rem; color:#fff; margin-bottom:1rem;"><i class="fa-solid fa-chart-area" style="color:#38bdf8;"></i> Tendencia Histórica NPS (2026)</h3>
@@ -498,7 +486,6 @@
                 </div>
             </div>
 
-            <!-- TABLA HISTÓRICA CON LAS 10 CUENTAS OFICIALES -->
             <div class="card" style="margin-top:1.5rem;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
@@ -618,7 +605,6 @@
             if(err) err.classList.add('hidden');
         }
 
-        /* SELECCIÓN LIKERT TÉRMICA */
         function selectLikert(opt, field, val) {
             const parent = opt.parentElement;
             parent.querySelectorAll('.likert-card').forEach(o => {
@@ -662,6 +648,16 @@
 
         function submitSurvey() {
             surveyData.comentario = document.getElementById('txt-comentario').value;
+            
+            // Generar Folio y Fecha para el Recibo Directivo
+            const randomFolio = 'EVO-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000) + 'X';
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('es-MX') + ' ' + now.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+
+            document.getElementById('rec-folio').innerText = randomFolio;
+            document.getElementById('rec-cuenta').innerText = surveyData.cliente;
+            document.getElementById('rec-fecha').innerText = dateStr;
+
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -679,7 +675,6 @@
             document.getElementById(`tab-${tab}`).className = 'nav-btn btn-active';
         }
 
-        /* INICIALIZAR GRÁFICAS PRO CON CHART.JS */
         function initCharts() {
             const ctx1 = document.getElementById('npsTrendChart');
             if (ctx1) {

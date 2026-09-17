@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evolve - Sistema de OKRs & Operaciones</title>
+    <title>Evolve - Sistema de OKRs & Encuestas NPS</title>
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,37 +18,50 @@
         @media (min-width: 768px) { aside { width: 16rem; display: flex; flex-direction: column; justify-content: space-between; } }
         
         .logo-container { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
-        .logo-box { width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background-color: #4f46e5; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.25rem; color: #ffffff; }
+        .logo-box { width: 2.5rem; height: 2.5rem; border-radius: 0.75rem; background-color: #0099ff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.25rem; color: #ffffff; }
         .logo-title { font-weight: 700; font-size: 1.125rem; color: #ffffff; }
-        .logo-subtitle { font-size: 0.75rem; color: #94a3b8; }
         
         nav { display: flex; flex-direction: column; gap: 0.5rem; }
         .nav-btn { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 0.75rem; transition: all 0.2s; background: none; border: none; cursor: pointer; text-align: left; font-size: 0.875rem; font-weight: 500; }
         .btn-inactive { color: #94a3b8; }
         .btn-inactive:hover { background-color: #0f172a; color: #ffffff; }
-        .btn-active { background-color: #4f46e5; color: #ffffff; }
+        .btn-active { background-color: #0099ff; color: #ffffff; }
         
-        main { flex: 1 1 0%; padding: 1.5rem; overflow-y: auto; }
-        @media (min-width: 768px) { main { padding: 2.5rem; } }
+        main { flex: 1 1 0%; padding: 1.5rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; }
         
-        header { display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid #1e293b; }
-        @media (min-width: 640px) { header { flex-direction: row; align-items: center; } }
+        /* TARJETA DE ENCUESTA (CLIENTE) */
+        .survey-card { background-color: #ffffff; color: #0f172a; width: 100%; max-width: 680px; border-radius: 1rem; padding: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
+        .survey-badge { background-color: #f1f5f9; color: #64748b; font-size: 0.75rem; text-align: center; padding: 0.4rem 0.8rem; border-radius: 9999px; font-weight: 500; margin-bottom: 1.5rem; }
+        .survey-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; color: #0f172a; line-height: 1.3; }
+        .survey-subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.5; }
         
-        .header-title { font-size: 1.5rem; font-weight: 700; color: #ffffff; }
-        .header-subtitle { font-size: 0.875rem; color: #94a3b8; margin-top: 0.25rem; }
+        /* ESCALA NPS (0 A 10) */
+        .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0.35rem; margin: 1.5rem 0; }
+        .nps-btn { border: 1px solid #cbd5e1; background: #fff; padding: 0.75rem 0; border-radius: 0.5rem; font-weight: 600; cursor: pointer; font-size: 0.9rem; color: #0f172a; transition: 0.2s; }
+        .nps-btn:hover, .nps-btn.selected { background-color: #0099ff; color: #fff; border-color: #0099ff; }
         
-        /* ESTILOS DE TARJETAS Y TABLAS */
+        /* OPCIONES LIKERT */
+        .likert-option { border: 1px solid #cbd5e1; padding: 1rem; border-radius: 0.75rem; margin-bottom: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 1rem; font-weight: 500; transition: 0.2s; }
+        .likert-option:hover, .likert-option.selected { border-color: #0099ff; background-color: #f0f9ff; }
+        .likert-num { width: 2rem; height: 2rem; border-radius: 9999px; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+        
+        .btn-primary { width: 100%; background-color: #0099ff; color: #fff; border: none; padding: 0.9rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 1.5rem; }
+        .btn-primary:hover { background-color: #007acc; }
+
+        textarea { width: 100%; height: 120px; border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1rem; font-family: inherit; font-size: 0.95rem; outline: none; margin-top: 1rem; }
+        textarea:focus { border-color: #0099ff; }
+        
+        .hidden { display: none !important; }
+        
+        /* VISTA TABLERO GENERAL */
+        .dashboard-container { width: 100%; max-width: 1000px; }
         .card { background-color: #020617; border: 1px solid #1e293b; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; }
-        .badge-green { background-color: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 9999px; font-weight: 600; }
-        .badge-yellow { background-color: rgba(245, 158, 11, 0.15); color: #fbbf24; font-size: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 9999px; font-weight: 600; }
-        
         table { width: 100%; text-align: left; border-collapse: collapse; font-size: 0.875rem; margin-top: 1rem; }
         th { background: #0f172a; padding: 0.75rem; color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; }
         td { padding: 0.75rem; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+        .badge-green { background-color: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 0.75rem; padding: 0.25rem 0.625rem; border-radius: 9999px; font-weight: 600; }
         .text-right { text-align: right; }
         .font-mono { font-family: monospace; }
-        
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -56,103 +69,202 @@
     <aside>
         <div>
             <div class="logo-container">
-                <div class="logo-box">E</div>
+                <div class="logo-box">e</div>
                 <div>
-                    <h1 class="logo-title">EVOLVE</h1>
-                    <span class="logo-subtitle">Repositorio OKR</span>
+                    <h1 class="logo-title">evolve</h1>
                 </div>
             </div>
 
             <nav>
-                <button onclick="switchTab('okr01')" id="tab-okr01" class="nav-btn btn-active">
-                    <i class="fa-solid fa-person-walking-luggage" style="width: 1.25rem;"></i>
+                <button onclick="switchTab('survey')" id="tab-survey" class="nav-btn btn-active">
+                    <i class="fa-solid fa-square-poll-vertical"></i>
+                    <span>Encuesta NPS (Cliente)</span>
+                </button>
+                <button onclick="switchTab('okr01')" id="tab-okr01" class="nav-btn btn-inactive">
+                    <i class="fa-solid fa-person-walking-luggage"></i>
                     <span>OKR 01 · Cobertura Campo</span>
                 </button>
                 <button onclick="switchTab('okr09')" id="tab-okr09" class="nav-btn btn-inactive">
-                    <i class="fa-solid fa-trophy" style="width: 1.25rem;"></i>
-                    <span>OKR 09 · Agencia #1 (NPS)</span>
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>OKR 09 · Tablero NPS</span>
                 </button>
             </nav>
         </div>
     </aside>
 
     <main>
-        <!-- SECCIÓN 1: OKR 01 DISCIPLINA OPERATIVA DE CAMPO -->
-        <section id="sec-okr01">
-            <header>
-                <div>
-                    <h2 class="header-title">OKR 01 · Disciplina Operativa de Campo</h2>
-                    <p class="header-subtitle">Presencia y Cobertura de Plan de Trabajo por Cuenta (Emetrix)</p>
-                </div>
-                <span class="badge-green"><i class="fa-solid fa-check"></i> 30-Sep-2026 (Medición Activa)</span>
-            </header>
+        <!-- VISTA 1: ENCUESTA CLIENTE CONECTADA A GOOGLE SHEETS -->
+        <div id="sec-survey" class="survey-card">
+            <div class="survey-badge">Encuesta de Satisfacción · Evolve Interactive</div>
+            
+            <!-- PASO 0: BIENVENIDA DINÁMICA -->
+            <div id="step-0">
+                <h2 class="survey-title" id="lbl-saludo">Hola, Cliente</h2>
+                <p class="survey-subtitle">En Evolve nos importa mucho la percepción de nuestros clientes y trabajamos constantemente para ofrecerte un mejor servicio en <strong id="lbl-cliente">tu cuenta</strong>.</p>
+                <button class="btn-primary" onclick="nextStep(1)">Comenzar encuesta</button>
+            </div>
 
+            <!-- PASO 1: ESFECO NPS (0-10) -->
+            <div id="step-1" class="hidden">
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 1 de 4</p>
+                <h3 class="survey-title">En una escala de 0 a 10, ¿qué tan probable es que recomiendes a Evolve a un colega de otra marca?</h3>
+                <div class="nps-grid">
+                    <button class="nps-btn" onclick="selectNPS(this, 0)">0</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 1)">1</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 2)">2</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 3)">3</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 4)">4</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 5)">5</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 6)">6</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 7)">7</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 8)">8</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 9)">9</button>
+                    <button class="nps-btn" onclick="selectNPS(this, 10)">10</button>
+                </div>
+                <button class="btn-primary" onclick="nextStep(2)">Siguiente</button>
+            </div>
+
+            <!-- PASO 2: COMENTARIO CUALITATIVO -->
+            <div id="step-2" class="hidden">
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 2 de 4</p>
+                <h3 class="survey-title">¿Por qué esa calificación?</h3>
+                <textarea id="txt-comentario" placeholder="Escribe tus comentarios o áreas de mejora..."></textarea>
+                <button class="btn-primary" onclick="nextStep(3)">Siguiente</button>
+            </div>
+
+            <!-- PASO 3: LIKERT PRESENCIA -->
+            <div id="step-3" class="hidden">
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 3 de 4</p>
+                <h3 class="survey-title">La presencia de nuestros promotores en tienda es consistente y confiable</h3>
+                <div class="likert-option" onclick="selectLikert(this, 'Totalmente en desacuerdo')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'En desacuerdo')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'Ni de acuerdo ni en desacuerdo')"><div class="likert-num">3</div> Ni de acuerdo ni en desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'De acuerdo')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'Totalmente de acuerdo')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
+                <button class="btn-primary" onclick="submitSurvey()">Enviar respuestas</button>
+            </div>
+
+            <!-- PASO 4: AGRADECIMIENTO -->
+            <div id="step-4" class="hidden" style="text-align:center;">
+                <div style="font-size:3rem; color:#10b981; margin-bottom:1rem;"><i class="fa-solid fa-circle-check"></i></div>
+                <h2 class="survey-title">¡Muchas gracias!</h2>
+                <p class="survey-subtitle">Tus respuestas han sido enviadas y guardadas correctamente. La Dirección General las revisará con atención.</p>
+            </div>
+        </div>
+
+        <!-- VISTA 2: OKR 01 DISCIPLINA DE CAMPO -->
+        <div id="sec-okr01" class="dashboard-container hidden">
             <div class="card">
-                <h3 style="color:#818cf8; margin-bottom:0.5rem;">Fórmula MD (Definición Operativa)</h3>
-                <p style="font-size:0.875rem; color:#cbd5e1;"><code>Visitas ejecutadas ÷ Visitas planeadas en el plan de trabajo del periodo, por cuenta.</code></p>
+                <h2 style="color:#fff; margin-bottom:0.5rem;">OKR 01 · Disciplina Operativa de Campo</h2>
+                <p style="font-size:0.875rem; color:#94a3b8; margin-bottom:1rem;">Presencia y Cobertura de Plan de Trabajo (Fuente: Emetrix)</p>
                 
                 <table>
                     <thead>
                         <tr>
                             <th>Cuenta</th>
-                            <th>Gerente / Responsable</th>
-                            <th>Fuente</th>
+                            <th>Gerente Responsable</th>
                             <th class="text-right">Meta</th>
                             <th class="text-right">Avance Real</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Hanes Promotoría</td><td>Fabián Martínez Campos</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#34d399;">77.1%</td></tr>
-                        <tr><td>Ajemex Promotoría</td><td>Mario Alberto Nieto Suárez</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#34d399;">73.7%</td></tr>
-                        <tr><td>ADM Promotoría</td><td>María Deisa Rodríguez</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#fbbf24;">69.4%</td></tr>
-                        <tr><td>Zuru Promotoría</td><td>Ejecutivo Cuenta</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#fbbf24;">61.1%</td></tr>
-                        <tr><td>Bepensa Promotoría</td><td>Omar Said Zapién</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#fbbf24;">60.0%</td></tr>
-                        <tr><td>Disney Promotoría</td><td>Édgar Alan Obregón</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#f87171;">54.2%</td></tr>
-                        <tr><td>Gifan Promotoría</td><td>Omar Said Zapién</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#f87171;">34.2%</td></tr>
-                        <tr><td>Ruz Promotoría</td><td>Fernando Delgadillo</td><td>Emetrix</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#f87171;">28.3%</td></tr>
+                        <tr><td>Hanes Promotoría</td><td>Fabián Martínez Campos</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#34d399;">77.1%</td></tr>
+                        <tr><td>Ajemex Promotoría</td><td>Mario Alberto Nieto Suárez</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#34d399;">73.7%</td></tr>
+                        <tr><td>ADM Promotoría</td><td>María Deisa Rodríguez</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#fbbf24;">69.4%</td></tr>
+                        <tr><td>Bepensa Promotoría</td><td>Omar Said Zapién</td><td class="text-right">90.0%</td><td class="text-right font-mono" style="color:#fbbf24;">60.0%</td></tr>
                     </tbody>
                 </table>
             </div>
-        </section>
+        </div>
 
-        <!-- SECCIÓN 2: OKR 09 SER PERCIBIDOS COMO LA AGENCIA #1 -->
-        <section id="sec-okr09" class="hidden">
-            <header>
-                <div>
-                    <h2 class="header-title">OKR 09 · Ser Percibidos como la Agencia #1</h2>
-                    <p class="header-subtitle">NPS Trimestral de Clientes por Gerente de Cuenta (Meta: ≥ 90.0%)</p>
-                </div>
-                <span class="badge-yellow"><i class="fa-solid fa-clock"></i> Evaluación Trimestral</span>
-            </header>
-
+        <!-- VISTA 3: OKR 09 TABLERO DE RESULTADOS NPS -->
+        <div id="sec-okr09" class="dashboard-container hidden">
             <div class="card">
-                <h3 style="color:#818cf8; margin-bottom:0.5rem;">Cuentas con NPS ≥ 8 Puntos</h3>
-                <p style="font-size:0.875rem; color:#cbd5e1; margin-bottom:1rem;"><code>Evaluación SI/NO por contacto principal de la cuenta en la encuesta de Vercel.</code></p>
+                <h2 style="color:#fff; margin-bottom:0.5rem;">OKR 09 · Tablero de Satisfacción (NPS)</h2>
+                <p style="font-size:0.875rem; color:#94a3b8; margin-bottom:1rem;">Métrica: Cuentas con evaluación NPS ≥ 8 puntos</p>
                 
                 <table>
                     <thead>
                         <tr>
                             <th>Cuenta</th>
                             <th>Gerente de Cuenta</th>
-                            <th>Puntaje NPS</th>
-                            <th>Status (≥8 Ptos)</th>
+                            <th>Status Meta (≥8)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Ajemex</td><td>Mario Alberto Nieto Suárez</td><td>9 / 10</td><td><span class="badge-green">SÍ</span></td></tr>
-                        <tr><td>ADM</td><td>María Deisa Rodríguez</td><td>9 / 10</td><td><span class="badge-green">SÍ</span></td></tr>
-                        <tr><td>Spinmaster</td><td>Verónica Ochoa Manzo</td><td>8 / 10</td><td><span class="badge-green">SÍ</span></td></tr>
-                        <tr><td>Bepensa</td><td>Omar Said Zapién</td><td>7 / 10</td><td><span style="color:#f87171; font-weight:700;">NO</span></td></tr>
+                        <tr><td>Ajemex</td><td>Mario Alberto Nieto Suárez</td><td><span class="badge-green">SÍ</span></td></tr>
+                        <tr><td>ADM</td><td>María Deisa Rodríguez</td><td><span class="badge-green">SÍ</span></td></tr>
+                        <tr><td>Spinmaster</td><td>Verónica Ochoa Manzo</td><td><span class="badge-green">SÍ</span></td></tr>
+                        <tr><td>Bepensa</td><td>Omar Said Zapién</td><td><span style="color:#f87171; font-weight:700;">NO</span></td></tr>
                     </tbody>
                 </table>
             </div>
-        </section>
+        </div>
     </main>
 
     <script>
+        // URL DE TU GOOGLE APPS SCRIPT
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytkZkfshddy_Cwby0uRQDloGwitfaHkWEYaM3RhDZctOQe0rp4ebJBRsHxre35dn8q/exec";
+
+        // CAPTURA DE PARÁMETROS DE LA URL (?cliente=Ajemex&contacto=Carlos)
+        const urlParams = new URLSearchParams(window.location.search);
+        const clienteParam = urlParams.get('cliente') || 'Ajemex';
+        const contactoParam = urlParams.get('contacto') || 'Carlos';
+        const gerenteParam = urlParams.get('gerente') || 'Mario Nieto';
+
+        document.getElementById('lbl-saludo').innerText = `Hola, ${contactoParam}`;
+        document.getElementById('lbl-cliente').innerText = clienteParam;
+
+        let surveyData = {
+            cliente: clienteParam,
+            gerente: gerenteParam,
+            nps: null,
+            comentario: "",
+            presencia: ""
+        };
+
+        function nextStep(step) {
+            for(let i=0; i<=4; i++) {
+                document.getElementById(`step-${i}`).classList.add('hidden');
+            }
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+        }
+
+        function selectNPS(btn, val) {
+            document.querySelectorAll('.nps-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            surveyData.nps = val;
+        }
+
+        function selectLikert(opt, val) {
+            document.querySelectorAll('.likert-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            surveyData.presencia = val;
+        }
+
+        // ENVÍO DE DATOS A GOOGLE SHEETS VIA FETCH
+        function submitSurvey() {
+            surveyData.comentario = document.getElementById('txt-comentario').value;
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(surveyData)
+            }).then(() => {
+                nextStep(4);
+            }).catch(err => {
+                console.error("Error al enviar:", err);
+                nextStep(4);
+            });
+        }
+
         function switchTab(tab) {
+            document.getElementById('sec-survey').classList.add('hidden');
             document.getElementById('sec-okr01').classList.add('hidden');
             document.getElementById('sec-okr09').classList.add('hidden');
+            
+            document.getElementById('tab-survey').className = 'nav-btn btn-inactive';
             document.getElementById('tab-okr01').className = 'nav-btn btn-inactive';
             document.getElementById('tab-okr09').className = 'nav-btn btn-inactive';
 

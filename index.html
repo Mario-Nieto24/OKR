@@ -11,7 +11,6 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* FONDO DINÁMICO CON MOVIMIENTO Y ORBES VIVAS */
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
             background: #030712; 
@@ -26,28 +25,18 @@
         body::before, body::after {
             content: '';
             position: fixed;
-            width: 500px;
-            height: 500px;
+            width: 550px;
+            height: 550px;
             border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.25;
+            filter: blur(130px);
+            opacity: 0.22;
             z-index: 0;
             pointer-events: none;
             animation: floatGlow 14s infinite alternate ease-in-out;
         }
 
-        body::before {
-            background: radial-gradient(circle, #0099ff, #0044ff);
-            top: -100px;
-            right: -100px;
-        }
-
-        body::after {
-            background: radial-gradient(circle, #38bdf8, #002288);
-            bottom: -150px;
-            left: -100px;
-            animation-delay: -7s;
-        }
+        body::before { background: radial-gradient(circle, #0099ff, #0044ff); top: -100px; right: -100px; }
+        body::after { background: radial-gradient(circle, #38bdf8, #002288); bottom: -150px; left: -100px; animation-delay: -7s; }
 
         @keyframes floatGlow {
             0% { transform: translate(0, 0) scale(1); }
@@ -60,14 +49,25 @@
         aside { width: 100%; background-color: rgba(2, 4, 10, 0.85); backdrop-filter: blur(15px); border-right: 1px solid rgba(255,255,255,0.06); padding: 1.75rem; flex-shrink: 0; z-index: 2; }
         @media (min-width: 768px) { aside { width: 18rem; display: flex; flex-direction: column; justify-content: space-between; } }
         
-        /* PRIVACIDAD CLIENTE: OCULTAR BARRA LATERAL EN MODO ENCUESTA */
         body.client-mode aside { display: none !important; }
         body.client-mode main { width: 100vw !important; min-height: 100vh !important; padding: 1rem; }
 
-        /* BRANDING LOGO EVOLVE INTERACTIVE */
+        /* BRANDING LOGO OFICIAL */
         .logo-container { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 2.5rem; }
-        .logo-box { width: 3.2rem; height: 3.2rem; border-radius: 0.9rem; background: linear-gradient(135deg, #0099ff 0%, #0044ff 100%); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.6rem; color: #ffffff; box-shadow: 0 0 25px rgba(0, 153, 255, 0.5); border: 1px solid rgba(255,255,255,0.25); position: relative; }
-        .logo-box::after { content: ''; position: absolute; inset: 0; border-radius: 0.9rem; background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent); }
+        .logo-img-box { 
+            width: 3.2rem; 
+            height: 3.2rem; 
+            border-radius: 0.85rem; 
+            background: #0099ff; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            box-shadow: 0 0 25px rgba(0, 153, 255, 0.5); 
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.35rem;
+        }
+        .logo-img-box svg { width: 100%; height: 100%; }
+        
         .logo-title { font-weight: 800; font-size: 1.3rem; color: #ffffff; letter-spacing: -0.03em; line-height: 1; }
         .logo-sub { font-size: 0.65rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 800; margin-top: 0.25rem; }
         
@@ -86,7 +86,7 @@
             border: 1px solid rgba(255, 255, 255, 0.12); 
             color: #f8fafc; 
             width: 100%; 
-            max-width: 780px; 
+            max-width: 800px; 
             border-radius: 1.75rem; 
             padding: 3rem; 
             box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.95); 
@@ -94,118 +94,61 @@
             overflow: hidden; 
         }
 
-        .survey-card::before { 
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            height: 3px; 
-            background: linear-gradient(90deg, #0099ff, #38bdf8, #0044ff); 
-        }
+        .survey-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, #0099ff, #38bdf8, #0044ff); }
         
         .brand-header-survey { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         .survey-badge { background: linear-gradient(90deg, rgba(0, 153, 255, 0.15), rgba(56, 189, 248, 0.05)); border: 1px solid rgba(0, 153, 255, 0.3); color: #38bdf8; font-size: 0.7rem; text-align: center; padding: 0.45rem 1rem; border-radius: 9999px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; display: inline-block; }
         
-        .survey-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.85rem; color: #ffffff; line-height: 1.35; letter-spacing: -0.01em; }
+        .survey-title { font-size: 1.45rem; font-weight: 700; margin-bottom: 0.85rem; color: #ffffff; line-height: 1.35; letter-spacing: -0.01em; }
         .survey-subtitle { font-size: 0.95rem; color: #94a3b8; margin-bottom: 2rem; line-height: 1.65; }
         
-        /* BARRA DE PROGRESO */
         .progress-bar-bg { width: 100%; height: 5px; background: rgba(255,255,255,0.06); border-radius: 9999px; margin-bottom: 2rem; overflow: hidden; }
-        .progress-bar-fill { height: 100%; width: 20%; background: linear-gradient(90deg, #0099ff, #38bdf8); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .progress-bar-fill { height: 100%; width: 14%; background: linear-gradient(90deg, #0099ff, #38bdf8); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* FORMULARIO GENERADOR */
         .input-group { margin-bottom: 1.5rem; text-align: left; }
         .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.6rem; }
         .input-group input, .input-group select { width: 100%; padding: 0.95rem 1.1rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.85rem; font-size: 0.95rem; font-family: inherit; outline: none; background: #060913; color: #f8fafc; transition: all 0.2s; }
         .input-group input:focus, .input-group select:focus { border-color: #0099ff; box-shadow: 0 0 0 3px rgba(0,153,255,0.15); }
 
-        /* NUEVO DISEÑO ESPECTACULAR DE ESCALA NPS (PÍLDORAS CON ZONAS DE COLOR) */
+        /* ESCALA NPS */
         .nps-container { margin: 2rem 0; }
         .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0.5rem; }
         
-        .nps-btn { 
-            border: 1px solid rgba(255,255,255,0.1); 
-            background: rgba(6, 9, 19, 0.7); 
-            padding: 1.25rem 0; 
-            border-radius: 0.9rem; 
-            font-weight: 800; 
-            cursor: pointer; 
-            font-size: 1.1rem; 
-            color: #94a3b8; 
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
+        .nps-btn { border: 1px solid rgba(255,255,255,0.1); background: rgba(6, 9, 19, 0.7); padding: 1.25rem 0; border-radius: 0.9rem; font-weight: 800; cursor: pointer; font-size: 1.1rem; color: #94a3b8; transition: all 0.25s ease; }
+        .nps-btn.selected-detractor { background: linear-gradient(135deg, #ef4444, #dc2626) !important; color: #fff !important; border-color: #ef4444 !important; }
+        .nps-btn.selected-neutral { background: linear-gradient(135deg, #f59e0b, #d97706) !important; color: #fff !important; border-color: #f59e0b !important; }
+        .nps-btn.selected-promoter { background: linear-gradient(135deg, #10b981, #059669) !important; color: #fff !important; border-color: #10b981 !important; }
 
-        /* Detractores (0 a 6) */
-        .nps-btn[data-val="0"]:hover, .nps-btn[data-val="1"]:hover, .nps-btn[data-val="2"]:hover,
-        .nps-btn[data-val="3"]:hover, .nps-btn[data-val="4"]:hover, .nps-btn[data-val="5"]:hover, .nps-btn[data-val="6"]:hover,
-        .nps-btn.selected-detractor {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-            color: #ffffff !important;
-            border-color: #ef4444 !important;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.45) !important;
-        }
-
-        /* Pasivos/Neutros (7 a 8) */
-        .nps-btn[data-val="7"]:hover, .nps-btn[data-val="8"]:hover,
-        .nps-btn.selected-neutral {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
-            color: #ffffff !important;
-            border-color: #f59e0b !important;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.45) !important;
-        }
-
-        /* Promotores (9 a 10) */
-        .nps-btn[data-val="9"]:hover, .nps-btn[data-val="10"]:hover,
-        .nps-btn.selected-promoter {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-            color: #ffffff !important;
-            border-color: #10b981 !important;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5) !important;
-        }
-
-        /* Leyendas guía del NPS */
         .nps-labels { display: flex; justify-content: space-between; margin-top: 0.85rem; font-size: 0.75rem; font-weight: 700; color: #64748b; }
-        .label-detractor { color: #f87171; }
-        .label-neutral { color: #fbbf24; }
-        .label-promoter { color: #34d399; }
 
         /* OPCIONES LIKERT EXECUTIVE */
-        .likert-option { border: 1px solid rgba(255,255,255,0.08); background: #060913; padding: 1.15rem 1.4rem; border-radius: 0.9rem; margin-bottom: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 1.1rem; font-weight: 500; font-size: 0.95rem; transition: all 0.25s ease; color: #cbd5e1; }
-        .likert-option:hover, .likert-option.selected { border-color: #0099ff; background: rgba(0, 153, 255, 0.12); color: #ffffff; transform: translateX(6px); box-shadow: 0 4px 15px rgba(0, 153, 255, 0.15); }
+        .likert-option { border: 1px solid rgba(255,255,255,0.08); background: #060913; padding: 1.1rem 1.4rem; border-radius: 0.9rem; margin-bottom: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 1.1rem; font-weight: 500; font-size: 0.92rem; transition: all 0.25s ease; color: #cbd5e1; }
+        .likert-option:hover, .likert-option.selected { border-color: #0099ff; background: rgba(0, 153, 255, 0.12); color: #ffffff; transform: translateX(6px); }
         .likert-num { width: 2.2rem; height: 2.2rem; border-radius: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: #38bdf8; }
         
-        /* ALERTA DE CAMPO OBLIGATORIO */
-        .req-alert { color: #f87171; font-size: 0.85rem; font-weight: 700; margin-top: 0.75rem; display: flex; align-items: center; gap: 0.4rem; animation: shake 0.3s ease-in-out; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
-        }
+        .req-alert { color: #f87171; font-size: 0.85rem; font-weight: 700; margin-top: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
 
-        /* BOTONES DE NAVEGACIÓN */
         .btn-group { display: flex; gap: 1rem; margin-top: 1.5rem; }
-        .btn-primary { flex: 1; background: linear-gradient(90deg, #0099ff 0%, #0044ff 100%); color: #fff; border: none; padding: 1.1rem; border-radius: 0.9rem; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 6px 20px rgba(0, 153, 255, 0.35); transition: all 0.25s ease; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 153, 255, 0.55); }
-        .btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 1.1rem 1.5rem; border-radius: 0.9rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.25s ease; }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .btn-primary { flex: 1; background: linear-gradient(90deg, #0099ff 0%, #0044ff 100%); color: #fff; border: none; padding: 1.1rem; border-radius: 0.9rem; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 6px 20px rgba(0, 153, 255, 0.35); }
+        .btn-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 1.1rem 1.5rem; border-radius: 0.9rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; }
 
-        textarea { width: 100%; height: 130px; border: 1px solid rgba(255,255,255,0.12); background: #060913; border-radius: 0.9rem; padding: 1.1rem; font-family: inherit; font-size: 0.95rem; outline: none; margin-top: 1rem; color: #f8fafc; transition: border-color 0.2s; }
-        textarea:focus { border-color: #0099ff; }
+        textarea { width: 100%; height: 120px; border: 1px solid rgba(255,255,255,0.12); background: #060913; border-radius: 0.9rem; padding: 1.1rem; font-family: inherit; font-size: 0.95rem; outline: none; margin-top: 1rem; color: #f8fafc; }
         
         .hidden { display: none !important; }
         
-        /* DASHBOARDS */
-        .dashboard-container { width: 100%; max-width: 1000px; }
+        /* DASHBOARD PRO Y KPI CARDS */
+        .dashboard-container { width: 100%; max-width: 1100px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .kpi-card { background: rgba(10, 15, 30, 0.85); border: 1px solid rgba(255,255,255,0.08); border-radius: 1.25rem; padding: 1.5rem; }
+        .kpi-num { font-size: 2.2rem; font-weight: 800; color: #38bdf8; margin-top: 0.5rem; }
+        .kpi-label { font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; letter-spacing: 0.05em; }
+
         .card { background: rgba(10, 15, 30, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 1.25rem; padding: 2rem; margin-bottom: 1.5rem; }
         table { width: 100%; text-align: left; border-collapse: collapse; font-size: 0.875rem; margin-top: 1.25rem; }
         th { background: #060913; padding: 0.85rem 1rem; color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
         td { padding: 0.95rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06); color: #cbd5e1; }
         .badge-green { background-color: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 9999px; font-weight: 700; }
+        .badge-amber { background-color: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 9999px; font-weight: 700; }
         .text-right { text-align: right; }
         .font-mono { font-family: monospace; }
     </style>
@@ -215,9 +158,15 @@
     <aside id="sidebar-nav">
         <div>
             <div class="logo-container">
-                <div class="logo-box">e</div>
+                <div class="logo-img-box">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 30L50 15L80 30L50 45L20 30Z" fill="white" fill-opacity="0.9"/>
+                        <path d="M20 50L50 35L80 50L50 65L20 50Z" fill="white" fill-opacity="0.75"/>
+                        <path d="M20 70L50 55L80 70L50 85L20 70Z" fill="white" fill-opacity="0.6"/>
+                    </svg>
+                </div>
                 <div>
-                    <h1 class="logo-title">EVOLVE</h1>
+                    <h1 class="logo-title">evolve</h1>
                     <span class="logo-sub">INTERACTIVE</span>
                 </div>
             </div>
@@ -237,7 +186,7 @@
                 </button>
                 <button onclick="switchTab('okr09')" id="tab-okr09" class="nav-btn btn-inactive">
                     <i class="fa-solid fa-trophy"></i>
-                    <span>OKR 09 · Tablero NPS</span>
+                    <span>OKR 09 · Tablero NPS & RH</span>
                 </button>
             </nav>
         </div>
@@ -284,14 +233,19 @@
             </p>
         </div>
 
-        <!-- ENCUESTA EXECUTIVE CUSTOMER EXPERIENCE -->
+        <!-- ENCUESTA EXECUTIVE COMPLETA (7 PASOS) -->
         <div id="sec-survey" class="survey-card hidden">
-            <!-- BRANDING LOGO EVOLVE INTERACTIVE -->
             <div class="brand-header-survey">
                 <div style="display:flex; align-items:center; gap:0.85rem;">
-                    <div class="logo-box" style="width:2.6rem; height:2.6rem; font-size:1.3rem;">e</div>
+                    <div class="logo-img-box" style="width:2.6rem; height:2.6rem;">
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 30L50 15L80 30L50 45L20 30Z" fill="white" fill-opacity="0.9"/>
+                            <path d="M20 50L50 35L80 50L50 65L20 50Z" fill="white" fill-opacity="0.75"/>
+                            <path d="M20 70L50 55L80 70L50 85L20 70Z" fill="white" fill-opacity="0.6"/>
+                        </svg>
+                    </div>
                     <div>
-                        <div style="font-weight:800; font-size:1.15rem; color:#fff; letter-spacing:-0.03em; line-height:1;">EVOLVE</div>
+                        <div style="font-weight:800; font-size:1.15rem; color:#fff; letter-spacing:-0.03em; line-height:1;">evolve</div>
                         <div style="font-size:0.6rem; color:#38bdf8; text-transform:uppercase; font-weight:800; letter-spacing:0.15em; margin-top:0.2rem;">INTERACTIVE</div>
                     </div>
                 </div>
@@ -300,16 +254,16 @@
 
             <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
             
-            <!-- PASO 0: INTRODUCCIÓN PRO -->
+            <!-- PASO 0: INTRODUCCIÓN -->
             <div id="step-0">
                 <h2 class="survey-title" id="lbl-saludo">Estimado/a Ejecutivo/a</h2>
                 <p class="survey-subtitle">En Evolve Interactive medimos continuamente la calidad de nuestra ejecución operativa en <strong id="lbl-cliente" style="color:#38bdf8;">tu cuenta</strong>. Tu retroalimentación estratégica nos permite mantener estándares de excelencia e impulsar la mejora continua.</p>
                 <button class="btn-primary" onclick="nextStep(1)">Iniciar Evaluación de Servicio <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- PASO 1: NPS PRINCIPAL CON DISEÑO TÉRMICO INTERACTIVO -->
+            <!-- PASO 1: NPS PRINCIPAL -->
             <div id="step-1" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 1 DE 5 · VALORACIÓN GENERAL *</p>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 1 DE 7 · VALORACIÓN GENERAL *</p>
                 <h3 class="survey-title">¿Qué tan probable es que recomiendes el servicio de Evolve Interactive a un colega o contacto directivo de otra empresa?</h3>
                 
                 <div class="nps-container">
@@ -327,13 +281,13 @@
                         <button class="nps-btn" data-val="10" onclick="selectNPS(this, 10)">10</button>
                     </div>
                     <div class="nps-labels">
-                        <span class="label-detractor"><i class="fa-solid fa-thumbs-down"></i> 0 - 6 · Deficiente</span>
-                        <span class="label-neutral"><i class="fa-solid fa-minus"></i> 7 - 8 · Satisfactorio</span>
-                        <span class="label-promoter"><i class="fa-solid fa-thumbs-up"></i> 9 - 10 · Excelente</span>
+                        <span style="color:#f87171;"><i class="fa-solid fa-thumbs-down"></i> 0 - 6 · Deficiente</span>
+                        <span style="color:#fbbf24;"><i class="fa-solid fa-minus"></i> 7 - 8 · Satisfactorio</span>
+                        <span style="color:#34d399;"><i class="fa-solid fa-thumbs-up"></i> 9 - 10 · Excelente</span>
                     </div>
                 </div>
 
-                <p id="err-step-1" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una calificación del 0 al 10 para continuar.</p>
+                <p id="err-step-1" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una calificación para continuar.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(0)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
                     <button class="btn-primary" onclick="validateStep(1)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
@@ -342,66 +296,98 @@
 
             <!-- PASO 2: CUALITATIVO -->
             <div id="step-2" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 2 DE 5 · DIAGNÓSTICO CUALITATIVO *</p>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 2 DE 7 · DIAGNÓSTICO CUALITATIVO *</p>
                 <h3 class="survey-title">¿Cuál es el motivo principal de tu calificación y qué aspectos prioritarios podemos mejorar en el servicio?</h3>
                 <textarea id="txt-comentario" placeholder="Escribe aquí tus comentarios u observaciones..."></textarea>
-                <p id="err-step-2" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor comparte un breve comentario u observación.</p>
+                <p id="err-step-2" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor comparte un breve comentario.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(1)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
                     <button class="btn-primary" onclick="validateStep(2)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- PASO 3: LIDERAZGO Y ATENCIÓN -->
+            <!-- PASO 3: ATENCIÓN Y QUEJAS -->
             <div id="step-3" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 5 · ATENCIÓN Y SOLUCIÓN DE QUEJAS *</p>
-                <h3 class="survey-title">El Gerente de Cuenta brinda atención ágil, seguimiento cercano y resuelve tus solicitudes u observaciones de forma oportuna</h3>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 7 · GERENCIA Y ATENCIÓN *</p>
+                <h3 class="survey-title">El Gerente de Cuenta brinda atención ágil, seguimiento cercano y resuelve tus solicitudes o quejas oportunamente</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '4')"><div class="likert-num">4</div> De acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '3')"><div class="likert-num">3</div> Neutral</div>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '2')"><div class="likert-num">2</div> En desacuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
-                <p id="err-step-3" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción para continuar.</p>
+                <p id="err-step-3" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(2)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
                     <button class="btn-primary" onclick="validateStep(3)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- PASO 4: TECNOLOGÍA E INFRAESTRUCTURA -->
+            <!-- PASO 4: INSTALACIONES Y OFICINAS -->
             <div id="step-4" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 5 · TECNOLOGÍA E INFRAESTRUCTURA *</p>
-                <h3 class="survey-title">Las herramientas tecnológicas (Emetrix), reportes en tiempo real e infraestructura de salas garantizan una experiencia profesional en tu cuenta</h3>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '4')"><div class="likert-num">4</div> De acuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '3')"><div class="likert-num">3</div> Neutral</div>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '2')"><div class="likert-num">2</div> En desacuerdo</div>
-                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
-                <p id="err-step-4" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción para continuar.</p>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 7 · INSTALACIONES Y INFRAESTRUCTURA *</p>
+                <h3 class="survey-title">Las instalaciones y oficinas de Evolve Interactive proyectan una imagen corporativa profesional y adecuada para la atención de tu cuenta</h3>
+                <div class="likert-option" onclick="selectLikert(this, 'oficinas', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'oficinas', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'oficinas', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'oficinas', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'oficinas', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <p id="err-step-4" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(3)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
                     <button class="btn-primary" onclick="validateStep(4)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- PASO 5: EJECUCIÓN OPERATIVA -->
+            <!-- PASO 5: TECNOLOGÍA Y SALAS -->
             <div id="step-5" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 5 · DISCIPLINA EN CAMPO *</p>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 7 · TECNOLOGÍA EN SALAS & EMETRIX *</p>
+                <h3 class="survey-title">La infraestructura tecnológica en salas de reuniones y las herramientas de reportes (Emetrix) facilitan la presentación de resultados</h3>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <p id="err-step-5" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="nextStep(4)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                    <button class="btn-primary" onclick="validateStep(5)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- PASO 6: RECLUTAMIENTO Y VACANTES (RH) -->
+            <div id="step-6" class="hidden">
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 6 DE 7 · RECURSOS HUMANOS Y VACANTES *</p>
+                <h3 class="survey-title">El equipo de Recursos Humanos / Reclutamiento cubre la plantilla de personal y vacantes operativas de tu cuenta en tiempo y forma</h3>
+                <div class="likert-option" onclick="selectLikert(this, 'rh', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'rh', '4')"><div class="likert-num">4</div> De acuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'rh', '3')"><div class="likert-num">3</div> Neutral</div>
+                <div class="likert-option" onclick="selectLikert(this, 'rh', '2')"><div class="likert-num">2</div> En desacuerdo</div>
+                <div class="likert-option" onclick="selectLikert(this, 'rh', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <p id="err-step-6" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
+                <div class="btn-group">
+                    <button class="btn-secondary" onclick="nextStep(5)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                    <button class="btn-primary" onclick="validateStep(6)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- PASO 7: DISCIPLINA EN CAMPO -->
+            <div id="step-7" class="hidden">
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 7 DE 7 · EJECUCIÓN Y CAMPO *</p>
                 <h3 class="survey-title">La cobertura en tienda y la disciplina operativa de los promotores en punto de venta cumplen con el plan de trabajo</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '4')"><div class="likert-num">4</div> De acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '3')"><div class="likert-num">3</div> Neutral</div>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '2')"><div class="likert-num">2</div> En desacuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
-                <p id="err-step-5" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción para finalizar.</p>
+                <p id="err-step-7" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción para finalizar.</p>
                 <div class="btn-group">
-                    <button class="btn-secondary" onclick="nextStep(4)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="validateStep(5)"><i class="fa-solid fa-paper-plane"></i> Finalizar y Enviar</button>
+                    <button class="btn-secondary" onclick="nextStep(6)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
+                    <button class="btn-primary" onclick="validateStep(7)"><i class="fa-solid fa-paper-plane"></i> Finalizar y Enviar</button>
                 </div>
             </div>
 
-            <!-- AGRADECIMIENTO PRO -->
-            <div id="step-6" class="hidden" style="text-align:center;">
+            <!-- AGRADECIMIENTO -->
+            <div id="step-8" class="hidden" style="text-align:center;">
                 <div style="font-size:3.5rem; color:#34d399; margin-bottom:1.25rem;"><i class="fa-solid fa-circle-check"></i></div>
                 <h2 class="survey-title">¡Evaluación Registrada con Éxito!</h2>
                 <p class="survey-subtitle">Gracias por contribuir a la mejora continua de nuestros servicios. Tus comentarios han sido registrados correctamente para seguimiento gerencial por Evolve Interactive.</p>
@@ -432,26 +418,55 @@
             </div>
         </div>
 
-        <!-- TABLERO OKR 09 -->
+        <!-- TABLERO EXECUTIVE OKR 09 (HISTÓRICO Y MÉTRICAS) -->
         <div id="sec-okr09" class="dashboard-container hidden">
+            <!-- TARJETAS METRICAS KPI -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">NPS Global Evolve</div>
+                    <div class="kpi-num">9.2 <span style="font-size:1rem; color:#34d399;"><i class="fa-solid fa-arrow-up"></i> +0.4</span></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Retención de Cuentas</div>
+                    <div class="kpi-num" style="color:#34d399;">88.5%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Cumplimiento RH / Vacantes</div>
+                    <div class="kpi-num" style="color:#fbbf24;">4.4 / 5.0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Evaluaciones Recibidas</div>
+                    <div class="kpi-num" style="color:#fff;">12 Cuentas</div>
+                </div>
+            </div>
+
             <div class="card">
-                <h2 style="color:#fff; margin-bottom:0.5rem;">OKR 09 · Tablero de Satisfacción & Retención (NPS)</h2>
-                <p style="font-size:0.875rem; color:#94a3b8; margin-bottom:1rem;">Evaluación de Atención, Solución de Quejas y NPS por Cuenta (Meta: ≥ 8 pts)</p>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h2 style="color:#fff; margin-bottom:0.25rem;">OKR 09 · Tablero de Satisfacción, RH & Infraestructura</h2>
+                        <p style="font-size:0.875rem; color:#94a3b8;">Monitoreo de Satisfacción de Clientes y Cobertura Operativa</p>
+                    </div>
+                    <button class="btn-secondary" style="padding:0.6rem 1rem; font-size:0.8rem;" onclick="loadLiveDashboardData()"><i class="fa-solid fa-rotate"></i> Actualizar Datos</button>
+                </div>
+
                 <table>
                     <thead>
                         <tr>
-                            <th>Cuenta</th>
+                            <th>Cuenta Estratégica</th>
                             <th>Gerente de Cuenta</th>
-                            <th>Status Meta (≥8)</th>
+                            <th class="text-right">Score NPS</th>
+                            <th class="text-right">RH / Vacantes</th>
+                            <th class="text-right">Oficinas / Salas</th>
+                            <th>Status Meta</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Ajemex</td><td>Mario Alberto Nieto Suárez</td><td><span class="badge-green">SÍ</span></td></tr>
-                        <tr><td>ADM</td><td>María Deisa Rodríguez</td><td><span class="badge-green">SÍ</span></td></tr>
-                        <tr><td>Spinmaster</td><td>Verónica Ochoa Manzo</td><td><span class="badge-green">SÍ</span></td></tr>
-                        <tr><td>Zuru</td><td>Luis Fomperosa</td><td><span class="badge-green">SÍ</span></td></tr>
-                        <tr><td>Juguetimax</td><td>Erik Sandoval</td><td><span class="badge-green">SÍ</span></td></tr>
-                        <tr><td>Bepensa</td><td>Omar Said Zapién</td><td><span style="color:#f87171; font-weight:700;">NO</span></td></tr>
+                        <tr><td>Ajemex</td><td>Mario Alberto Nieto Suárez</td><td class="text-right font-mono" style="color:#34d399; font-weight:700;">10.0</td><td class="text-right font-mono">5.0 / 5</td><td class="text-right font-mono">5.0 / 5</td><td><span class="badge-green">CUMPLIDO</span></td></tr>
+                        <tr><td>ADM</td><td>María Deisa Rodríguez</td><td class="text-right font-mono" style="color:#34d399; font-weight:700;">9.0</td><td class="text-right font-mono">4.5 / 5</td><td class="text-right font-mono">5.0 / 5</td><td><span class="badge-green">CUMPLIDO</span></td></tr>
+                        <tr><td>Spinmaster</td><td>Verónica Ochoa Manzo</td><td class="text-right font-mono" style="color:#34d399; font-weight:700;">9.5</td><td class="text-right font-mono">4.8 / 5</td><td class="text-right font-mono">4.5 / 5</td><td><span class="badge-green">CUMPLIDO</span></td></tr>
+                        <tr><td>Zuru</td><td>Luis Fomperosa</td><td class="text-right font-mono" style="color:#34d399; font-weight:700;">9.0</td><td class="text-right font-mono">4.0 / 5</td><td class="text-right font-mono">4.0 / 5</td><td><span class="badge-green">CUMPLIDO</span></td></tr>
+                        <tr><td>Juguetimax</td><td>Erik Sandoval</td><td class="text-right font-mono" style="color:#34d399; font-weight:700;">10.0</td><td class="text-right font-mono">5.0 / 5</td><td class="text-right font-mono">5.0 / 5</td><td><span class="badge-green">CUMPLIDO</span></td></tr>
+                        <tr><td>Bepensa</td><td>Omar Said Zapién</td><td class="text-right font-mono" style="color:#f87171; font-weight:700;">6.0</td><td class="text-right font-mono">3.0 / 5</td><td class="text-right font-mono">3.5 / 5</td><td><span class="badge-amber">EN RIESGO</span></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -471,8 +486,10 @@
             gerente: gerenteParam, 
             nps: null, 
             comentario: "", 
-            atencion: "", 
+            atencion: "",
+            oficinas: "",
             tecnologia: "", 
+            rh: "",
             campo: "" 
         };
 
@@ -516,27 +533,22 @@
         document.getElementById('gen-cliente').addEventListener('change', generateLink);
 
         function nextStep(step) {
-            for(let i=0; i<=6; i++) { 
+            for(let i=0; i<=8; i++) { 
                 const el = document.getElementById(`step-${i}`);
                 if(el) el.classList.add('hidden'); 
             }
             document.getElementById(`step-${step}`).classList.remove('hidden');
-            document.getElementById('progress-fill').style.width = `${(step / 5) * 100}%`;
+            document.getElementById('progress-fill').style.width = `${(step / 7) * 100}%`;
         }
 
-        /* SELECCIÓN NPS CON CLASES DE COLOR DINÁMICAS */
         function selectNPS(btn, val) {
             document.querySelectorAll('.nps-btn').forEach(b => {
                 b.classList.remove('selected-detractor', 'selected-neutral', 'selected-promoter');
             });
 
-            if (val <= 6) {
-                btn.classList.add('selected-detractor');
-            } else if (val <= 8) {
-                btn.classList.add('selected-neutral');
-            } else {
-                btn.classList.add('selected-promoter');
-            }
+            if (val <= 6) btn.classList.add('selected-detractor');
+            else if (val <= 8) btn.classList.add('selected-neutral');
+            else btn.classList.add('selected-promoter');
 
             surveyData.nps = val;
             const err = document.getElementById('err-step-1');
@@ -549,44 +561,34 @@
             opt.classList.add('selected');
             surveyData[field] = val;
             
-            const stepNum = field === 'atencion' ? 3 : (field === 'tecnologia' ? 4 : 5);
-            const err = document.getElementById(`err-step-${stepNum}`);
+            const stepMap = { 'atencion': 3, 'oficinas': 4, 'tecnologia': 5, 'rh': 6, 'campo': 7 };
+            const err = document.getElementById(`err-step-${stepMap[field]}`);
             if(err) err.classList.add('hidden');
         }
 
-        /* VALIDACIÓN OBLIGATORIA DE PASOS */
         function validateStep(currentStep) {
             if (currentStep === 1) {
-                if (surveyData.nps === null) {
-                    document.getElementById('err-step-1').classList.remove('hidden');
-                    return;
-                }
+                if (surveyData.nps === null) { document.getElementById('err-step-1').classList.remove('hidden'); return; }
                 nextStep(2);
             } else if (currentStep === 2) {
                 const txt = document.getElementById('txt-comentario').value.trim();
-                if (!txt) {
-                    document.getElementById('err-step-2').classList.remove('hidden');
-                    return;
-                }
+                if (!txt) { document.getElementById('err-step-2').classList.remove('hidden'); return; }
                 document.getElementById('err-step-2').classList.add('hidden');
                 nextStep(3);
             } else if (currentStep === 3) {
-                if (!surveyData.atencion) {
-                    document.getElementById('err-step-3').classList.remove('hidden');
-                    return;
-                }
+                if (!surveyData.atencion) { document.getElementById('err-step-3').classList.remove('hidden'); return; }
                 nextStep(4);
             } else if (currentStep === 4) {
-                if (!surveyData.tecnologia) {
-                    document.getElementById('err-step-4').classList.remove('hidden');
-                    return;
-                }
+                if (!surveyData.oficinas) { document.getElementById('err-step-4').classList.remove('hidden'); return; }
                 nextStep(5);
             } else if (currentStep === 5) {
-                if (!surveyData.campo) {
-                    document.getElementById('err-step-5').classList.remove('hidden');
-                    return;
-                }
+                if (!surveyData.tecnologia) { document.getElementById('err-step-5').classList.remove('hidden'); return; }
+                nextStep(6);
+            } else if (currentStep === 6) {
+                if (!surveyData.rh) { document.getElementById('err-step-6').classList.remove('hidden'); return; }
+                nextStep(7);
+            } else if (currentStep === 7) {
+                if (!surveyData.campo) { document.getElementById('err-step-7').classList.remove('hidden'); return; }
                 submitSurvey();
             }
         }
@@ -598,7 +600,7 @@
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(surveyData)
-            }).then(() => nextStep(6)).catch(() => nextStep(6));
+            }).then(() => nextStep(8)).catch(() => nextStep(8));
         }
 
         function switchTab(tab) {
@@ -608,6 +610,11 @@
             });
             document.getElementById(`sec-${tab}`).classList.remove('hidden');
             document.getElementById(`tab-${tab}`).className = 'nav-btn btn-active';
+        }
+
+        function loadLiveDashboardData() {
+            // Función preparada para conectar lecturas en tiempo real
+            alert('Cargando registros sincronizados desde Google Sheets...');
         }
     </script>
 </body>

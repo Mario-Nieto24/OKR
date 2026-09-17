@@ -54,10 +54,12 @@
         body.client-mode aside { display: none !important; }
         body.client-mode main { width: 100vw !important; min-height: 100vh !important; padding: 1rem; }
 
-        /* BRANDING LOGO OFICIAL EVOLVE VECTORIAL */
-        .logo-container { margin-bottom: 2.5rem; }
-        .logo-svg-full { width: 100%; max-width: 170px; height: auto; display: block; filter: drop-shadow(0 0 12px rgba(0, 153, 255, 0.4)); }
-        .logo-sub { font-size: 0.62rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.22em; font-weight: 800; margin-top: 0.4rem; display: block; }
+        /* ESTILO BRANDING LOGO OFICIAL EVOLVE VECTORIAL */
+        .logo-container { margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.85rem; }
+        .logo-svg-icon { width: 2.8rem; height: 2.8rem; display: block; filter: drop-shadow(0 0 12px rgba(0, 153, 255, 0.4)); }
+        .logo-text-wrap { display: flex; flex-direction: column; }
+        .logo-title-text { font-size: 1.4rem; font-weight: 800; color: #0099ff; letter-spacing: -0.03em; line-height: 1; }
+        .logo-sub { font-size: 0.62rem; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.22em; font-weight: 800; margin-top: 0.25rem; display: block; }
 
         nav { display: flex; flex-direction: column; gap: 0.6rem; }
         .nav-btn { width: 100%; display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1.1rem; border-radius: 0.85rem; transition: all 0.25s ease; background: none; border: none; cursor: pointer; text-align: left; font-size: 0.875rem; font-weight: 600; }
@@ -67,7 +69,7 @@
         
         main { flex: 1 1 0%; padding: 2rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; width: 100%; z-index: 1; }
         
-        /* TARJETA GLASSMORPHISM EXECUTIVE MASTER */
+        /* TARJETA GLASSMORPHISM EXECUTIVE */
         .survey-card { 
             background: rgba(10, 15, 30, 0.85); 
             backdrop-filter: blur(25px); 
@@ -147,7 +149,7 @@
         .hidden { display: none !important; }
 
         /* RECEIPT CARD / CONFIRMACIÓN */
-        .receipt-box { background: rgba(6, 9, 19, 0.8); border: 1px border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; margin: 1.5rem 0; text-align: left; font-size: 0.85rem; color: #cbd5e1; }
+        .receipt-box { background: rgba(6, 9, 19, 0.8); border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; margin: 1.5rem 0; text-align: left; font-size: 0.85rem; color: #cbd5e1; }
         .receipt-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem; }
         
         /* DASHBOARD PRO Y KPI CARDS */
@@ -175,13 +177,15 @@
     <aside id="sidebar-nav">
         <div>
             <div class="logo-container">
-                <svg class="logo-svg-full" viewBox="0 0 350 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="logo-svg-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 45L60 15L95 32.5L35 62.5L0 45Z" fill="#0099FF"/>
                     <path d="M0 65L60 35L95 52.5L35 82.5L0 65Z" fill="#0099FF"/>
                     <path d="M25 82.5L60 65L95 82.5L60 100L25 82.5Z" fill="#0099FF"/>
-                    <text x="110" y="70" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="62" fill="#0099FF" letter-spacing="-2">evolve</text>
                 </svg>
-                <span class="logo-sub">INTERACTIVE</span>
+                <div class="logo-text-wrap">
+                    <span class="logo-title-text">evolve</span>
+                    <span class="logo-sub">INTERACTIVE</span>
+                </div>
             </div>
 
             <nav>
@@ -249,14 +253,16 @@
         <!-- ENCUESTA EXECUTIVE MASTER RELEASE -->
         <div id="sec-survey" class="survey-card hidden">
             <div class="brand-header-survey">
-                <div>
-                    <svg class="logo-svg-full" style="max-width:145px;" viewBox="0 0 350 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div style="display:flex; align-items:center; gap:0.75rem;">
+                    <svg class="logo-svg-icon" style="width:2.2rem; height:2.2rem;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 45L60 15L95 32.5L35 62.5L0 45Z" fill="#0099FF"/>
                         <path d="M0 65L60 35L95 52.5L35 82.5L0 65Z" fill="#0099FF"/>
                         <path d="M25 82.5L60 65L95 82.5L60 100L25 82.5Z" fill="#0099FF"/>
-                        <text x="110" y="70" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="62" fill="#0099FF" letter-spacing="-2">evolve</text>
                     </svg>
-                    <span class="logo-sub" style="font-size:0.55rem; margin-top:0.2rem;">INTERACTIVE</span>
+                    <div class="logo-text-wrap">
+                        <span class="logo-title-text" style="font-size:1.2rem;">evolve</span>
+                        <span class="logo-sub" style="font-size:0.5rem; margin-top:0.1rem;">INTERACTIVE</span>
+                    </div>
                 </div>
                 <span class="survey-badge">Client Assessment</span>
             </div>
@@ -270,7 +276,7 @@
                 <button class="btn-primary" onclick="nextStep(1)">Iniciar Evaluación de Servicio <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- PASO 1: NPS PRINCIPAL -->
+            <!-- PASO 1: NPS PRINCIPAL (AVANCE AUTOMÁTICO) -->
             <div id="step-1" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 1 DE 7 · VALORACIÓN GENERAL *</p>
                 <h3 class="survey-title">¿Qué tan probable es que recomiendes el servicio de Evolve Interactive a un colega o contacto directivo de otra empresa?</h3>
@@ -299,11 +305,10 @@
                 <p id="err-step-1" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una calificación para continuar.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(0)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="validateStep(1)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- PASO 2: CUALITATIVO -->
+            <!-- PASO 2: CUALITATIVO (TEXTO - REQUIERE BOTÓN) -->
             <div id="step-2" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 2 DE 7 · DIAGNÓSTICO CUALITATIVO *</p>
                 <h3 class="survey-title">¿Cuál es el motivo principal de tu calificación y qué aspectos prioritarios podemos mejorar en el servicio?</h3>
@@ -315,7 +320,7 @@
                 </div>
             </div>
 
-            <!-- PASO 3: ATENCIÓN Y QUEJAS -->
+            <!-- PASO 3: ATENCIÓN Y QUEJAS (AVANCE AUTOMÁTICO) -->
             <div id="step-3" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 7 · GERENCIA Y ATENCIÓN *</p>
                 <h3 class="survey-title">El Gerente de Cuenta brinda atención ágil, seguimiento cercano y resuelve tus solicitudes o quejas oportunamente</h3>
@@ -331,11 +336,10 @@
                 <p id="err-step-3" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(2)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="validateStep(3)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- PASO 4: INSTALACIONES Y OFICINAS -->
+            <!-- PASO 4: INSTALACIONES Y OFICINAS (AVANCE AUTOMÁTICO) -->
             <div id="step-4" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 7 · INSTALACIONES Y INFRAESTRUCTURA *</p>
                 <h3 class="survey-title">Las instalaciones y oficinas de Evolve Interactive proyectan una imagen corporativa profesional y adecuada para la atención de tu cuenta</h3>
@@ -351,11 +355,10 @@
                 <p id="err-step-4" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(3)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="validateStep(4)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- PASO 5: TECNOLOGÍA Y SALAS -->
+            <!-- PASO 5: TECNOLOGÍA Y SALAS (AVANCE AUTOMÁTICO) -->
             <div id="step-5" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 7 · TECNOLOGÍA EN SALAS & EMETRIX *</p>
                 <h3 class="survey-title">La infraestructura tecnológica en salas de reuniones y las herramientas de reportes (Emetrix) facilitan la presentación de resultados</h3>
@@ -371,11 +374,10 @@
                 <p id="err-step-5" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(4)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="validateStep(5)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- PASO 6: EVALUACIÓN A LA AGENCIA (VACANTES Y COBERTURA) -->
+            <!-- PASO 6: EVALUACIÓN A LA AGENCIA (AVANCE AUTOMÁTICO) -->
             <div id="step-6" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 6 DE 7 · EVALUACIÓN DE LA AGENCIA *</p>
                 <h3 class="survey-title">La agencia (Evolve Interactive) garantiza la cobertura oportuna de personal y la atención efectiva de vacantes operativas en tu cuenta</h3>
@@ -391,11 +393,10 @@
                 <p id="err-step-6" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(5)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="validateStep(6)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
-            <!-- PASO 7: DISCIPLINA EN CAMPO -->
+            <!-- PASO 7: DISCIPLINA EN CAMPO (ÚLTIMA PREGUNTA - CONFIRMACIÓN MANUAL) -->
             <div id="step-7" class="hidden">
                 <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 7 DE 7 · EJECUCIÓN Y CAMPO *</p>
                 <h3 class="survey-title">La cobertura en tienda y la disciplina operativa de los promotores en punto de venta cumplen con el plan de trabajo</h3>
@@ -591,6 +592,7 @@
             document.getElementById('progress-fill').style.width = `${(step / 7) * 100}%`;
         }
 
+        /* SELECCIÓN NPS CON AVANCE AUTOMÁTICO */
         function selectNPS(btn, val) {
             document.querySelectorAll('.nps-btn').forEach(b => {
                 b.classList.remove('selected-detractor', 'selected-neutral', 'selected-promoter');
@@ -603,8 +605,14 @@
             surveyData.nps = val;
             const err = document.getElementById('err-step-1');
             if(err) err.classList.add('hidden');
+
+            // Salto automático al paso 2
+            setTimeout(() => {
+                nextStep(2);
+            }, 250);
         }
 
+        /* SELECCIÓN LIKERT CON AVANCE AUTOMÁTICO (EXCEPTO PASO 7) */
         function selectLikert(opt, field, val) {
             const parent = opt.parentElement;
             parent.querySelectorAll('.likert-card').forEach(o => {
@@ -615,8 +623,16 @@
             surveyData[field] = val;
             
             const stepMap = { 'atencion': 3, 'oficinas': 4, 'tecnologia': 5, 'agencia': 6, 'campo': 7 };
-            const err = document.getElementById(`err-step-${stepMap[field]}`);
+            const currentStepNum = stepMap[field];
+            const err = document.getElementById(`err-step-${currentStepNum}`);
             if(err) err.classList.add('hidden');
+
+            // Avance automático solo para pasos del 3 al 6
+            if (currentStepNum < 7) {
+                setTimeout(() => {
+                    nextStep(currentStepNum + 1);
+                }, 250);
+            }
         }
 
         function validateStep(currentStep) {

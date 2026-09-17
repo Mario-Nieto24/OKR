@@ -7,7 +7,6 @@
     <!-- FontAwesome & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,12 +28,18 @@
         
         main { flex: 1 1 0%; padding: 1.5rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; }
         
-        /* TARJETA DE ENCUESTA (CLIENTE) */
+        /* TARJETA DE ENCUESTA Y GENERADOR */
         .survey-card { background-color: #ffffff; color: #0f172a; width: 100%; max-width: 680px; border-radius: 1rem; padding: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
         .survey-badge { background-color: #f1f5f9; color: #64748b; font-size: 0.75rem; text-align: center; padding: 0.4rem 0.8rem; border-radius: 9999px; font-weight: 500; margin-bottom: 1.5rem; }
         .survey-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 1rem; color: #0f172a; line-height: 1.3; }
         .survey-subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 1.5rem; line-height: 1.5; }
         
+        /* FORMULARIO DEL GENERADOR */
+        .input-group { margin-bottom: 1.25rem; text-align: left; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 0.5rem; }
+        .input-group input, .input-group select { width: 100%; padding: 0.8rem 1rem; border: 1px solid #cbd5e1; border-radius: 0.75rem; font-size: 0.95rem; font-family: inherit; outline: none; background: #fff; color: #0f172a; }
+        .input-group input:focus, .input-group select:focus { border-color: #0099ff; }
+
         /* ESCALA NPS (0 A 10) */
         .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0.35rem; margin: 1.5rem 0; }
         .nps-btn { border: 1px solid #cbd5e1; background: #fff; padding: 0.75rem 0; border-radius: 0.5rem; font-weight: 600; cursor: pointer; font-size: 0.9rem; color: #0f172a; transition: 0.2s; }
@@ -45,7 +50,7 @@
         .likert-option:hover, .likert-option.selected { border-color: #0099ff; background-color: #f0f9ff; }
         .likert-num { width: 2rem; height: 2rem; border-radius: 9999px; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
         
-        .btn-primary { width: 100%; background-color: #0099ff; color: #fff; border: none; padding: 0.9rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 1.5rem; }
+        .btn-primary { width: 100%; background-color: #0099ff; color: #fff; border: none; padding: 0.9rem; border-radius: 0.75rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .btn-primary:hover { background-color: #007acc; }
 
         textarea { width: 100%; height: 120px; border: 1px solid #cbd5e1; border-radius: 0.75rem; padding: 1rem; font-family: inherit; font-size: 0.95rem; outline: none; margin-top: 1rem; }
@@ -76,9 +81,13 @@
             </div>
 
             <nav>
-                <button onclick="switchTab('survey')" id="tab-survey" class="nav-btn btn-active">
+                <button onclick="switchTab('generator')" id="tab-generator" class="nav-btn btn-active">
+                    <i class="fa-solid fa-link"></i>
+                    <span>Generar Links NPS</span>
+                </button>
+                <button onclick="switchTab('survey')" id="tab-survey" class="nav-btn btn-inactive">
                     <i class="fa-solid fa-square-poll-vertical"></i>
-                    <span>Encuesta NPS (Cliente)</span>
+                    <span>Vista Encuesta (Cliente)</span>
                 </button>
                 <button onclick="switchTab('okr01')" id="tab-okr01" class="nav-btn btn-inactive">
                     <i class="fa-solid fa-person-walking-luggage"></i>
@@ -93,20 +102,56 @@
     </aside>
 
     <main>
-        <!-- VISTA 1: ENCUESTA CLIENTE CONECTADA A GOOGLE SHEETS -->
-        <div id="sec-survey" class="survey-card">
+        <!-- NUEVA VISTA: GENERADOR DE ENLACES PARA EL GERENTE -->
+        <div id="sec-generator" class="survey-card">
+            <div class="survey-badge">Herramienta Interna Evolve</div>
+            <h2 class="survey-title">Generador de Enlaces de Encuesta NPS</h2>
+            <p class="survey-subtitle">Crea un enlace personalizado para enviarlo directamente a la persona de contacto de cada cuenta por WhatsApp o correo.</p>
+
+            <div class="input-group">
+                <label for="gen-contacto">Nombre del Cliente / Contacto:</label>
+                <input type="text" id="gen-contacto" placeholder="Ejemplo: Karla, Roberto, María..." value="Karla">
+            </div>
+
+            <div class="input-group">
+                <label for="gen-cliente">Cuenta / Marca:</label>
+                <select id="gen-cliente" onchange="updateGerente()">
+                    <option value="Ajemex" data-gerente="Mario Nieto">Ajemex</option>
+                    <option value="ADM" data-gerente="Deisa Rodríguez">ADM</option>
+                    <option value="Bepensa" data-gerente="Omar Zapién">Bepensa</option>
+                    <option value="Hanes" data-gerente="Fabián Martínez">Hanes</option>
+                    <option value="Disney" data-gerente="Édgar Alan Obregón">Disney</option>
+                    <option value="Ruz" data-gerente="Fernando Delgadillo">Ruz</option>
+                    <option value="Gifan" data-gerente="Omar Zapién">Gifan</option>
+                    <option value="Spinmaster" data-gerente="Verónica Ochoa">Spinmaster</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Enlace Generado:</label>
+                <input type="text" id="gen-url-result" readonly style="background:#f8fafc; font-size:0.85rem; color:#475569;">
+            </div>
+
+            <button class="btn-primary" onclick="copyGeneratedLink()">
+                <i class="fa-solid fa-copy"></i> Copiar Enlace para WhatsApp
+            </button>
+            <p id="gen-alert" style="color:#10b981; font-weight:600; font-size:0.85rem; margin-top:0.75rem; text-align:center;" class="hidden">
+                ¡Enlace copiado al portapapeles con éxito!
+            </p>
+        </div>
+
+        <!-- VISTA CLIENTE: ENCUESTA NPS -->
+        <div id="sec-survey" class="survey-card hidden">
             <div class="survey-badge">Encuesta de Satisfacción · Evolve Interactive</div>
             
-            <!-- PASO 0: BIENVENIDA DINÁMICA -->
             <div id="step-0">
                 <h2 class="survey-title" id="lbl-saludo">Hola, Cliente</h2>
                 <p class="survey-subtitle">En Evolve nos importa mucho la percepción de nuestros clientes y trabajamos constantemente para ofrecerte un mejor servicio en <strong id="lbl-cliente">tu cuenta</strong>.</p>
                 <button class="btn-primary" onclick="nextStep(1)">Comenzar encuesta</button>
             </div>
 
-            <!-- PASO 1: ESFECO NPS (0-10) -->
             <div id="step-1" class="hidden">
-                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 1 de 4</p>
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 1 de 3</p>
                 <h3 class="survey-title">En una escala de 0 a 10, ¿qué tan probable es que recomiendes a Evolve a un colega de otra marca?</h3>
                 <div class="nps-grid">
                     <button class="nps-btn" onclick="selectNPS(this, 0)">0</button>
@@ -124,18 +169,16 @@
                 <button class="btn-primary" onclick="nextStep(2)">Siguiente</button>
             </div>
 
-            <!-- PASO 2: COMENTARIO CUALITATIVO -->
             <div id="step-2" class="hidden">
-                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 2 de 4</p>
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 2 de 3</p>
                 <h3 class="survey-title">¿Por qué esa calificación?</h3>
                 <textarea id="txt-comentario" placeholder="Escribe tus comentarios o áreas de mejora..."></textarea>
                 <button class="btn-primary" onclick="nextStep(3)">Siguiente</button>
             </div>
 
-            <!-- PASO 3: LIKERT PRESENCIA -->
             <div id="step-3" class="hidden">
-                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 3 de 4</p>
-                <h3 class="survey-title">La presencia de nuestros promotores en tienda es consistente y confiable</h3>
+                <p style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">Pregunta 3 de 3</p>
+                <h3 class="survey-title">La presencia y ejecución de nuestros promotores en tienda es consistente</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'Totalmente en desacuerdo')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'En desacuerdo')"><div class="likert-num">2</div> En desacuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'Ni de acuerdo ni en desacuerdo')"><div class="likert-num">3</div> Ni de acuerdo ni en desacuerdo</div>
@@ -144,7 +187,6 @@
                 <button class="btn-primary" onclick="submitSurvey()">Enviar respuestas</button>
             </div>
 
-            <!-- PASO 4: AGRADECIMIENTO -->
             <div id="step-4" class="hidden" style="text-align:center;">
                 <div style="font-size:3rem; color:#10b981; margin-bottom:1rem;"><i class="fa-solid fa-circle-check"></i></div>
                 <h2 class="survey-title">¡Muchas gracias!</h2>
@@ -152,12 +194,11 @@
             </div>
         </div>
 
-        <!-- VISTA 2: OKR 01 DISCIPLINA DE CAMPO -->
+        <!-- VISTA OKR 01 -->
         <div id="sec-okr01" class="dashboard-container hidden">
             <div class="card">
                 <h2 style="color:#fff; margin-bottom:0.5rem;">OKR 01 · Disciplina Operativa de Campo</h2>
                 <p style="font-size:0.875rem; color:#94a3b8; margin-bottom:1rem;">Presencia y Cobertura de Plan de Trabajo (Fuente: Emetrix)</p>
-                
                 <table>
                     <thead>
                         <tr>
@@ -177,12 +218,11 @@
             </div>
         </div>
 
-        <!-- VISTA 3: OKR 09 TABLERO DE RESULTADOS NPS -->
+        <!-- VISTA OKR 09 -->
         <div id="sec-okr09" class="dashboard-container hidden">
             <div class="card">
                 <h2 style="color:#fff; margin-bottom:0.5rem;">OKR 09 · Tablero de Satisfacción (NPS)</h2>
                 <p style="font-size:0.875rem; color:#94a3b8; margin-bottom:1rem;">Métrica: Cuentas con evaluación NPS ≥ 8 puntos</p>
-                
                 <table>
                     <thead>
                         <tr>
@@ -203,10 +243,8 @@
     </main>
 
     <script>
-        // URL DE TU GOOGLE APPS SCRIPT
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytkZkfshddy_Cwby0uRQDloGwitfaHkWEYaM3RhDZctOQe0rp4ebJBRsHxre35dn8q/exec";
 
-        // CAPTURA DE PARÁMETROS DE LA URL (?cliente=Ajemex&contacto=Carlos)
         const urlParams = new URLSearchParams(window.location.search);
         const clienteParam = urlParams.get('cliente') || 'Ajemex';
         const contactoParam = urlParams.get('contacto') || 'Carlos';
@@ -215,18 +253,36 @@
         document.getElementById('lbl-saludo').innerText = `Hola, ${contactoParam}`;
         document.getElementById('lbl-cliente').innerText = clienteParam;
 
-        let surveyData = {
-            cliente: clienteParam,
-            gerente: gerenteParam,
-            nps: null,
-            comentario: "",
-            presencia: ""
-        };
+        let surveyData = { cliente: clienteParam, gerente: gerenteParam, nps: null, comentario: "", presencia: "" };
+
+        // GENERADOR DE LINKS AUTOMÁTICO
+        function generateLink() {
+            const contacto = document.getElementById('gen-contacto').value.trim() || 'Cliente';
+            const selectCliente = document.getElementById('gen-cliente');
+            const cliente = selectCliente.value;
+            const gerente = selectCliente.options[selectCliente.selectedIndex].getAttribute('data-gerente');
+
+            const baseUrl = window.location.origin + window.location.pathname;
+            const fullUrl = `${baseUrl}?contacto=${encodeURIComponent(contacto)}&cliente=${encodeURIComponent(cliente)}&gerente=${encodeURIComponent(gerente)}`;
+            
+            document.getElementById('gen-url-result').value = fullUrl;
+            return fullUrl;
+        }
+
+        function copyGeneratedLink() {
+            const link = generateLink();
+            navigator.clipboard.writeText(link).then(() => {
+                const alert = document.getElementById('gen-alert');
+                alert.classList.remove('hidden');
+                setTimeout(() => alert.classList.add('hidden'), 3000);
+            });
+        }
+
+        document.getElementById('gen-contacto').addEventListener('input', generateLink);
+        window.addEventListener('DOMContentLoaded', generateLink);
 
         function nextStep(step) {
-            for(let i=0; i<=4; i++) {
-                document.getElementById(`step-${i}`).classList.add('hidden');
-            }
+            for(let i=0; i<=4; i++) { document.getElementById(`step-${i}`).classList.add('hidden'); }
             document.getElementById(`step-${step}`).classList.remove('hidden');
         }
 
@@ -242,32 +298,21 @@
             surveyData.presencia = val;
         }
 
-        // ENVÍO DE DATOS A GOOGLE SHEETS VIA FETCH
         function submitSurvey() {
             surveyData.comentario = document.getElementById('txt-comentario').value;
-
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(surveyData)
-            }).then(() => {
-                nextStep(4);
-            }).catch(err => {
-                console.error("Error al enviar:", err);
-                nextStep(4);
-            });
+            }).then(() => nextStep(4)).catch(() => nextStep(4));
         }
 
         function switchTab(tab) {
-            document.getElementById('sec-survey').classList.add('hidden');
-            document.getElementById('sec-okr01').classList.add('hidden');
-            document.getElementById('sec-okr09').classList.add('hidden');
-            
-            document.getElementById('tab-survey').className = 'nav-btn btn-inactive';
-            document.getElementById('tab-okr01').className = 'nav-btn btn-inactive';
-            document.getElementById('tab-okr09').className = 'nav-btn btn-inactive';
-
+            ['generator', 'survey', 'okr01', 'okr09'].forEach(t => {
+                document.getElementById(`sec-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).className = 'nav-btn btn-inactive';
+            });
             document.getElementById(`sec-${tab}`).classList.remove('hidden');
             document.getElementById(`tab-${tab}`).className = 'nav-btn btn-active';
         }

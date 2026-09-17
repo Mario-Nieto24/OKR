@@ -10,10 +10,54 @@
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030712; color: #f8fafc; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+        
+        /* FONDO DINÁMICO CON MOVIMIENTO Y ORBES VIVAS */
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #030712; 
+            color: #f8fafc; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow-x: hidden; 
+            position: relative; 
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.25;
+            z-index: 0;
+            pointer-events: none;
+            animation: floatGlow 14s infinite alternate ease-in-out;
+        }
+
+        body::before {
+            background: radial-gradient(circle, #0099ff, #0044ff);
+            top: -100px;
+            right: -100px;
+        }
+
+        body::after {
+            background: radial-gradient(circle, #38bdf8, #002288);
+            bottom: -150px;
+            left: -100px;
+            animation-delay: -7s;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, 80px) scale(1.15); }
+            100% { transform: translate(-40px, 40px) scale(0.9); }
+        }
+
         @media (min-width: 768px) { body { flex-direction: row; } }
         
-        aside { width: 100%; background-color: #02040a; border-right: 1px solid rgba(255,255,255,0.06); padding: 1.75rem; flex-shrink: 0; }
+        aside { width: 100%; background-color: rgba(2, 4, 10, 0.85); backdrop-filter: blur(15px); border-right: 1px solid rgba(255,255,255,0.06); padding: 1.75rem; flex-shrink: 0; z-index: 2; }
         @media (min-width: 768px) { aside { width: 18rem; display: flex; flex-direction: column; justify-content: space-between; } }
         
         /* PRIVACIDAD CLIENTE: OCULTAR BARRA LATERAL EN MODO ENCUESTA */
@@ -33,11 +77,32 @@
         .btn-inactive:hover { background: rgba(255,255,255,0.03); color: #cbd5e1; }
         .btn-active { background: linear-gradient(90deg, rgba(0, 153, 255, 0.15) 0%, rgba(0, 102, 255, 0.05) 100%); border: 1px solid rgba(0, 153, 255, 0.4); color: #38bdf8; box-shadow: 0 4px 20px rgba(0, 153, 255, 0.15); }
         
-        main { flex: 1 1 0%; padding: 2rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at top right, rgba(0, 153, 255, 0.08), transparent 50%), radial-gradient(circle at bottom left, rgba(0, 68, 255, 0.05), transparent 50%); width: 100%; }
+        main { flex: 1 1 0%; padding: 2rem; overflow-y: auto; display: flex; justify-content: center; align-items: center; width: 100%; z-index: 1; }
         
         /* TARJETA GLASSMORPHISM EXECUTIVE */
-        .survey-card { background: rgba(10, 15, 30, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); color: #f8fafc; width: 100%; max-width: 750px; border-radius: 1.75rem; padding: 3rem; box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.9); position: relative; overflow: hidden; }
-        .survey-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #0099ff, #38bdf8, #0044ff); }
+        .survey-card { 
+            background: rgba(10, 15, 30, 0.85); 
+            backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 255, 255, 0.12); 
+            color: #f8fafc; 
+            width: 100%; 
+            max-width: 780px; 
+            border-radius: 1.75rem; 
+            padding: 3rem; 
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.95); 
+            position: relative; 
+            overflow: hidden; 
+        }
+
+        .survey-card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            height: 3px; 
+            background: linear-gradient(90deg, #0099ff, #38bdf8, #0044ff); 
+        }
         
         .brand-header-survey { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         .survey-badge { background: linear-gradient(90deg, rgba(0, 153, 255, 0.15), rgba(56, 189, 248, 0.05)); border: 1px solid rgba(0, 153, 255, 0.3); color: #38bdf8; font-size: 0.7rem; text-align: center; padding: 0.45rem 1rem; border-radius: 9999px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; display: inline-block; }
@@ -55,16 +120,73 @@
         .input-group input, .input-group select { width: 100%; padding: 0.95rem 1.1rem; border: 1px solid rgba(255,255,255,0.12); border-radius: 0.85rem; font-size: 0.95rem; font-family: inherit; outline: none; background: #060913; color: #f8fafc; transition: all 0.2s; }
         .input-group input:focus, .input-group select:focus { border-color: #0099ff; box-shadow: 0 0 0 3px rgba(0,153,255,0.15); }
 
-        /* ESCALA NPS EXECUTIVE (0 A 10) */
-        .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0.5rem; margin: 2rem 0; }
-        .nps-btn { border: 1px solid rgba(255,255,255,0.1); background: #060913; padding: 1.1rem 0; border-radius: 0.85rem; font-weight: 800; cursor: pointer; font-size: 1.05rem; color: #94a3b8; transition: all 0.25s ease; }
-        .nps-btn:hover, .nps-btn.selected { background: linear-gradient(135deg, #0099ff 0%, #0044ff 100%); color: #fff; border-color: #0099ff; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0, 153, 255, 0.4); }
+        /* NUEVO DISEÑO ESPECTACULAR DE ESCALA NPS (PÍLDORAS CON ZONAS DE COLOR) */
+        .nps-container { margin: 2rem 0; }
+        .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); gap: 0.5rem; }
         
+        .nps-btn { 
+            border: 1px solid rgba(255,255,255,0.1); 
+            background: rgba(6, 9, 19, 0.7); 
+            padding: 1.25rem 0; 
+            border-radius: 0.9rem; 
+            font-weight: 800; 
+            cursor: pointer; 
+            font-size: 1.1rem; 
+            color: #94a3b8; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        /* Detractores (0 a 6) */
+        .nps-btn[data-val="0"]:hover, .nps-btn[data-val="1"]:hover, .nps-btn[data-val="2"]:hover,
+        .nps-btn[data-val="3"]:hover, .nps-btn[data-val="4"]:hover, .nps-btn[data-val="5"]:hover, .nps-btn[data-val="6"]:hover,
+        .nps-btn.selected-detractor {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+            color: #ffffff !important;
+            border-color: #ef4444 !important;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.45) !important;
+        }
+
+        /* Pasivos/Neutros (7 a 8) */
+        .nps-btn[data-val="7"]:hover, .nps-btn[data-val="8"]:hover,
+        .nps-btn.selected-neutral {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+            color: #ffffff !important;
+            border-color: #f59e0b !important;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.45) !important;
+        }
+
+        /* Promotores (9 a 10) */
+        .nps-btn[data-val="9"]:hover, .nps-btn[data-val="10"]:hover,
+        .nps-btn.selected-promoter {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+            color: #ffffff !important;
+            border-color: #10b981 !important;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.5) !important;
+        }
+
+        /* Leyendas guía del NPS */
+        .nps-labels { display: flex; justify-content: space-between; margin-top: 0.85rem; font-size: 0.75rem; font-weight: 700; color: #64748b; }
+        .label-detractor { color: #f87171; }
+        .label-neutral { color: #fbbf24; }
+        .label-promoter { color: #34d399; }
+
         /* OPCIONES LIKERT EXECUTIVE */
         .likert-option { border: 1px solid rgba(255,255,255,0.08); background: #060913; padding: 1.15rem 1.4rem; border-radius: 0.9rem; margin-bottom: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 1.1rem; font-weight: 500; font-size: 0.95rem; transition: all 0.25s ease; color: #cbd5e1; }
         .likert-option:hover, .likert-option.selected { border-color: #0099ff; background: rgba(0, 153, 255, 0.12); color: #ffffff; transform: translateX(6px); box-shadow: 0 4px 15px rgba(0, 153, 255, 0.15); }
         .likert-num { width: 2.2rem; height: 2.2rem; border-radius: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: #38bdf8; }
         
+        /* ALERTA DE CAMPO OBLIGATORIO */
+        .req-alert { color: #f87171; font-size: 0.85rem; font-weight: 700; margin-top: 0.75rem; display: flex; align-items: center; gap: 0.4rem; animation: shake 0.3s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
         /* BOTONES DE NAVEGACIÓN */
         .btn-group { display: flex; gap: 1rem; margin-top: 1.5rem; }
         .btn-primary { flex: 1; background: linear-gradient(90deg, #0099ff 0%, #0044ff 100%); color: #fff; border: none; padding: 1.1rem; border-radius: 0.9rem; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 6px 20px rgba(0, 153, 255, 0.35); transition: all 0.25s ease; }
@@ -164,7 +286,7 @@
 
         <!-- ENCUESTA EXECUTIVE CUSTOMER EXPERIENCE -->
         <div id="sec-survey" class="survey-card hidden">
-            <!-- BRANDING LOGO EVOLVE INTERACTIVE EN LA ENCUESTA -->
+            <!-- BRANDING LOGO EVOLVE INTERACTIVE -->
             <div class="brand-header-survey">
                 <div style="display:flex; align-items:center; gap:0.85rem;">
                     <div class="logo-box" style="width:2.6rem; height:2.6rem; font-size:1.3rem;">e</div>
@@ -185,82 +307,96 @@
                 <button class="btn-primary" onclick="nextStep(1)">Iniciar Evaluación de Servicio <i class="fa-solid fa-arrow-right"></i></button>
             </div>
 
-            <!-- PASO 1: NPS PRINCIPAL -->
+            <!-- PASO 1: NPS PRINCIPAL CON DISEÑO TÉRMICO INTERACTIVO -->
             <div id="step-1" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 1 DE 5 · VALORACIÓN GENERAL</p>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 1 DE 5 · VALORACIÓN GENERAL *</p>
                 <h3 class="survey-title">¿Qué tan probable es que recomiendes el servicio de Evolve Interactive a un colega o contacto directivo de otra empresa?</h3>
-                <div class="nps-grid">
-                    <button class="nps-btn" onclick="selectNPS(this, 0)">0</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 1)">1</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 2)">2</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 3)">3</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 4)">4</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 5)">5</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 6)">6</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 7)">7</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 8)">8</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 9)">9</button>
-                    <button class="nps-btn" onclick="selectNPS(this, 10)">10</button>
+                
+                <div class="nps-container">
+                    <div class="nps-grid">
+                        <button class="nps-btn" data-val="0" onclick="selectNPS(this, 0)">0</button>
+                        <button class="nps-btn" data-val="1" onclick="selectNPS(this, 1)">1</button>
+                        <button class="nps-btn" data-val="2" onclick="selectNPS(this, 2)">2</button>
+                        <button class="nps-btn" data-val="3" onclick="selectNPS(this, 3)">3</button>
+                        <button class="nps-btn" data-val="4" onclick="selectNPS(this, 4)">4</button>
+                        <button class="nps-btn" data-val="5" onclick="selectNPS(this, 5)">5</button>
+                        <button class="nps-btn" data-val="6" onclick="selectNPS(this, 6)">6</button>
+                        <button class="nps-btn" data-val="7" onclick="selectNPS(this, 7)">7</button>
+                        <button class="nps-btn" data-val="8" onclick="selectNPS(this, 8)">8</button>
+                        <button class="nps-btn" data-val="9" onclick="selectNPS(this, 9)">9</button>
+                        <button class="nps-btn" data-val="10" onclick="selectNPS(this, 10)">10</button>
+                    </div>
+                    <div class="nps-labels">
+                        <span class="label-detractor"><i class="fa-solid fa-thumbs-down"></i> 0 - 6 · Deficiente</span>
+                        <span class="label-neutral"><i class="fa-solid fa-minus"></i> 7 - 8 · Satisfactorio</span>
+                        <span class="label-promoter"><i class="fa-solid fa-thumbs-up"></i> 9 - 10 · Excelente</span>
+                    </div>
                 </div>
+
+                <p id="err-step-1" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una calificación del 0 al 10 para continuar.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(0)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="nextStep(2)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-primary" onclick="validateStep(1)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
             <!-- PASO 2: CUALITATIVO -->
             <div id="step-2" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 2 DE 5 · DIAGNÓSTICO CUALITATIVO</p>
-                <h3 class="survey-title">¿Cuál es el motivo principal de tu calificación y qué aspectos podemos mejorar en el servicio?</h3>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 2 DE 5 · DIAGNÓSTICO CUALITATIVO *</p>
+                <h3 class="survey-title">¿Cuál es el motivo principal de tu calificación y qué aspectos prioritarios podemos mejorar en el servicio?</h3>
                 <textarea id="txt-comentario" placeholder="Escribe aquí tus comentarios u observaciones..."></textarea>
+                <p id="err-step-2" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor comparte un breve comentario u observación.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(1)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="nextStep(3)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-primary" onclick="validateStep(2)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
             <!-- PASO 3: LIDERAZGO Y ATENCIÓN -->
             <div id="step-3" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 5 · ATENCIÓN Y SOLUCIÓN DE QUEJAS</p>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 3 DE 5 · ATENCIÓN Y SOLUCIÓN DE QUEJAS *</p>
                 <h3 class="survey-title">El Gerente de Cuenta brinda atención ágil, seguimiento cercano y resuelve tus solicitudes u observaciones de forma oportuna</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '4')"><div class="likert-num">4</div> De acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '3')"><div class="likert-num">3</div> Neutral</div>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '2')"><div class="likert-num">2</div> En desacuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'atencion', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <p id="err-step-3" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción para continuar.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(2)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="nextStep(4)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-primary" onclick="validateStep(3)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
             <!-- PASO 4: TECNOLOGÍA E INFRAESTRUCTURA -->
             <div id="step-4" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 5 · TECNOLOGÍA E INFRAESTRUCTURA</p>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 4 DE 5 · TECNOLOGÍA E INFRAESTRUCTURA *</p>
                 <h3 class="survey-title">Las herramientas tecnológicas (Emetrix), reportes en tiempo real e infraestructura de salas garantizan una experiencia profesional en tu cuenta</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '4')"><div class="likert-num">4</div> De acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '3')"><div class="likert-num">3</div> Neutral</div>
                 <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '2')"><div class="likert-num">2</div> En desacuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'tecnologia', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <p id="err-step-4" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción para continuar.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(3)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="nextStep(5)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn-primary" onclick="validateStep(4)">Continuar <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
 
             <!-- PASO 5: EJECUCIÓN OPERATIVA -->
             <div id="step-5" class="hidden">
-                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 5 · DISCIPLINA EN CAMPO</p>
+                <p style="font-size:0.75rem; color:#64748b; margin-bottom:0.5rem; font-weight:700;">PREGUNTA 5 DE 5 · DISCIPLINA EN CAMPO *</p>
                 <h3 class="survey-title">La cobertura en tienda y la disciplina operativa de los promotores en punto de venta cumplen con el plan de trabajo</h3>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '5')"><div class="likert-num">5</div> Totalmente de acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '4')"><div class="likert-num">4</div> De acuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '3')"><div class="likert-num">3</div> Neutral</div>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '2')"><div class="likert-num">2</div> En desacuerdo</div>
                 <div class="likert-option" onclick="selectLikert(this, 'campo', '1')"><div class="likert-num">1</div> Totalmente en desacuerdo</div>
+                <p id="err-step-5" class="req-alert hidden"><i class="fa-solid fa-circle-exclamation"></i> Por favor selecciona una opción para finalizar.</p>
                 <div class="btn-group">
                     <button class="btn-secondary" onclick="nextStep(4)"><i class="fa-solid fa-arrow-left"></i> Regresar</button>
-                    <button class="btn-primary" onclick="submitSurvey()"><i class="fa-solid fa-paper-plane"></i> Finalizar y Enviar</button>
+                    <button class="btn-primary" onclick="validateStep(5)"><i class="fa-solid fa-paper-plane"></i> Finalizar y Enviar</button>
                 </div>
             </div>
 
@@ -388,10 +524,23 @@
             document.getElementById('progress-fill').style.width = `${(step / 5) * 100}%`;
         }
 
+        /* SELECCIÓN NPS CON CLASES DE COLOR DINÁMICAS */
         function selectNPS(btn, val) {
-            document.querySelectorAll('.nps-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
+            document.querySelectorAll('.nps-btn').forEach(b => {
+                b.classList.remove('selected-detractor', 'selected-neutral', 'selected-promoter');
+            });
+
+            if (val <= 6) {
+                btn.classList.add('selected-detractor');
+            } else if (val <= 8) {
+                btn.classList.add('selected-neutral');
+            } else {
+                btn.classList.add('selected-promoter');
+            }
+
             surveyData.nps = val;
+            const err = document.getElementById('err-step-1');
+            if(err) err.classList.add('hidden');
         }
 
         function selectLikert(opt, field, val) {
@@ -399,6 +548,47 @@
             parent.querySelectorAll('.likert-option').forEach(o => o.classList.remove('selected'));
             opt.classList.add('selected');
             surveyData[field] = val;
+            
+            const stepNum = field === 'atencion' ? 3 : (field === 'tecnologia' ? 4 : 5);
+            const err = document.getElementById(`err-step-${stepNum}`);
+            if(err) err.classList.add('hidden');
+        }
+
+        /* VALIDACIÓN OBLIGATORIA DE PASOS */
+        function validateStep(currentStep) {
+            if (currentStep === 1) {
+                if (surveyData.nps === null) {
+                    document.getElementById('err-step-1').classList.remove('hidden');
+                    return;
+                }
+                nextStep(2);
+            } else if (currentStep === 2) {
+                const txt = document.getElementById('txt-comentario').value.trim();
+                if (!txt) {
+                    document.getElementById('err-step-2').classList.remove('hidden');
+                    return;
+                }
+                document.getElementById('err-step-2').classList.add('hidden');
+                nextStep(3);
+            } else if (currentStep === 3) {
+                if (!surveyData.atencion) {
+                    document.getElementById('err-step-3').classList.remove('hidden');
+                    return;
+                }
+                nextStep(4);
+            } else if (currentStep === 4) {
+                if (!surveyData.tecnologia) {
+                    document.getElementById('err-step-4').classList.remove('hidden');
+                    return;
+                }
+                nextStep(5);
+            } else if (currentStep === 5) {
+                if (!surveyData.campo) {
+                    document.getElementById('err-step-5').classList.remove('hidden');
+                    return;
+                }
+                submitSurvey();
+            }
         }
 
         function submitSurvey() {
